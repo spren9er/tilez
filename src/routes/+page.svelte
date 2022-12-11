@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Tile, HTile, VTile } from '$lib';
 
-	import ContextInfo from '$lib/components/ContextInfo.svelte';
+	import TileSpecs from '$lib/components/TileSpecs.svelte';
 
 	let width = 900;
 	let height = 600;
@@ -15,62 +15,62 @@
 	<HTile {width} {height} {padding}>
 		<VTile>
 			<Tile height="30%">
-				<ContextInfo />
+				<TileSpecs />
 			</Tile>
 			<Tile>
-				<ContextInfo />
+				<TileSpecs />
 			</Tile>
 		</VTile>
 		<Tile>
-			<ContextInfo />
+			<TileSpecs />
 		</Tile>
 		<VTile width="220px">
 			<Tile>
-				<ContextInfo />
+				<TileSpecs />
 			</Tile>
 			<Tile>
-				<ContextInfo />
+				<TileSpecs />
 			</Tile>
 			<HTile width="80%">
 				<Tile>
-					<ContextInfo />
+					<TileSpecs />
 				</Tile>
 				<Tile>
-					<ContextInfo />
+					<TileSpecs />
 				</Tile>
 			</HTile>
 			<HTile>
 				<Tile height="50%" align="bottom">
-					<ContextInfo />
+					<TileSpecs />
 				</Tile>
 				<Tile height="50%" align="top">
-					<ContextInfo />
+					<TileSpecs />
 				</Tile>
 			</HTile>
 		</VTile>
 		<Tile width="20%">
-			<ContextInfo />
+			<TileSpecs />
 		</Tile>
 		<Tile height="60%" align="center">
-			<ContextInfo />
+			<TileSpecs />
 		</Tile>
 		<VTile>
 			<HTile>
 				<Tile>
-					<ContextInfo />
+					<TileSpecs />
 				</Tile>
 				<Tile>
-					<ContextInfo />
+					<TileSpecs />
 				</Tile>
 			</HTile>
 			<Tile width="80" height="100px" align="center">
-				<ContextInfo />
+				<TileSpecs />
 			</Tile>
 			<Tile>
-				<ContextInfo />
+				<TileSpecs />
 			</Tile>
 			<Tile width="0.75" align="right">
-				<ContextInfo />
+				<TileSpecs />
 			</Tile>
 		</VTile>
 	</HTile>
