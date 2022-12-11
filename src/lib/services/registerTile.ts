@@ -87,8 +87,7 @@ export function registerTile(props: TypeTileProps) {
 
 function buildRootSpecs(props: TypeTileProps): TileSpecs {
   const { width, height } = props;
-  const errorMsg =
-    'Root component requires explicit absolute width and height!';
+  const errorMsg = 'Root tile requires explicit absolute width and height!';
 
   if (!width || !height) throw new Error(errorMsg);
 
