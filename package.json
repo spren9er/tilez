@@ -1,0 +1,39 @@
+{
+	"name": "tilez",
+	"version": "0.0.1",
+ 	"author": "Torsten Sprenger <mail@spren9er.de>",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "svelte-kit sync && svelte-package",
+		"prepublishOnly": "echo 'Did you mean to publish `./package/`, instead of `./`?' && exit 1",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"test": "vitest",
+		"coverage": "vitest run --coverage",
+		"lint": "prettier --plugin-search-dir . --check . && eslint .",
+		"format": "prettier --plugin-search-dir . --write ."
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "next",
+		"@sveltejs/kit": "next",
+		"@sveltejs/package": "next",
+		"@types/d3-scale": "^4.0.2",
+		"@typescript-eslint/eslint-plugin": "^5.45.0",
+		"@typescript-eslint/parser": "^5.45.0",
+		"@vitest/coverage-c8": "^0.25.5",
+		"d3-scale": "^4.0.2",
+		"eslint": "^8.28.0",
+		"eslint-config-prettier": "^8.5.0",
+		"eslint-plugin-svelte3": "^4.0.0",
+		"prettier": "^2.8.0",
+		"prettier-plugin-svelte": "^2.8.1",
+		"svelte": "^3.53.1",
+		"svelte-check": "^2.9.2",
+		"svelte-preprocess": "^4.10.7",
+		"tslib": "^2.4.1",
+		"typescript": "^4.9.3",
+		"vite": "^3.2.4",
+		"vitest": "^0.25.3"
+	},
+	"type": "module"
+}
