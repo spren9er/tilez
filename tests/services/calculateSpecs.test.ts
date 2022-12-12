@@ -124,4 +124,55 @@ describe('CalculateSpecs', () => {
       new TileSpecs(400, 1000, 600, 0, 600, 0),
     ]);
   });
+
+  it('considers padding only for leaf tiles', () => {
+    const root = new TileNodeFactory({
+      ...propsDimensions,
+      stack: 'vertical',
+      padding: 5,
+    }).build();
+    new TileNodeFactory({}, root).build();
+    new TileNodeFactory({}, root).build();
+
+    const childrenSpecs = new CalculateSpecs(root).call();
+
+    expect(childrenSpecs).toEqual([
+      new TileSpecs(990, 490, 5, 5, 5, 5),
+      new TileSpecs(990, 490, 5, 505, 5, 505),
+    ]);
+  });
+
+  it('accepts overriding paddings of inner node tiles', () => {
+    const root = new TileNodeFactory({
+      ...propsDimensions,
+      stack: 'vertical',
+      padding: 5,
+    }).build();
+    new TileNodeFactory({}, root).build();
+    new TileNodeFactory({ padding: 10 }, root).build();
+
+    const childrenSpecs = new CalculateSpecs(root).call();
+
+    expect(childrenSpecs).toEqual([
+      new TileSpecs(990, 490, 5, 5, 5, 5),
+      new TileSpecs(980, 480, 10, 510, 10, 510),
+    ]);
+  });
+
+  it('recognizes when padding is larger than width or height (no negative size)', () => {
+    const root = new TileNodeFactory({
+      ...propsDimensions,
+      stack: 'horizontal',
+      padding: 10,
+    }).build();
+    new TileNodeFactory({ width: 990 }, root).build();
+    new TileNodeFactory({}, root).build();
+
+    const childrenSpecs = new CalculateSpecs(root).call();
+
+    expect(childrenSpecs).toEqual([
+      new TileSpecs(970, 980, 10, 10, 10, 10),
+      new TileSpecs(0, 980, 1000, 10, 1000, 10),
+    ]);
+  });
 });
