@@ -1,6 +1,7 @@
 import type {
   TypeTilePropsStack,
   TypeTilePropsAlign,
+  TypeTilePropsType,
 } from '$lib/types/tileProps.type';
 import type { TilePropsDimensions } from '$lib/valueObjects/tilePropsDimensions';
 
@@ -34,9 +35,10 @@ class TilePropsDimensionsAccessor {
 export class TileProps {
   constructor(
     public dimensions: TilePropsDimensions,
-    public stack?: TypeTilePropsStack,
+    public stack: TypeTilePropsStack,
+    public align: TypeTilePropsAlign,
+    public type?: TypeTilePropsType,
     public padding?: number,
-    public align?: TypeTilePropsAlign,
   ) {}
 
   public dim(type: 'width' | 'height') {

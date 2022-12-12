@@ -93,11 +93,10 @@ export class CalculateSpecs {
 
     return sizes.map((specsDimension, idx) => {
       const props = this.props[idx].props;
-      const align = props.align || 'center';
 
       const specs: TypeTileSpecs = {
         ...specsDimension,
-        ...this.offsetsFor(specsDimension, offset, align),
+        ...this.offsetsFor(specsDimension, offset, props.align),
       };
 
       offset += specsDimension[this.stackDimension];
@@ -150,7 +149,8 @@ export class CalculateSpecs {
   private applyPadding(specs: TypeTileSpecs[]) {
     return specs.map((specs, idx) => {
       const props = this.props[idx].props;
-      if (!props.stack) specs = this.paddingFor(specs, props.padding ?? 0);
+      if (props.stack === 'none')
+        specs = this.paddingFor(specs, props.padding ?? 0);
 
       const { width, height, absX, absY, relX, relY } = specs;
 
@@ -206,6 +206,6 @@ export class CalculateSpecs {
   }
 
   private get isStack(): boolean {
-    return !!this.stack;
+    return this.stack !== 'none';
   }
 }

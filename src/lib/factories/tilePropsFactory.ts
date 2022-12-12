@@ -1,7 +1,9 @@
 import type {
   TypeTileProps,
+  TypeTilePropsStack,
   TypeTilePropsAlign,
   TypeTilePropsDimension,
+  TypeTilePropsType,
 } from '$lib/types/tileProps.type';
 
 import { TileProps } from '$lib/valueObjects/tileProps';
@@ -11,7 +13,7 @@ export class TilePropsFactory {
   constructor(private rawProps: TypeTileProps) {}
 
   public build() {
-    const { width, height, stack, align, padding } = this.rawProps;
+    const { width, height, stack, align, type, padding } = this.rawProps;
 
     const propsDimensions = new TilePropsDimensionsFactory(
       width,
@@ -20,10 +22,20 @@ export class TilePropsFactory {
 
     return new TileProps(
       propsDimensions,
-      stack,
+      this.parseStack(stack) || 'none',
+      this.parseAlign(align) || 'center',
+      this.parseType(type),
       this.parsePadding(padding),
-      this.parseAlign(align),
     );
+  }
+
+  private parseStack(stack?: TypeTilePropsStack) {
+    if (stack && !['horizontal', 'vertical', 'none'].includes(stack))
+      throw Error(
+        'Tile prop "stack" must be one of "horizontal", "vertical", "none"!',
+      );
+
+    return stack;
   }
 
   private parsePadding(padding?: TypeTilePropsDimension) {
@@ -37,5 +49,12 @@ export class TilePropsFactory {
       );
 
     return align;
+  }
+
+  private parseType(type?: TypeTilePropsType) {
+    if (type && !['plain', 'html', 'svg'].includes(type))
+      throw Error('Tile prop "type" must be one of "plain", "html", "svg"!');
+
+    return type;
   }
 }
