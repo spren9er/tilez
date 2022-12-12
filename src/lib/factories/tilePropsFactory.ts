@@ -1,5 +1,6 @@
 import type {
   TypeTileProps,
+  TypeTilePropsAlign,
   TypeTilePropsDimension,
 } from '$lib/types/tileProps.type';
 
@@ -21,11 +22,20 @@ export class TilePropsFactory {
       propsDimensions,
       stack,
       this.parsePadding(padding),
-      align,
+      this.parseAlign(align),
     );
   }
 
   private parsePadding(padding?: TypeTilePropsDimension) {
     return typeof padding === 'string' ? parseInt(padding) : padding;
+  }
+
+  private parseAlign(align?: TypeTilePropsAlign) {
+    if (align && !['left', 'right', 'top', 'bottom', 'center'].includes(align))
+      throw Error(
+        'Tile prop "align" must be one of "left", "right", "top", "bottom", "center"!',
+      );
+
+    return align;
   }
 }

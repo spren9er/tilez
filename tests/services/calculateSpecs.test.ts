@@ -1,5 +1,7 @@
 import { expect, describe, it } from 'vitest';
 
+import type { TypeTilePropsAlign } from '$lib/types/tileProps.type';
+
 import { TileNode } from '$lib/entities/tileNode';
 import { TileSpecs } from '$lib/valueObjects/tileSpecs';
 import { TileNodeFactory } from '$lib/factories/tileNodeFactory';
@@ -173,6 +175,62 @@ describe('CalculateSpecs', () => {
     expect(childrenSpecs).toEqual([
       new TileSpecs(970, 980, 10, 10, 10, 10),
       new TileSpecs(0, 980, 1000, 10, 1000, 10),
+    ]);
+  });
+
+  it('considers "align" parameters for horizontal layout', () => {
+    const alignSpecsFor = (align: TypeTilePropsAlign) => {
+      const root = new TileNodeFactory({
+        ...propsDimensions,
+        stack: 'horizontal',
+      }).build();
+      new TileNodeFactory({ height: '60%', align }, root).build();
+      new TileNodeFactory({ height: '40%', align }, root).build();
+
+      return new CalculateSpecs(root).call();
+    };
+
+    expect(alignSpecsFor('top')).toEqual([
+      new TileSpecs(500, 600, 0, 0, 0, 0),
+      new TileSpecs(500, 400, 500, 0, 500, 0),
+    ]);
+
+    expect(alignSpecsFor('center')).toEqual([
+      new TileSpecs(500, 600, 0, 200, 0, 200),
+      new TileSpecs(500, 400, 500, 300, 500, 300),
+    ]);
+
+    expect(alignSpecsFor('bottom')).toEqual([
+      new TileSpecs(500, 600, 0, 400, 0, 400),
+      new TileSpecs(500, 400, 500, 600, 500, 600),
+    ]);
+  });
+
+  it('considers "align" parameters for vertical layout', () => {
+    const alignSpecsFor = (align: TypeTilePropsAlign) => {
+      const root = new TileNodeFactory({
+        ...propsDimensions,
+        stack: 'vertical',
+      }).build();
+      new TileNodeFactory({ width: '60%', align }, root).build();
+      new TileNodeFactory({ width: '40%', align }, root).build();
+
+      return new CalculateSpecs(root).call();
+    };
+
+    expect(alignSpecsFor('left')).toEqual([
+      new TileSpecs(600, 500, 0, 0, 0, 0),
+      new TileSpecs(400, 500, 0, 500, 0, 500),
+    ]);
+
+    expect(alignSpecsFor('center')).toEqual([
+      new TileSpecs(600, 500, 200, 0, 200, 0),
+      new TileSpecs(400, 500, 300, 500, 300, 500),
+    ]);
+
+    expect(alignSpecsFor('right')).toEqual([
+      new TileSpecs(600, 500, 400, 0, 400, 0),
+      new TileSpecs(400, 500, 600, 500, 600, 500),
     ]);
   });
 });
