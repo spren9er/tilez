@@ -4,31 +4,50 @@ import type {
 } from '$lib/types/tileProps.type';
 import type { TilePropsDimensions } from '$lib/valueObjects/tilePropsDimensions';
 
-export class TileProps {
+class TilePropsDimensionsAccessor {
   constructor(
     private dimensions: TilePropsDimensions,
+    private type: 'width' | 'height',
+  ) {}
+
+  public get value() {
+    return this.dimensions.valueFor(this.type);
+  }
+
+  public get unit() {
+    return this.dimensions.unitFor(this.type);
+  }
+
+  public get size() {
+    if (this.unit === 'px') return this.value;
+  }
+
+  public relSize(fullSize: number) {
+    if (this.unit === '%') return this.value! * fullSize;
+  }
+
+  public compare(props: TileProps) {
+    return this.dimensions.compare(props.dimensions, this.type);
+  }
+}
+
+export class TileProps {
+  constructor(
+    public dimensions: TilePropsDimensions,
     public stack?: TypeTilePropsStack,
     public padding?: number,
     public align?: TypeTilePropsAlign,
   ) {}
 
+  public dim(type: 'width' | 'height') {
+    return new TilePropsDimensionsAccessor(this.dimensions, type);
+  }
+
   public get width() {
-    return this.valueFor('width');
+    return this.dim('width').size;
   }
 
   public get height() {
-    return this.valueFor('height');
-  }
-
-  public valueFor(type: 'width' | 'height') {
-    return this.dimensions.valueFor(type);
-  }
-
-  public unitFor(type: 'width' | 'height') {
-    return this.dimensions.unitFor(type);
-  }
-
-  public compare(props: TileProps, type: 'width' | 'height') {
-    return this.dimensions.compare(props.dimensions, type);
+    return this.dim('height').size;
   }
 }

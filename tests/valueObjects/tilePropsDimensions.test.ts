@@ -19,7 +19,9 @@ describe('TilePropsDimensions', () => {
 
     expect(propsDimensions.unitFor('width')).toEqual('px');
     expect(propsDimensions.unitFor('height')).toEqual('%');
+  });
 
+  it('has undefined units if there are no dimensions given', () => {
     const emptyPropsDimensions = new TilePropsDimensions([]);
 
     expect(emptyPropsDimensions.unitFor('width')).toBeUndefined();
@@ -32,6 +34,13 @@ describe('TilePropsDimensions', () => {
 
     expect(propsDimensions.valueFor('width')).toEqual(0.9);
     expect(propsDimensions.valueFor('height')).toBeUndefined();
+  });
+
+  it('has undefined values if there are no dimensions given', () => {
+    const emptyPropsDimensions = new TilePropsDimensions([]);
+
+    expect(emptyPropsDimensions.valueFor('width')).toBeUndefined();
+    expect(emptyPropsDimensions.valueFor('height')).toBeUndefined();
   });
 
   it('can be compared with other props dimensions if not both dimensions are available', () => {

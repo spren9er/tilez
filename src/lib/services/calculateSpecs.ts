@@ -20,7 +20,7 @@ export class CalculateSpecs {
   constructor(node: TileNode) {
     if (!node.specs)
       throw new Error(
-        'Specs of root node are required for calculating specs of children nodes!',
+        'Specs of tile are required for calculating specs of children nodes!',
       );
 
     this.props = node.childrenProps.map((props, idx) => ({ idx, props }));
@@ -29,91 +29,86 @@ export class CalculateSpecs {
   }
 
   public call(): TileSpecs[] {
-    const nProps = this.props.length;
-
-    if (nProps === 0) return [];
+    if (this.nProps === 0) return [];
 
     if (!this.isStack) return this.props.map(() => this.specs);
 
+    const sizes = this.calculateSizes();
+    const specs = this.addOffsets(sizes);
+    return this.applyPadding(specs);
+  }
+
+  private calculateSizes() {
     const stackFullSize = this.specs[this.stackDimension];
     const fixedFullSize = this.specs[this.fixedDimension];
 
     let remainingSize = stackFullSize;
+    let nPxPctSize = 0;
     let cumPxSize = 0;
     let cumPctSize = 0;
-    let nPxPctSize = 0;
 
     const specsDimensions = this.sortedProps.map(({ idx, props }) => {
-      const otherUnit = props.unitFor(this.fixedDimension);
-      const otherValue = props[this.fixedDimension]!;
+      const fixedDimension = props.dim(this.fixedDimension);
+      const stackDimension = props.dim(this.stackDimension);
 
-      let otherSize = fixedFullSize;
-      if (otherUnit === 'px') otherSize = otherValue ?? fixedFullSize;
-      if (otherUnit === '%') otherSize = otherValue * fixedFullSize;
-      otherSize = Math.min(otherSize, fixedFullSize);
+      let fixedSize: number | undefined;
+      let stackSize: number | undefined;
 
-      let size = 0;
+      fixedSize =
+        fixedDimension.size ??
+        fixedDimension.relSize(fixedFullSize) ??
+        fixedFullSize;
+      fixedSize = Math.min(fixedSize, fixedFullSize);
+
       if (remainingSize > 0) {
-        const unit = props.unitFor(this.stackDimension);
+        stackSize =
+          stackDimension.size ??
+          stackDimension.relSize(stackFullSize - cumPxSize) ??
+          (stackFullSize - cumPxSize - cumPctSize) / (this.nProps - nPxPctSize);
+        stackSize = Math.min(remainingSize, stackSize);
 
-        if (unit === 'px') {
-          size = props[this.stackDimension]!;
-          nPxPctSize += 1;
-        } else if (unit === '%') {
-          size = props[this.stackDimension]! * (stackFullSize - cumPxSize);
-          nPxPctSize += 1;
-        } else {
-          size =
-            (stackFullSize - cumPxSize - cumPctSize) / (nProps - nPxPctSize);
-        }
+        remainingSize -= stackSize;
 
-        size = Math.min(remainingSize, size);
-
-        remainingSize -= size;
-        if (unit === 'px') cumPxSize += size;
-        if (unit === '%') cumPctSize += size;
+        const unit = stackDimension.unit;
+        if (unit) nPxPctSize += 1;
+        if (unit === 'px') cumPxSize += stackSize;
+        if (unit === '%') cumPctSize += stackSize;
       }
 
       const specsDimension = {
-        [this.stackDimension]: size,
-        [this.fixedDimension]: otherSize,
+        [this.stackDimension]: stackSize,
+        [this.fixedDimension]: fixedSize,
       } as TypeTileSpecsDimension;
 
       return { idx, specsDimension };
     });
 
-    let offset = 0;
-
     return specsDimensions
       .sort((a, b) => (a.idx > b.idx ? 1 : -1))
-      .map(({ specsDimension }, idx) => {
-        const props = this.props[idx].props;
-        const align = props.align || 'center';
-
-        const specs: TypeTileSpecs = {
-          ...specsDimension,
-          ...this.offsets(offset, specsDimension, align),
-        };
-
-        offset += specsDimension[this.stackDimension];
-
-        return specs;
-      })
-      .map((specs, idx) => {
-        const props = this.props[idx].props;
-        if (!props.stack) specs = this.applyPadding(specs, props.padding ?? 0);
-
-        const { width, height, absX, absY, relX, relY } = specs;
-
-        const tileSpecs = new TileSpecs(width, height, absX, absY, relX, relY);
-
-        return tileSpecs;
-      });
+      .map(({ specsDimension }) => specsDimension);
   }
 
-  private offsets(
-    offset: number,
+  private addOffsets(sizes: TypeTileSpecsDimension[]) {
+    let offset = 0;
+
+    return sizes.map((specsDimension, idx) => {
+      const props = this.props[idx].props;
+      const align = props.align || 'center';
+
+      const specs: TypeTileSpecs = {
+        ...specsDimension,
+        ...this.offsetsFor(specsDimension, offset, align),
+      };
+
+      offset += specsDimension[this.stackDimension];
+
+      return specs;
+    });
+  }
+
+  private offsetsFor(
     specsDimension: TypeTileSpecsDimension,
+    offset: number,
     align: TypeTilePropsAlign,
   ): TypeTileSpecsCoords {
     let hAlignOffset = 0;
@@ -152,10 +147,26 @@ export class CalculateSpecs {
     };
   }
 
-  private applyPadding(specs: TypeTileSpecs, padding: number) {
+  private applyPadding(specs: TypeTileSpecs[]) {
+    return specs.map((specs, idx) => {
+      const props = this.props[idx].props;
+      if (!props.stack) specs = this.paddingFor(specs, props.padding ?? 0);
+
+      const { width, height, absX, absY, relX, relY } = specs;
+
+      const tileSpecs = new TileSpecs(width, height, absX, absY, relX, relY);
+
+      return tileSpecs;
+    });
+  }
+
+  private paddingFor(specs: TypeTileSpecs, padding: number) {
+    const width = Math.max(specs.width - 2 * padding, 0);
+    const height = Math.max(specs.height - 2 * padding, 0);
+
     return {
-      width: specs.width - 2 * padding,
-      height: specs.height - 2 * padding,
+      width,
+      height,
       absX: specs.absX + padding,
       absY: specs.absY + padding,
       relX: specs.relX + padding,
@@ -165,13 +176,17 @@ export class CalculateSpecs {
 
   private get sortedProps() {
     return [...this.props].sort((a, b) => {
-      // reverse order ('highest' units first)!
-      const result = b.props.compare(a.props, this.stackDimension);
+      // reverse order w.r.t. unit ('px' > '%' > undefined)!
+      const result = b.props.dim(this.stackDimension).compare(a.props);
 
       if (result === 0) return a.idx - b.idx; // small indexes first
 
       return result;
     });
+  }
+
+  private get nProps() {
+    return this.props.length;
   }
 
   private get stackDimension(): 'width' | 'height' {

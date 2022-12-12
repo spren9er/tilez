@@ -17,16 +17,16 @@
 
 	let visible = false;
 
-	const store = registerTile({ stack, width, height, align, padding });
+	const node = registerTile({ stack, width, height, align, padding });
 
-	$: if ($store.isRoot) store.updateSpecs(width!, height!);
+	$: if ($node.isRoot) $node.updateSpecs(width!, height!);
 
 	onMount(() => {
 		visible = true;
 	});
 </script>
 
-{#if $store.isRoot}
+{#if $node.isRoot}
 	<div id="root" class:visible>
 		<slot />
 	</div>

@@ -1,19 +1,32 @@
 import type { TypeTileProps } from '$lib/types/tileProps.type';
-import type { TileSpecs } from '$lib/valueObjects/tileSpecs';
+import type { TileProps } from '$lib/valueObjects/tileProps';
 
 import { TileNode } from '$lib/entities/tileNode';
+import { TileSpecs } from '$lib/valueObjects/tileSpecs';
 import { TilePropsFactory } from '$lib/factories/tilePropsFactory';
 
 export class TileNodeFactory {
-  constructor(
-    private rawProps: TypeTileProps,
-    private opts: { specs?: TileSpecs; parentNode?: TileNode },
-  ) {}
+  private props: TileProps;
+  private parent?: TileNode;
+  private specs?: TileSpecs;
+
+  constructor(rawProps: TypeTileProps, parent?: TileNode) {
+    this.props = new TilePropsFactory(rawProps).build();
+    this.parent = parent;
+
+    if (!this.parent) this.specs = this.rootSpecs();
+  }
 
   public build() {
-    const props = new TilePropsFactory(this.rawProps).build();
-    const { specs, parentNode } = this.opts;
+    return new TileNode(this.props, this.parent, this.specs);
+  }
 
-    return new TileNode(props, specs, parentNode);
+  private rootSpecs() {
+    const { width, height } = this.props;
+    const errorMsg = 'Root tile requires absolute width and height!';
+
+    if (!width || !height) throw new Error(errorMsg);
+
+    return new TileSpecs(width, height, 0, 0, 0, 0);
   }
 }

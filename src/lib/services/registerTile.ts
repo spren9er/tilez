@@ -1,101 +1,50 @@
-import { getContext, hasContext, setContext } from 'svelte';
-import { get, writable, type Writable } from 'svelte/store';
+import { getContext, setContext } from 'svelte';
+import { writable } from 'svelte/store';
 
-import type {
-  TypeTileProps,
-  TypeTilePropsDimension,
-} from '$lib/types/tileProps.type';
+import type { TypeTileProps } from '$lib/types/tileProps.type';
 import type { TileNode } from '$lib/entities/tileNode';
+import type { TileSpecs } from '$lib/valueObjects/tileSpecs';
 
-import { TileSpecs } from '$lib/valueObjects/tileSpecs';
 import { TileNodeFactory } from '$lib/factories/tileNodeFactory';
-import { TilePropsDimensionFactory } from '$lib/factories/tilePropsDimensionFactory';
 
-export function registerTile(props: TypeTileProps) {
-  let parentNodeStore: Writable<TileNode> | undefined;
-  let parentNode: TileNode | undefined;
-  let specs: TileSpecs | undefined;
+class TileRegistration {
+  private props: TypeTileProps;
+  private parent: TileNode;
 
-  const root = !hasContext('tilez-internal');
-
-  if (root) {
-    specs = buildRootSpecs(props);
-  } else {
-    parentNodeStore = getContext('tilez-internal')!;
-    parentNode = get(parentNodeStore) as TileNode;
+  constructor(props: TypeTileProps, parent: TileNode) {
+    this.props = props;
+    this.parent = parent;
   }
 
-  const node = new TileNodeFactory(props, { specs, parentNode }).build();
-  if (!node.props.padding && parentNode)
-    node.props.padding = parentNode.props.padding;
+  public call() {
+    const node = new TileNodeFactory(this.props, this.parent).build();
 
-  const nodeStore: Writable<TileNode> = writable(node);
-
-  if (parentNodeStore && parentNode) {
-    if (!parentNode.hasChildren)
-      parentNodeStore.subscribe((parentNode: TileNode) => {
-        parentNode.updateChildrenSpecs();
-      });
-
-    parentNodeStore.update((parentNode: TileNode) => {
-      parentNode.addChild(nodeStore);
-
-      return parentNode;
-    });
+    return node;
   }
+}
 
-  const specsStore = writable(node.specs);
+function setSpecsContext(name: string, node: TileNode) {
+  const specs = writable(node.specs);
 
-  nodeStore.subscribe((node: TileNode) => {
-    specsStore.update((specs: TileSpecs) => {
-      specs = node.specs!;
+  // copy specs from node store
+  node.subscribe((_node: TileNode) => {
+    specs.update((specs: TileSpecs) => {
+      specs = _node.specs!;
 
       return specs;
     });
   });
 
-  setContext('tilez', specsStore);
-  setContext('tilez-internal', nodeStore);
-
-  return {
-    ...nodeStore,
-    updateSpecs: (
-      width: TypeTilePropsDimension,
-      height: TypeTilePropsDimension,
-    ) => {
-      nodeStore.update((node: TileNode) => {
-        if (!node.specs) return node;
-
-        const propsWidth = new TilePropsDimensionFactory(
-          'width',
-          width,
-        ).build();
-
-        const propsHeight = new TilePropsDimensionFactory(
-          'height',
-          height,
-        ).build();
-
-        node.specs.width = propsWidth.value;
-        node.specs.height = propsHeight.value;
-
-        return node;
-      });
-    },
-  };
+  setContext(name, specs);
 }
 
-function buildRootSpecs(props: TypeTileProps): TileSpecs {
-  const { width, height } = props;
-  const errorMsg = 'Root tile requires explicit absolute width and height!';
+export function registerTile(props: TypeTileProps) {
+  const parent: TileNode = getContext('tilez-node');
 
-  if (!width || !height) throw new Error(errorMsg);
+  const node = new TileRegistration(props, parent).call();
 
-  const propsWidth = new TilePropsDimensionFactory('width', width).build();
-  const propsHeight = new TilePropsDimensionFactory('height', height).build();
+  setContext('tilez-node', node);
+  setSpecsContext('tilez', node);
 
-  if (propsWidth.unit !== 'px' || propsHeight.unit !== 'px')
-    throw new Error(errorMsg);
-
-  return new TileSpecs(propsWidth.value, propsHeight.value, 0, 0, 0, 0);
+  return node;
 }
