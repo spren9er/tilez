@@ -69,7 +69,7 @@ describe('TilePropsFactory', () => {
 
     const props = new TilePropsFactory({}).build();
 
-    expect(props.type).toEqual('plain');
+    expect(props.type).toBeUndefined();
 
     expect(() => {
       new TilePropsFactory({ type: 'webgl' as TypeTilePropsType }).build();

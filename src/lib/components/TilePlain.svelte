@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let root: boolean;
+	export const root = true;
 </script>
 
 <slot />
