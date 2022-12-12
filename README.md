@@ -1,3 +1,3 @@
-# Tilez
+![Tests](https://github.com/spren9er/tilez/actions/workflows/test.yml/badge.svg)
 
-This Svelte library ...
+# Tilez
