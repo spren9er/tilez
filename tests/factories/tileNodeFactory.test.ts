@@ -16,7 +16,7 @@ describe('TileNodeFactory', () => {
     const specs = node.specs;
 
     expect(specs).toBeDefined();
-    expect(specs.width!).toEqual(width);
-    expect(specs.height!).toEqual(height);
+    expect(specs?.width).toEqual(width);
+    expect(specs?.height).toEqual(height);
   });
 });
