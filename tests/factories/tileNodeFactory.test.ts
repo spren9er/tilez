@@ -15,7 +15,6 @@ describe('TileNodeFactory', () => {
     const node = new TileNodeFactory({ width, height }).build();
     const specs = node.specs;
 
-    expect(specs).toBeDefined();
     expect(specs?.width).toEqual(width);
     expect(specs?.height).toEqual(height);
   });
