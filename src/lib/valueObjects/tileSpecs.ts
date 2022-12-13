@@ -2,7 +2,7 @@ import type { Writable } from 'svelte/store';
 import { getContext } from 'svelte';
 
 export function getSpecs(): Writable<TileSpecs> {
-  return getContext('tilez');
+  return getContext('tilez-specs');
 }
 
 export class TileSpecs {

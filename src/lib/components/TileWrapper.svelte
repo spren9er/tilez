@@ -21,6 +21,8 @@
 <style>
 	#tile-wrapper {
 		visibility: hidden;
+		margin: 0;
+		padding: 0;
 	}
 
 	#tile-wrapper.visible {

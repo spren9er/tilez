@@ -7,7 +7,7 @@
 	} from '$lib/types/tileProps.type';
 	import type { TileNode } from '$lib/entities/tileNode';
 
-	import { registerTile } from '$lib/services/registerTile';
+	import { registerTile } from '$lib/services/tileRegistration';
 
 	import TilePlain from '$lib/components/TilePlain.svelte';
 	import TileSVG from '$lib/components/TileSVG.svelte';

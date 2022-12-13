@@ -12,7 +12,7 @@ import type { TileProps } from '$lib/valueObjects/tileProps';
 
 import { TileSpecs } from '$lib/valueObjects/tileSpecs';
 
-export class CalculateSpecs {
+export class TileSpecsCalculation {
   private props: { idx: number; props: TileProps }[];
   private stack?: TypeTilePropsStack;
   private specs: TileSpecs;

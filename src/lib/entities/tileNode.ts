@@ -5,7 +5,7 @@ import type { TileProps } from '$lib/valueObjects/tileProps';
 import type { TileSpecs } from '$lib/valueObjects/tileSpecs';
 
 import { TilePropsDimensionFactory } from '$lib/factories/tilePropsDimensionFactory';
-import { CalculateSpecs } from '$lib/services/calculateSpecs';
+import { TileSpecsCalculation } from '$lib/services/tileSpecsCalculation';
 
 export class TileNode {
   public props: TileProps;
@@ -58,7 +58,7 @@ export class TileNode {
   public updateChildrenSpecs() {
     if (!this.hasChildren || !this.specs) return;
 
-    const specs = new CalculateSpecs(this).call();
+    const specs = new TileSpecsCalculation(this).call();
 
     if (specs.length === 0) return;
 
@@ -102,7 +102,12 @@ export class TileNode {
   }
 
   private derivePropsFrom(parent: TileNode) {
-    if (!this.props.type) this.props.type = get(parent).props.type;
+    const parentType = get(parent).props.type;
+    const type = this.props.type;
+    if (type && type !== 'svg' && parentType === 'svg')
+      throw Error("SVG tile can't be embedded into a non-SVG tile!");
+    if (!type) this.props.type = parentType;
+
     if (!this.props.padding) this.props.padding = get(parent).props.padding;
   }
 }

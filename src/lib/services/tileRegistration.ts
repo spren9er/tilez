@@ -7,6 +7,17 @@ import type { TileSpecs } from '$lib/valueObjects/tileSpecs';
 
 import { TileNodeFactory } from '$lib/factories/tileNodeFactory';
 
+export function registerTile(props: TypeTileProps) {
+  const parent: TileNode = getContext('tilez-nodes');
+
+  const node = new TileRegistration(props, parent).call();
+
+  setContext('tilez-nodes', node);
+  setSpecsContext('tilez-specs', node);
+
+  return node;
+}
+
 class TileRegistration {
   private props: TypeTileProps;
   private parent: TileNode;
@@ -17,9 +28,7 @@ class TileRegistration {
   }
 
   public call() {
-    const node = new TileNodeFactory(this.props, this.parent).build();
-
-    return node;
+    return new TileNodeFactory(this.props, this.parent).build();
   }
 }
 
@@ -36,15 +45,4 @@ function setSpecsContext(name: string, node: TileNode) {
   });
 
   setContext(name, specs);
-}
-
-export function registerTile(props: TypeTileProps) {
-  const parent: TileNode = getContext('tilez-node');
-
-  const node = new TileRegistration(props, parent).call();
-
-  setContext('tilez-node', node);
-  setSpecsContext('tilez', node);
-
-  return node;
 }

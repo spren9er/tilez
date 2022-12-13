@@ -7,7 +7,7 @@
 </script>
 
 <div
-	class="box"
+	class="tile"
 	style="
 			top: {$specs.absY}px;
 			left: {$specs.absX}px;
@@ -26,10 +26,11 @@
 </div>
 
 <style>
-	.box {
+	.tile {
 		position: absolute;
-		overflow: hidden;
-		background-color: #efefef;
+		box-sizing: border-box;
+		background-color: #dedede;
+		border: 1px solid #cccccc;
 	}
 
 	ul {

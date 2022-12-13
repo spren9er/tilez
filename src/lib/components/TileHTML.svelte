@@ -26,6 +26,8 @@
 <style>
 	#tile-root {
 		position: relative;
+		margin: 0;
+		padding: 0;
 	}
 
 	.tile {
@@ -34,5 +36,7 @@
 		left: var(--left);
 		width: var(--width);
 		height: var(--height);
+		margin: 0;
+		padding: 0;
 	}
 </style>
