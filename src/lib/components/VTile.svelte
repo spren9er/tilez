@@ -1,11 +1,11 @@
 <script lang="ts">
-	import Tile from './Tile.svelte';
-
 	import type {
 		TypeTilePropsDimension,
 		TypeTilePropsAlign,
 		TypeTilePropsType,
 	} from '$lib/types/tileProps.type';
+
+	import Tile from './Tile.svelte';
 
 	export let width: TypeTilePropsDimension | undefined = undefined;
 	export let height: TypeTilePropsDimension | undefined = undefined;
