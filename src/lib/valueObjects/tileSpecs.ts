@@ -1,3 +1,10 @@
+import type { Writable } from 'svelte/store';
+import { getContext } from 'svelte';
+
+export function getSpecs(): Writable<TileSpecs> {
+  return getContext('tilez');
+}
+
 export class TileSpecs {
   constructor(
     public width: number,

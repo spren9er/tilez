@@ -1,18 +1,13 @@
 <script lang="ts">
-	import type { Writable } from 'svelte/store';
-	import { getContext } from 'svelte';
-
-	import type { TileSpecs } from '$lib/valueObjects/tileSpecs';
+	import { getSpecs } from '$lib/valueObjects/tileSpecs';
 
 	export let root: boolean;
 
-	const specs: Writable<TileSpecs> = getContext('tilez');
+	const specs = getSpecs();
 </script>
 
-<slot />
-
 {#if root}
-	<div id="root-tile">
+	<div id="tile-root">
 		<slot />
 	</div>
 {:else}
@@ -29,7 +24,7 @@
 {/if}
 
 <style>
-	#root-tile {
+	#tile-root {
 		position: relative;
 	}
 

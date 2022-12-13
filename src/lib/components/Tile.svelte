@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-
 	import type {
 		TypeTilePropsStack,
 		TypeTilePropsDimension,
@@ -14,6 +12,7 @@
 	import TilePlain from '$lib/components/TilePlain.svelte';
 	import TileSVG from '$lib/components/TileSVG.svelte';
 	import TileHTML from '$lib/components/TileHTML.svelte';
+	import TileWrapper from '$lib/components/TileWrapper.svelte';
 
 	export let stack: TypeTilePropsStack | undefined = undefined;
 	export let width: TypeTilePropsDimension | undefined = undefined;
@@ -22,46 +21,24 @@
 	export let align: TypeTilePropsAlign | undefined = undefined;
 	export let type: TypeTilePropsType | undefined = undefined;
 
-	let visible = false;
-
 	const node = registerTile({ stack, width, height, align, padding, type });
 	const root = $node.isRoot;
 
 	const componentFor = (node: TileNode) => {
-		const component_mapping = {
+		const componentMapping = {
 			plain: TilePlain,
 			svg: TileSVG,
 			html: TileHTML,
 		};
 
-		return component_mapping[node.props.type || 'plain'];
+		return componentMapping[node.props.type || 'plain'];
 	};
 
 	$: if (root) $node.updateSpecs(width!, height!);
-
-	onMount(() => {
-		visible = true;
-	});
 </script>
 
-{#if root}
-	<div id="root" class:visible>
-		<svelte:component this={componentFor($node)} {root}>
-			<slot />
-		</svelte:component>
-	</div>
-{:else}
+<TileWrapper {root}>
 	<svelte:component this={componentFor($node)} {root}>
 		<slot />
 	</svelte:component>
-{/if}
-
-<style>
-	#root {
-		visibility: hidden;
-	}
-
-	#root.visible {
-		visibility: visible;
-	}
-</style>
+</TileWrapper>

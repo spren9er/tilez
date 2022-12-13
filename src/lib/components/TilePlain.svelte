@@ -1,5 +1,7 @@
 <script lang="ts">
-	export const root = true;
+	export let root;
+
+	root;
 </script>
 
 <slot />
