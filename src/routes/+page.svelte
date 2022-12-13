@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Tile, HTile, VTile } from '$lib';
 
-	import TileSpecsInfo from '$lib/components/TileSpecsInfo.svelte';
+	import TileSpecsInfo from '$lib/components/_tileExamples/TileSpecsInfo.svelte';
 
 	let width = 900;
 	let height = 600;

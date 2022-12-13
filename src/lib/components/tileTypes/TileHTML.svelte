@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getSpecs } from '$lib/valueObjects/tileSpecs';
+	import { getSpecs } from '$lib/entities/tileSpecs';
 
 	export let root: boolean;
 

@@ -9,10 +9,10 @@
 
 	import { registerTile } from '$lib/services/tileRegistration';
 
-	import TilePlain from '$lib/components/TilePlain.svelte';
-	import TileSVG from '$lib/components/TileSVG.svelte';
-	import TileHTML from '$lib/components/TileHTML.svelte';
-	import TileWrapper from '$lib/components/TileWrapper.svelte';
+	import TileWrapper from '$lib/components/tileTypes/TileWrapper.svelte';
+	import TilePlain from '$lib/components/tileTypes/TilePlain.svelte';
+	import TileSVG from '$lib/components/tileTypes/TileSVG.svelte';
+	import TileHTML from '$lib/components/tileTypes/TileHTML.svelte';
 
 	export let stack: TypeTilePropsStack | undefined = undefined;
 	export let width: TypeTilePropsDimension | undefined = undefined;

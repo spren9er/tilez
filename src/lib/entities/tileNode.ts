@@ -2,7 +2,7 @@ import { get, writable, type Writable } from 'svelte/store';
 
 import type { TypeTilePropsDimension } from '$lib/types/tileProps.type';
 import type { TileProps } from '$lib/valueObjects/tileProps';
-import type { TileSpecs } from '$lib/valueObjects/tileSpecs';
+import type { TileSpecs } from '$lib/entities/tileSpecs';
 
 import { TilePropsDimensionFactory } from '$lib/factories/tilePropsDimensionFactory';
 import { TileSpecsCalculation } from '$lib/services/tileSpecsCalculation';

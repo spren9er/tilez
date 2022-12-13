@@ -1,3 +1,3 @@
 ![Tests](https://github.com/spren9er/tilez/actions/workflows/test.yml/badge.svg)
 
-# Tilez
+# ![Logo](https://github.com/spren9er/tilez/blob/main/static/tilez.svg) tilez

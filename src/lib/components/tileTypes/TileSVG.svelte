@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getSpecs } from '$lib/valueObjects/tileSpecs';
+	import { getSpecs } from '$lib/entities/tileSpecs';
 
 	export let root: boolean;
 
@@ -9,8 +9,8 @@
 {#if root}
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
-		width="{$specs.width}px"
-		height="{$specs.height}px"
+		width={$specs.width}
+		height={$specs.height}
 		viewBox="0 0 {$specs.width} {$specs.height}"
 	>
 		<slot />

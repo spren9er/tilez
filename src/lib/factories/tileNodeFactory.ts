@@ -2,7 +2,7 @@ import type { TypeTileProps } from '$lib/types/tileProps.type';
 import type { TileProps } from '$lib/valueObjects/tileProps';
 
 import { TileNode } from '$lib/entities/tileNode';
-import { TileSpecs } from '$lib/valueObjects/tileSpecs';
+import { TileSpecs } from '$lib/entities/tileSpecs';
 import { TilePropsFactory } from '$lib/factories/tilePropsFactory';
 
 export class TileNodeFactory {

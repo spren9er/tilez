@@ -29,6 +29,7 @@
 	.tile {
 		position: absolute;
 		box-sizing: border-box;
+		overflow: hidden;
 		background-color: #dedede;
 		border: 1px solid #cccccc;
 	}

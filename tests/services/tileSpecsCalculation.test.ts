@@ -3,7 +3,7 @@ import { expect, describe, it } from 'vitest';
 import type { TypeTilePropsAlign } from '$lib/types/tileProps.type';
 
 import { TileNode } from '$lib/entities/tileNode';
-import { TileSpecs } from '$lib/valueObjects/tileSpecs';
+import { TileSpecs } from '$lib/entities/tileSpecs';
 import { TileNodeFactory } from '$lib/factories/tileNodeFactory';
 import { TilePropsFactory } from '$lib/factories/tilePropsFactory';
 import { TileSpecsCalculation } from '$lib/services/tileSpecsCalculation';

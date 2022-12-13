@@ -10,7 +10,7 @@ import type {
 import type { TileNode } from '$lib/entities/tileNode';
 import type { TileProps } from '$lib/valueObjects/tileProps';
 
-import { TileSpecs } from '$lib/valueObjects/tileSpecs';
+import { TileSpecs } from '$lib/entities/tileSpecs';
 
 export class TileSpecsCalculation {
   private props: { idx: number; props: TileProps }[];
@@ -150,7 +150,7 @@ export class TileSpecsCalculation {
     return specs.map((specs, idx) => {
       const props = this.props[idx].props;
       if (props.stack === 'none')
-        specs = this.paddingFor(specs, props.padding ?? 0);
+        specs = this.applyPaddingFor(specs, props.padding ?? 0);
 
       const { width, height, absX, absY, relX, relY } = specs;
 
@@ -160,7 +160,7 @@ export class TileSpecsCalculation {
     });
   }
 
-  private paddingFor(specs: TypeTileSpecs, padding: number) {
+  private applyPaddingFor(specs: TypeTileSpecs, padding: number) {
     const width = Math.max(specs.width - 2 * padding, 0);
     const height = Math.max(specs.height - 2 * padding, 0);
 

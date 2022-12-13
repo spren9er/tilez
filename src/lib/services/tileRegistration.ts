@@ -3,7 +3,7 @@ import { writable } from 'svelte/store';
 
 import type { TypeTileProps } from '$lib/types/tileProps.type';
 import type { TileNode } from '$lib/entities/tileNode';
-import type { TileSpecs } from '$lib/valueObjects/tileSpecs';
+import type { TileSpecs } from '$lib/entities/tileSpecs';
 
 import { TileNodeFactory } from '$lib/factories/tileNodeFactory';
 
