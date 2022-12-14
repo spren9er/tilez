@@ -1,4 +1,5 @@
 {
+  "testing.automaticallyOpenPeekView": "never",
   "vitest.changeBackgroundColor": false,
   "vitest.enable": true,
 }

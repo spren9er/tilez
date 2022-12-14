@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { getSpecs } from '$lib';
+	import { getSpecsContext } from '$lib';
 
-	const specs = getSpecs();
+	const specs = getSpecsContext();
 
 	const format = (number: number) => Number(number).toFixed(0);
 </script>

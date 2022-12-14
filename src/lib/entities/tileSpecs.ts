@@ -1,11 +1,23 @@
-import type { Writable } from 'svelte/store';
-import { getContext } from 'svelte';
+type TypeRange = [number, number];
 
-export function getSpecs(): Writable<TileSpecs> {
-  return getContext('tilez-specs');
+function scaleLinear(
+  domain: [number, number],
+  range: [number, number],
+): (x: number) => number {
+  const [x1, x2] = domain;
+  const [y1, y2] = range;
+
+  if (x1 === x2) throw new Error('Empty domain is not allowed!');
+
+  if (x1 > x2) return scaleLinear([x2, x1], [range[1], range[0]]);
+
+  return (x: number) => (y1 * (x2 - x) + y2 * (x - x1)) / (x2 - x1);
 }
 
 export class TileSpecs {
+  private coordsX?: TileSpecsCoords;
+  private coordsY?: TileSpecsCoords;
+
   constructor(
     public width: number,
     public height: number,
@@ -15,59 +27,86 @@ export class TileSpecs {
     public relY: number,
   ) {}
 
-  public x(x: number) {
-    return this.scaleLinear(
-      [0, this.width],
-      [this.relX, this.relX + this.width],
-    )(x);
+  public domainX(domain: [number, number]) {
+    this.coordsX = this.specsCoordsX(domain);
+
+    return this;
   }
 
-  public xRev(x: number) {
-    return this.scaleLinear(
-      [0, this.width],
-      [this.relX + this.width, this.relX],
-    )(x);
+  public domainY(domain: [number, number]) {
+    this.coordsY = this.specsCoordsY(domain);
+
+    return this;
+  }
+
+  public x(x: number) {
+    if (!this.coordsX) throw Error('No domain for x-axis specified!');
+
+    return this.coordsX.transform(x);
   }
 
   public y(y: number) {
-    return this.scaleLinear(
-      [0, this.height],
-      [this.relY, this.relY + this.height],
-    )(y);
+    if (!this.coordsY) throw Error('No domain for y-axis specified!');
+
+    return this.coordsY.transform(y);
   }
 
-  public yRev(y: number) {
-    return this.scaleLinear(
-      [0, this.height],
-      [this.relY + this.height, this.relY],
-    )(y);
+  public px(x: number) {
+    return this.specsCoordsX([0, 1]).transform(x);
   }
 
-  public pX(x: number) {
-    return this.scaleLinear([0, 1], [this.relX, this.relX + this.width])(x);
+  public py(y: number) {
+    return this.specsCoordsY([0, 1]).transform(y);
   }
 
-  public pXRev(x: number) {
-    return this.scaleLinear([0, 1], [this.relX + this.width, this.relX])(x);
+  public xinv(x: number) {
+    if (!this.coordsX) throw Error('No domain for x-axis specified!');
+
+    return this.coordsX.invTransform(x);
   }
 
-  public pY(y: number) {
-    return this.scaleLinear([0, 1], [this.relY, this.relY + this.height])(y);
+  public yinv(y: number) {
+    if (!this.coordsY) throw Error('No domain for y-axis specified!');
+
+    return this.coordsY.invTransform(y);
   }
 
-  public pYRev(y: number) {
-    return this.scaleLinear([0, 1], [this.relY + this.height, this.relY])(y);
+  public pxinv(x: number) {
+    return this.specsCoordsX([0, 1]).invTransform(x);
   }
 
-  private scaleLinear(
-    domain: number[],
-    range: number[],
-  ): (x: number) => number {
-    const [x1, x2] = domain;
-    const [y1, y2] = range;
+  public pyinv(y: number) {
+    return this.specsCoordsY([0, 1]).invTransform(y);
+  }
 
-    if (x1 === x2) return () => (y2 - y1) / 2;
+  private specsCoordsY(domain: [number, number]) {
+    const range = [0, this.height] as TypeRange;
 
-    return (x: number) => (y1 * (x2 - x) + y2 * (x - x1)) / (x2 - x1);
+    return new TileSpecsCoords(domain, range);
+  }
+
+  private specsCoordsX(domain: [number, number]) {
+    const range = [0, this.width] as TypeRange;
+
+    return new TileSpecsCoords(domain, range);
+  }
+}
+
+class TileSpecsCoords {
+  constructor(
+    private domain: [number, number],
+    private range: [number, number],
+  ) {}
+
+  public transform(x: number) {
+    const linearScale = scaleLinear(this.domain, this.range);
+
+    return linearScale(x);
+  }
+
+  public invTransform(y: number) {
+    const invLinearScale = scaleLinear(this.range, this.domain);
+
+    return invLinearScale(y);
   }
 }

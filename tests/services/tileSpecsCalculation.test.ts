@@ -233,4 +233,23 @@ describe('TileSpecsCalculation', () => {
       new TileSpecs(400, 500, 600, 500, 600, 500),
     ]);
   });
+
+  it('returns specs in same order as children', () => {
+    const root = new TileNodeFactory({
+      ...propsDimensions,
+      stack: 'horizontal',
+    }).build();
+    new TileNodeFactory({}, root).build();
+    new TileNodeFactory({ width: '25%' }, root).build();
+    new TileNodeFactory({ width: '400px' }, root).build();
+
+    // during calculation children props/specs are sorted twice
+    const childrenSpecs = new TileSpecsCalculation(root).call();
+
+    expect(childrenSpecs).toEqual([
+      new TileSpecs(450, 1000, 0, 0, 0, 0),
+      new TileSpecs(150, 1000, 450, 0, 450, 0),
+      new TileSpecs(400, 1000, 600, 0, 600, 0),
+    ]);
+  });
 });

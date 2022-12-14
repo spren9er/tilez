@@ -60,8 +60,6 @@ export class TileNode {
 
     const specs = new TileSpecsCalculation(this).call();
 
-    if (specs.length === 0) return;
-
     this.children.forEach((child, idx) => {
       child.update((node: TileNode) => {
         node.specs = specs[idx];

@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { getSpecs } from '$lib/entities/tileSpecs';
+	import { getSpecsContext } from '$lib/entities/tileContext';
 
 	export let root: boolean;
 
-	const specs = getSpecs();
+	const specs = getSpecsContext();
 </script>
 
 {#if root}

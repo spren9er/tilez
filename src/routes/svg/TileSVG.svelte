@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { getSpecs } from '$lib';
+	import { getSpecsContext } from '$lib';
 
-	const specs = getSpecs();
+	const specs = getSpecsContext();
 </script>
 
 <rect

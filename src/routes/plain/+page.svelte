@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Tile, HTile, VTile } from '$lib';
 
-	import TileSpecsInfo from '$lib/components/_tileExamples/TileSpecsInfo.svelte';
+	import TilePlain from './TilePlain.svelte';
 
 	let width = 900;
 	let height = 600;
@@ -15,62 +15,62 @@
 	<HTile {width} {height} {padding}>
 		<VTile>
 			<Tile height="30%">
-				<TileSpecsInfo />
+				<TilePlain />
 			</Tile>
 			<Tile>
-				<TileSpecsInfo />
+				<TilePlain />
 			</Tile>
 		</VTile>
 		<Tile>
-			<TileSpecsInfo />
+			<TilePlain />
 		</Tile>
 		<VTile width="220px">
 			<Tile>
-				<TileSpecsInfo />
+				<TilePlain />
 			</Tile>
 			<Tile>
-				<TileSpecsInfo />
+				<TilePlain />
 			</Tile>
 			<HTile width="80%">
 				<Tile>
-					<TileSpecsInfo />
+					<TilePlain />
 				</Tile>
 				<Tile>
-					<TileSpecsInfo />
+					<TilePlain />
 				</Tile>
 			</HTile>
 			<HTile>
 				<Tile height="50%" align="bottom">
-					<TileSpecsInfo />
+					<TilePlain />
 				</Tile>
 				<Tile height="50%" align="top">
-					<TileSpecsInfo />
+					<TilePlain />
 				</Tile>
 			</HTile>
 		</VTile>
 		<Tile width="20%">
-			<TileSpecsInfo />
+			<TilePlain />
 		</Tile>
 		<Tile height="60%" align="center">
-			<TileSpecsInfo />
+			<TilePlain />
 		</Tile>
 		<VTile>
 			<HTile>
 				<Tile>
-					<TileSpecsInfo />
+					<TilePlain />
 				</Tile>
 				<Tile>
-					<TileSpecsInfo />
+					<TilePlain />
 				</Tile>
 			</HTile>
 			<Tile width="80" height="100px" align="center">
-				<TileSpecsInfo />
+				<TilePlain />
 			</Tile>
 			<Tile>
-				<TileSpecsInfo />
+				<TilePlain />
 			</Tile>
 			<Tile width="0.75" align="right">
-				<TileSpecsInfo />
+				<TilePlain />
 			</Tile>
 		</VTile>
 	</HTile>

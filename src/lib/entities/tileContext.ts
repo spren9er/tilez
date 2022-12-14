@@ -1,5 +1,5 @@
 import { getContext, setContext } from 'svelte';
-import { writable } from 'svelte/store';
+import { writable, type Writable } from 'svelte/store';
 
 import type { TypeTileProps } from '$lib/types/tileProps.type';
 import type { TileNode } from '$lib/entities/tileNode';
@@ -7,29 +7,19 @@ import type { TileSpecs } from '$lib/entities/tileSpecs';
 
 import { TileNodeFactory } from '$lib/factories/tileNodeFactory';
 
-export function registerTile(props: TypeTileProps) {
+export function getSpecsContext(): Writable<TileSpecs> {
+  return getContext('tilez-specs');
+}
+
+export function setNodeContext(props: TypeTileProps) {
   const parent: TileNode = getContext('tilez-nodes');
 
-  const node = new TileRegistration(props, parent).call();
+  const node = new TileNodeFactory(props, parent).build();
 
   setContext('tilez-nodes', node);
   setSpecsContext('tilez-specs', node);
 
   return node;
-}
-
-class TileRegistration {
-  private props: TypeTileProps;
-  private parent: TileNode;
-
-  constructor(props: TypeTileProps, parent: TileNode) {
-    this.props = props;
-    this.parent = parent;
-  }
-
-  public call() {
-    return new TileNodeFactory(this.props, this.parent).build();
-  }
 }
 
 function setSpecsContext(name: string, node: TileNode) {

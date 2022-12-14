@@ -7,9 +7,9 @@
 	} from '$lib/types/tileProps.type';
 	import type { TileNode } from '$lib/entities/tileNode';
 
-	import { registerTile } from '$lib/services/tileRegistration';
+	import { setNodeContext } from '$lib/entities/tileContext';
 
-	import TileWrapper from '$lib/components/tileTypes/TileWrapper.svelte';
+	import TileWrapper from '$lib/components/TileWrapper.svelte';
 	import TilePlain from '$lib/components/tileTypes/TilePlain.svelte';
 	import TileSVG from '$lib/components/tileTypes/TileSVG.svelte';
 	import TileHTML from '$lib/components/tileTypes/TileHTML.svelte';
@@ -21,7 +21,7 @@
 	export let align: TypeTilePropsAlign | undefined = undefined;
 	export let type: TypeTilePropsType | undefined = undefined;
 
-	const node = registerTile({ stack, width, height, align, padding, type });
+	const node = setNodeContext({ stack, width, height, align, padding, type });
 	const root = $node.isRoot;
 
 	const componentFor = (node: TileNode) => {
