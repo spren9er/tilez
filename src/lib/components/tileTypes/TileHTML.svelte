@@ -6,30 +6,19 @@
 	const specs = getSpecsContext();
 </script>
 
-{#if root}
-	<div id="tile-root">
-		<slot />
-	</div>
-{:else}
-	<div
-		class="tile"
-		style="
+<div
+	class:root
+	class="tile"
+	style="
       --top: {$specs.relY}px;
       --left: {$specs.relX}px;
       --width: {$specs.width}px;
       --height: {$specs.height}px"
-	>
-		<slot />
-	</div>
-{/if}
+>
+	<slot />
+</div>
 
 <style>
-	#tile-root {
-		position: relative;
-		margin: 0;
-		padding: 0;
-	}
-
 	.tile {
 		position: absolute;
 		top: var(--top);
@@ -38,5 +27,9 @@
 		height: var(--height);
 		margin: 0;
 		padding: 0;
+	}
+
+	.root.tile {
+		position: relative;
 	}
 </style>
