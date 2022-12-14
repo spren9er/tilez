@@ -3,13 +3,13 @@
 
 	import TileSVGExample from './TileSVG.svelte';
 
-	let width = 900;
-	let height = 600;
+	let width = 500;
+	let height = 500;
 	let padding = 2;
 </script>
 
-<input type="range" min={900 - 250} max={900 + 250} bind:value={width} />
-<input type="range" min={600 - 250} max={600 + 250} bind:value={height} />
+<input type="range" min={0} max={1000} bind:value={width} />
+<input type="range" min={0} max={1000} bind:value={height} />
 
 <HTile {width} {height} {padding} type="svg">
 	<VTile>
