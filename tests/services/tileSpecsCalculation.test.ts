@@ -174,7 +174,7 @@ describe('TileSpecsCalculation', () => {
 
     expect(childrenSpecs).toEqual([
       new TileSpecs(970, 980, 10, 10, 10, 10),
-      new TileSpecs(0, 980, 1000, 10, 1000, 10),
+      new TileSpecs(0, 980, 990, 10, 990, 10),
     ]);
   });
 
@@ -250,6 +250,22 @@ describe('TileSpecsCalculation', () => {
       new TileSpecs(450, 1000, 0, 0, 0, 0),
       new TileSpecs(150, 1000, 450, 0, 450, 0),
       new TileSpecs(400, 1000, 600, 0, 600, 0),
+    ]);
+  });
+
+  it('sets specs sizes to zero if no more space is available', () => {
+    const root = new TileNodeFactory({
+      ...propsDimensions,
+      stack: 'horizontal',
+    }).build();
+    new TileNodeFactory({ width: propsDimensions.width + 1 }, root).build();
+    new TileNodeFactory({ width: '400px' }, root).build();
+
+    const childrenSpecs = new TileSpecsCalculation(root).call();
+
+    expect(childrenSpecs).toEqual([
+      new TileSpecs(1000, 1000, 0, 0, 0, 0),
+      new TileSpecs(0, 1000, 1000, 0, 1000, 0),
     ]);
   });
 });

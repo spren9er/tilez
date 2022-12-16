@@ -73,7 +73,7 @@ export class TileSpecsCalculation {
         if (unit) nPxPctSize += 1;
         if (unit === 'px') cumPxSize += stackSize;
         if (unit === '%') cumPctSize += stackSize;
-      }
+      } else stackSize = 0;
 
       const specsDimension = {
         [this.stackDimension]: stackSize,
@@ -164,13 +164,16 @@ export class TileSpecsCalculation {
     const width = Math.max(specs.width - 2 * padding, 0);
     const height = Math.max(specs.height - 2 * padding, 0);
 
+    const hPadding = width === 0 ? 0 : padding;
+    const vPadding = height === 0 ? 0 : padding;
+
     return {
       width,
       height,
-      absX: specs.absX + padding,
-      absY: specs.absY + padding,
-      relX: specs.relX + padding,
-      relY: specs.relY + padding,
+      absX: specs.absX + hPadding,
+      absY: specs.absY + vPadding,
+      relX: specs.relX + hPadding,
+      relY: specs.relY + vPadding,
     };
   }
 
