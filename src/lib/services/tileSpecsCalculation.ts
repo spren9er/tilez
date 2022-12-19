@@ -21,6 +21,7 @@ export class TileSpecsCalculation {
   private fixedFullSize: number;
   private fullSize: number;
   private pctFullSize: number;
+  private firstTile: boolean;
 
   constructor(node: TileNode) {
     if (!node.specs)
@@ -45,6 +46,7 @@ export class TileSpecsCalculation {
 
     this.fullSize = 0;
     this.pctFullSize = this.stackFullSize;
+    this.firstTile = true;
   }
 
   public call(): TileSpecs[] {
@@ -131,19 +133,17 @@ export class TileSpecsCalculation {
       return props.dim(this.stackDimension).unit === 'px';
     });
 
-    let firstTile = true;
-
     return pxProps.map(({ props }) => {
       if (this.pctFullSize <= innerPadding) return 0;
 
       const stackDimension = props.dim(this.stackDimension);
       const stackSize = Math.min(stackDimension.size!, this.pctFullSize);
 
-      const step = firstTile ? stackSize : innerPadding + stackSize;
+      const step = this.firstTile ? stackSize : innerPadding + stackSize;
 
       if (stackSize > 0) {
         this.pctFullSize -= step;
-        firstTile = false;
+        this.firstTile = false;
       }
 
       return stackSize;
@@ -158,7 +158,10 @@ export class TileSpecsCalculation {
     });
     const maxPctSpecs = pctProps.length;
 
-    if (this.pctFullSize <= innerPadding) return new Array(maxPctSpecs).fill(0);
+    // there are already some px tiles (add single inner padding add the end)
+    if (!this.firstTile) this.pctFullSize -= innerPadding;
+
+    if (this.pctFullSize < 1) return new Array(maxPctSpecs).fill(0);
 
     let sizes: number[] = [];
     Array.from({ length: maxPctSpecs }, (_, i) => i + 1)
@@ -175,14 +178,14 @@ export class TileSpecsCalculation {
         let success = true;
 
         pctProps.every(({ props }, idx) => {
+          if (idx >= n) {
+            sizes.push(0);
+            return true;
+          }
+
           if (availableSize < 1) {
-            if (idx >= n) {
-              sizes.push(0);
-              return true;
-            } else {
-              success = false;
-              return false;
-            }
+            success = false;
+            return false;
           }
 
           const stackDimension = props.dim(this.stackDimension);
@@ -197,7 +200,7 @@ export class TileSpecsCalculation {
             const nFlexTiles = n - nPctTiles;
             stackSize = flexFullSize / nFlexTiles;
 
-            if (stackSize < 1) {
+            if (nFlexTiles <= 0 || stackSize < 1) {
               success = false;
               return false;
             }
