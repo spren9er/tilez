@@ -110,9 +110,9 @@ describe('TileNode', () => {
   });
 
   it('overrides inner padding from parent when given explicitly', () => {
-    const childInnerPadding = 5;
+    const childInnerPadding = 0;
 
-    const props = new TilePropsFactory({ innerPadding: 10 }).build();
+    const props = new TilePropsFactory({ innerPadding: 5 }).build();
     const node = new TileNode(props);
     const child = new TileNodeFactory(
       { innerPadding: childInnerPadding },
