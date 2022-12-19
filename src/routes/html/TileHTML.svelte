@@ -4,10 +4,12 @@
 	const specs = getSpecsContext();
 </script>
 
-<div
-	class="tile"
-	style="--width: {$specs.width}px; --height: {$specs.height}px"
-/>
+{#if $specs}
+	<div
+		class="tile"
+		style="--width: {$specs.width}px; --height: {$specs.height}px"
+	/>
+{/if}
 
 <style>
 	.tile {

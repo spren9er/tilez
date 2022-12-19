@@ -10,4 +10,13 @@ export type TypeTileSpecsCoords = {
   relY: number;
 };
 
-export type TypeTileSpecs = TypeTileSpecsDimension & TypeTileSpecsCoords;
+export type TypeTileSpecsFormat = {
+  innerPadding: number;
+  outerPadding: number;
+  hAlign: 'left' | 'center' | 'right';
+  vAlign: 'top' | 'center' | 'bottom';
+};
+
+export type TypeTileSpecs = TypeTileSpecsDimension &
+  TypeTileSpecsCoords &
+  TypeTileSpecsFormat;

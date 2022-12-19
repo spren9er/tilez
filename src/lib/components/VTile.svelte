@@ -1,7 +1,8 @@
 <script lang="ts">
 	import type {
 		TypeTilePropsDimension,
-		TypeTilePropsAlign,
+		TypeTilePropsHAlign,
+		TypeTilePropsVAlign,
 		TypeTilePropsType,
 	} from '$lib/types/tileProps.type';
 
@@ -9,11 +10,22 @@
 
 	export let width: TypeTilePropsDimension | undefined = undefined;
 	export let height: TypeTilePropsDimension | undefined = undefined;
-	export let padding: TypeTilePropsDimension | undefined = undefined;
-	export let align: TypeTilePropsAlign | undefined = undefined;
+	export let innerPadding: TypeTilePropsDimension | undefined = undefined;
+	export let outerPadding: TypeTilePropsDimension | undefined = undefined;
+	export let hAlign: TypeTilePropsHAlign | undefined = undefined;
+	export let vAlign: TypeTilePropsVAlign | undefined = undefined;
 	export let type: TypeTilePropsType | undefined = undefined;
 </script>
 
-<Tile stack="vertical" {width} {height} {align} {padding} {type}>
+<Tile
+	stack="vertical"
+	{width}
+	{height}
+	{innerPadding}
+	{outerPadding}
+	{hAlign}
+	{vAlign}
+	{type}
+>
 	<slot />
 </Tile>

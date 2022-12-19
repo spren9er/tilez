@@ -4,11 +4,13 @@
 	const specs = getSpecsContext();
 </script>
 
-<rect
-	x={0}
-	y={0}
-	width={$specs.width}
-	height={$specs.height}
-	fill="#dedede"
-	stroke="#cccccc"
-/>
+{#if $specs}
+	<rect
+		x={0}
+		y={0}
+		width={$specs.width}
+		height={$specs.height}
+		fill="#dedede"
+		stroke="#cccccc"
+	/>
+{/if}

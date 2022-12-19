@@ -22,11 +22,24 @@ export class TileNodeFactory {
   }
 
   private rootSpecs() {
-    const { width, height } = this.props;
+    const { width, height, innerPadding, outerPadding, hAlign, vAlign } =
+      this.props;
+
     const errorMsg = 'Root tile requires absolute width and height!';
 
     if (!width || !height) throw new Error(errorMsg);
 
-    return new TileSpecs(width, height, 0, 0, 0, 0);
+    return new TileSpecs(
+      width,
+      height,
+      0,
+      0,
+      0,
+      0,
+      innerPadding ?? 0,
+      outerPadding ?? 0,
+      hAlign || 'left',
+      vAlign || 'top',
+    );
   }
 }

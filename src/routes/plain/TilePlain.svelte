@@ -6,24 +6,26 @@
 	const format = (number: number) => Number(number).toFixed(0);
 </script>
 
-<div
-	class="tile"
-	style="
+{#if $specs.width > 0 && $specs.height > 0}
+	<div
+		class="tile"
+		style="
 			top: {$specs.absY}px;
 			left: {$specs.absX}px;
 			width: {$specs.width}px;
 			height: {$specs.height}px;
 		"
->
-	<ul>
-		<li><b>Width x Height</b></li>
-		<li class="specs">{format($specs.width)} x {format($specs.height)}</li>
-		<li><b>X / Y (rel.)</b></li>
-		<li class="specs">{format($specs.relX)} / {format($specs.relY)}</li>
-		<li><b>X / Y (abs.)</b></li>
-		<li class="specs">{format($specs.absX)} / {format($specs.absY)}</li>
-	</ul>
-</div>
+	>
+		<ul>
+			<li><b>Width x Height</b></li>
+			<li class="specs">{format($specs.width)} x {format($specs.height)}</li>
+			<li><b>X / Y (rel.)</b></li>
+			<li class="specs">{format($specs.relX)} / {format($specs.relY)}</li>
+			<li><b>X / Y (abs.)</b></li>
+			<li class="specs">{format($specs.absX)} / {format($specs.absY)}</li>
+		</ul>
+	</div>
+{/if}
 
 <style>
 	.tile {

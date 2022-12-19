@@ -97,32 +97,51 @@ describe('TileNode', () => {
     expect(child.props.type).toBeUndefined();
   });
 
-  it('derives padding from parent unless specified', () => {
-    const parentPadding = 10;
+  it('derives inner padding from parent unless specified', () => {
+    const parentInnerPadding = 10;
 
-    const props = new TilePropsFactory({ padding: parentPadding }).build();
+    const props = new TilePropsFactory({
+      innerPadding: parentInnerPadding,
+    }).build();
     const node = new TileNode(props);
     const child = new TileNodeFactory({}, node).build();
 
-    expect(child.props.padding).toEqual(parentPadding);
+    expect(child.props.innerPadding).toEqual(parentInnerPadding);
   });
 
-  it('overrides padding from parent', () => {
-    const childPadding = 5;
+  it('overrides inner padding from parent when given explicitly', () => {
+    const childInnerPadding = 5;
 
-    const props = new TilePropsFactory({ padding: 10 }).build();
+    const props = new TilePropsFactory({ innerPadding: 10 }).build();
     const node = new TileNode(props);
-    const child = new TileNodeFactory({ padding: childPadding }, node).build();
+    const child = new TileNodeFactory(
+      { innerPadding: childInnerPadding },
+      node,
+    ).build();
 
-    expect(child.props.padding).toEqual(childPadding);
+    expect(child.props.innerPadding).toEqual(childInnerPadding);
   });
 
-  it('has no padding when not specified in parent and itself', () => {
+  it('has no inner padding when not specified in parent and itself', () => {
     const props = new TilePropsFactory({}).build();
     const node = new TileNode(props);
     const child = new TileNodeFactory({}, node).build();
 
-    expect(child.props.padding).toBeUndefined();
+    expect(child.props.innerPadding).toBeUndefined();
+  });
+
+  it('does not inherit props "outerPadding", "hAlign", "vAlign" from parent', () => {
+    const props = new TilePropsFactory({
+      outerPadding: 10,
+      hAlign: 'left',
+      vAlign: 'bottom',
+    }).build();
+    const node = new TileNode(props);
+    const child = new TileNodeFactory({}, node).build();
+
+    expect(child.props.outerPadding).toBeUndefined();
+    expect(child.props.hAlign).toBeUndefined();
+    expect(child.props.vAlign).toBeUndefined();
   });
 
   it('updates specs when specs given', () => {

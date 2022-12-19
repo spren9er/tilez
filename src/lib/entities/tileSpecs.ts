@@ -25,6 +25,10 @@ export class TileSpecs {
     public absY: number,
     public relX: number,
     public relY: number,
+    public innerPadding: number,
+    public outerPadding: number,
+    public hAlign: 'left' | 'center' | 'right',
+    public vAlign: 'top' | 'center' | 'bottom',
   ) {}
 
   public domainX(domain: [number, number]) {

@@ -1,32 +1,33 @@
 <script lang="ts">
 	import { Tile, HTile, VTile } from '$lib';
 
-	import TileSVGExample from './TileSVG.svelte';
+	import TileSVG from './TileSVG.svelte';
 
 	let width = 500;
 	let height = 500;
-	let padding = 2;
+	let innerPadding = 4;
+	let outerPadding = 4;
 </script>
 
 <input type="range" min={0} max={1000} bind:value={width} />
 <input type="range" min={0} max={1000} bind:value={height} />
 
-<HTile {width} {height} {padding} type="svg">
+<HTile {width} {height} {innerPadding} {outerPadding} type="svg">
 	<VTile>
-		<Tile width="50%">
-			<TileSVGExample />
+		<Tile width="60%">
+			<TileSVG />
 		</Tile>
 		<Tile>
-			<TileSVGExample />
+			<TileSVG />
 		</Tile>
 		<Tile width="50px" height="50px">
-			<TileSVGExample />
+			<TileSVG />
 		</Tile>
 	</VTile>
 	<Tile>
-		<TileSVGExample />
+		<TileSVG />
 	</Tile>
 	<Tile>
-		<TileSVGExample />
+		<TileSVG />
 	</Tile>
 </HTile>

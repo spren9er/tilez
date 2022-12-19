@@ -106,6 +106,7 @@ export class TileNode {
       throw Error("SVG tile can't be embedded into a non-SVG tile!");
     if (!type) this.props.type = parentType;
 
-    if (!this.props.padding) this.props.padding = get(parent).props.padding;
+    if (!this.props.innerPadding)
+      this.props.innerPadding = get(parent).props.innerPadding;
   }
 }

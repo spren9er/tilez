@@ -1,9 +1,10 @@
 import type {
   TypeTileProps,
   TypeTilePropsStack,
-  TypeTilePropsAlign,
   TypeTilePropsDimension,
   TypeTilePropsType,
+  TypeTilePropsHAlign,
+  TypeTilePropsVAlign,
 } from '$lib/types/tileProps.type';
 
 import { TileProps } from '$lib/valueObjects/tileProps';
@@ -13,7 +14,16 @@ export class TilePropsFactory {
   constructor(private rawProps: TypeTileProps) {}
 
   public build() {
-    const { width, height, stack, align, type, padding } = this.rawProps;
+    const {
+      width,
+      height,
+      stack,
+      type,
+      innerPadding,
+      outerPadding,
+      hAlign,
+      vAlign,
+    } = this.rawProps;
 
     const propsDimensions = new TilePropsDimensionsFactory(
       width,
@@ -23,9 +33,11 @@ export class TilePropsFactory {
     return new TileProps(
       propsDimensions,
       this.parseStack(stack) || 'none',
-      this.parseAlign(align) || 'center',
       this.parseType(type),
-      this.parsePadding(padding),
+      this.parsePadding(innerPadding),
+      this.parsePadding(outerPadding),
+      this.parseHAlign(hAlign),
+      this.parseVAlign(vAlign),
     );
   }
 
@@ -38,23 +50,32 @@ export class TilePropsFactory {
     return stack;
   }
 
-  private parsePadding(padding?: TypeTilePropsDimension) {
-    return typeof padding === 'string' ? parseInt(padding) : padding;
-  }
-
-  private parseAlign(align?: TypeTilePropsAlign) {
-    if (align && !['left', 'right', 'top', 'bottom', 'center'].includes(align))
-      throw Error(
-        'Tile prop "align" must be one of "left", "right", "top", "bottom", "center"!',
-      );
-
-    return align;
-  }
-
   private parseType(type?: TypeTilePropsType) {
     if (type && !['plain', 'html', 'svg'].includes(type))
       throw Error('Tile prop "type" must be one of "plain", "html", "svg"!');
 
     return type;
+  }
+
+  private parsePadding(padding?: TypeTilePropsDimension) {
+    return typeof padding === 'string' ? parseInt(padding) : padding;
+  }
+
+  private parseHAlign(hAlign?: TypeTilePropsHAlign) {
+    if (hAlign && !['left', 'center', 'right'].includes(hAlign))
+      throw Error(
+        'Tile prop "hAlign" must be one of "left", "center", "right"!',
+      );
+
+    return hAlign;
+  }
+
+  private parseVAlign(vAlign?: TypeTilePropsVAlign) {
+    if (vAlign && !['top', 'center', 'bottom'].includes(vAlign))
+      throw Error(
+        'Tile prop "vAlign" must be one of "top", "center", "bottom"!',
+      );
+
+    return vAlign;
   }
 }

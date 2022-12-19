@@ -5,14 +5,61 @@
 
 	let width = 500;
 	let height = 500;
-	let padding = 2;
+	let innerPadding = 2;
+	let outerPadding = 8;
+
+	const Simple1DNoise = function () {
+		const MAX_VERTICES = 256;
+		const MAX_VERTICES_MASK = MAX_VERTICES - 1;
+		let amplitude = 1;
+		let scale = 1;
+
+		const r = new Array(MAX_VERTICES).fill(0).map(() => Math.random());
+
+		const getVal = function (x: number) {
+			const scaledX = x * scale;
+			const xFloor = Math.floor(scaledX);
+			const t = scaledX - xFloor;
+			const tRemapSmoothstep = t * t * (3 - 2 * t);
+
+			const xMin = xFloor % MAX_VERTICES_MASK;
+			const xMax = (xMin + 1) % MAX_VERTICES_MASK;
+
+			const y = lerp(r[xMin], r[xMax], tRemapSmoothstep);
+
+			return y * amplitude;
+		};
+
+		const lerp = function (a: number, b: number, t: number) {
+			return a * (1 - t) + b * t;
+		};
+
+		return {
+			getVal: getVal,
+			setAmplitude: function (newAmplitude: number) {
+				amplitude = newAmplitude;
+			},
+			setScale: function (newScale: number) {
+				scale = newScale;
+			},
+		};
+	};
+
+	let widthCounter = 0;
+	let heightCounter = 0;
+	const widthGenerator = Simple1DNoise();
+	const heightGenerator = Simple1DNoise();
+
+	setInterval(() => {
+		widthCounter += 0.02;
+		heightCounter += 0.03;
+		width = widthGenerator.getVal(widthCounter) * 800;
+		height = heightGenerator.getVal(heightCounter) * 800;
+	}, 100);
 </script>
 
-<input type="range" min={0} max={1000} bind:value={width} />
-<input type="range" min={0} max={1000} bind:value={height} />
-
-<div id="wrapper">
-	<HTile {width} {height} {padding}>
+<div id="wrapper" style="width: {width}px; height: {height}px;">
+	<HTile {width} {height} {innerPadding} {outerPadding}>
 		<VTile>
 			<Tile height="30%">
 				<TilePlain />
@@ -24,7 +71,7 @@
 		<Tile>
 			<TilePlain />
 		</Tile>
-		<VTile width="220px">
+		<VTile width="100px" innerPadding="0" hAlign="right">
 			<Tile>
 				<TilePlain />
 			</Tile>
@@ -39,11 +86,11 @@
 					<TilePlain />
 				</Tile>
 			</HTile>
-			<HTile>
-				<Tile height="50%" align="bottom">
+			<HTile vAlign="bottom">
+				<Tile height="50%">
 					<TilePlain />
 				</Tile>
-				<Tile height="50%" align="top">
+				<Tile height="50%">
 					<TilePlain />
 				</Tile>
 			</HTile>
@@ -51,11 +98,13 @@
 		<Tile width="20%">
 			<TilePlain />
 		</Tile>
-		<Tile height="60%" align="center">
-			<TilePlain />
-		</Tile>
-		<VTile>
-			<HTile>
+		<VTile vAlign="center">
+			<Tile height="60%">
+				<TilePlain />
+			</Tile>
+		</VTile>
+		<VTile hAlign="center">
+			<HTile width="60%" height="80%">
 				<Tile>
 					<TilePlain />
 				</Tile>
@@ -63,13 +112,13 @@
 					<TilePlain />
 				</Tile>
 			</HTile>
-			<Tile width="80" height="100px" align="center">
+			<Tile width="80" height="100px">
 				<TilePlain />
 			</Tile>
 			<Tile>
 				<TilePlain />
 			</Tile>
-			<Tile width="0.75" align="right">
+			<Tile width="0.75">
 				<TilePlain />
 			</Tile>
 		</VTile>
@@ -77,18 +126,18 @@
 </div>
 
 <style>
-	:global(body) {
+	:global(html) {
 		margin: 0;
 		padding: 0;
+		display: flex;
+		width: 100%;
+		height: 100%;
+		align-items: center;
+		justify-content: center;
 	}
 
 	#wrapper {
-		position: absolute;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		box-sizing: border-box;
-		width: 100%;
-		height: 100%;
+		position: relative;
+		border: 1px solid #333333;
 	}
 </style>

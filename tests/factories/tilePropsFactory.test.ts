@@ -2,8 +2,9 @@ import { expect, describe, it } from 'vitest';
 
 import type {
   TypeTilePropsStack,
-  TypeTilePropsAlign,
   TypeTilePropsType,
+  TypeTilePropsHAlign,
+  TypeTilePropsVAlign,
 } from '$lib/types/tileProps.type';
 
 import { TilePropsFactory } from '$lib/factories/tilePropsFactory';
@@ -11,11 +12,13 @@ import { TilePropsFactory } from '$lib/factories/tilePropsFactory';
 describe('TilePropsFactory', () => {
   it('passes through "stack" and "align" props', () => {
     const stack = 'horizontal';
-    const align = 'center';
-    const props = new TilePropsFactory({ stack, align }).build();
+    const hAlign = 'center';
+    const vAlign = 'center';
+    const props = new TilePropsFactory({ stack, hAlign, vAlign }).build();
 
     expect(props.stack).toEqual(stack);
-    expect(props.align).toEqual(align);
+    expect(props.hAlign).toEqual(hAlign);
+    expect(props.vAlign).toEqual(vAlign);
   });
 
   it('validates prop "stack"', () => {
@@ -38,26 +41,6 @@ describe('TilePropsFactory', () => {
     );
   });
 
-  it('validates prop "align"', () => {
-    ['left', 'right', 'top', 'bottom', 'center'].forEach((align: string) => {
-      const props = new TilePropsFactory({
-        align: align as TypeTilePropsAlign,
-      }).build();
-
-      expect(props.align).toEqual(align);
-    });
-
-    const props = new TilePropsFactory({}).build();
-
-    expect(props.align).toEqual('center');
-
-    expect(() => {
-      new TilePropsFactory({ align: 'middle' as TypeTilePropsAlign }).build();
-    }).toThrowError(
-      'Tile prop "align" must be one of "left", "right", "top", "bottom", "center"!',
-    );
-  });
-
   it('validates prop "type"', () => {
     ['plain', 'html', 'svg'].forEach((type: string) => {
       const props = new TilePropsFactory({
@@ -76,15 +59,69 @@ describe('TilePropsFactory', () => {
     }).toThrowError('Tile prop "type" must be one of "plain", "html", "svg"!');
   });
 
-  it('parses prop "padding" when given as string', () => {
-    const props = new TilePropsFactory({ padding: '2px' }).build();
+  it('parses prop "innerPadding" when given as string', () => {
+    const props = new TilePropsFactory({ innerPadding: '2px' }).build();
 
-    expect(props.padding).toEqual(2);
+    expect(props.innerPadding).toEqual(2);
   });
 
-  it('keeps trivial "padding" undefined (needed for inheritance)', () => {
+  it('keeps trivial "innerPadding" undefined', () => {
     const props = new TilePropsFactory({}).build();
 
-    expect(props.padding).toBeUndefined();
+    expect(props.innerPadding).toBeUndefined();
+  });
+
+  it('parses prop "outerPadding" when given as string', () => {
+    const props = new TilePropsFactory({ outerPadding: '2px' }).build();
+
+    expect(props.outerPadding).toEqual(2);
+  });
+
+  it('keeps trivial "outerPadding" undefined', () => {
+    const props = new TilePropsFactory({}).build();
+
+    expect(props.innerPadding).toBeUndefined();
+  });
+
+  it('validates prop "hAlign"', () => {
+    ['left', 'center', 'right'].forEach((hAlign: string) => {
+      const props = new TilePropsFactory({
+        hAlign: hAlign as TypeTilePropsHAlign,
+      }).build();
+
+      expect(props.hAlign).toEqual(hAlign);
+    });
+
+    const props = new TilePropsFactory({}).build();
+
+    expect(props.hAlign).toBeUndefined();
+
+    expect(() => {
+      new TilePropsFactory({ hAlign: 'middle' as TypeTilePropsHAlign }).build();
+    }).toThrowError(
+      'Tile prop "hAlign" must be one of "left", "center", "right"!',
+    );
+  });
+
+  it('validates prop "vAlign"', () => {
+    ['top', 'center', 'bottom'].forEach((vAlign: string) => {
+      const props = new TilePropsFactory({
+        vAlign: vAlign as TypeTilePropsVAlign,
+      }).build();
+
+      expect(props.vAlign).toEqual(vAlign);
+    });
+
+    const props = new TilePropsFactory({}).build();
+
+    expect(props.vAlign).toBeUndefined();
+
+    expect(() => {
+      new TilePropsFactory({
+        vAlign: 'middle' as TypeTilePropsVAlign,
+      }).build();
+    }).toThrowError(
+      'Tile prop "vAlign" must be one of "top", "center", "bottom"!',
+    );
   });
 });

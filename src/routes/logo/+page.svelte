@@ -4,13 +4,14 @@
 	import TileLogo from './TileLogo.svelte';
 
 	let size = 64;
-	let padding = 3;
+	let innerPadding = 3;
+	let outerPadding = 3;
 
 	const goldenRatio = 1.61803398875;
 	const ratio = 1 - 1 / goldenRatio;
 </script>
 
-<HTile width={size} height={size} {padding} type="svg">
+<HTile width={size} height={size} {innerPadding} {outerPadding} type="svg">
 	<VTile width={ratio}>
 		<Tile height={ratio}>
 			<TileLogo />

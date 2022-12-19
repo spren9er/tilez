@@ -2,7 +2,7 @@ import { expect, describe, it } from 'vitest';
 
 import { TileSpecs } from '$lib/entities/tileSpecs';
 
-const specs = new TileSpecs(100, 200, 0, 0, 0, 0);
+const specs = new TileSpecs(100, 200, 0, 0, 0, 0, 0, 0, 'center', 'center');
 
 describe('TileSpecs', () => {
   it("can't calculate value if domain has not been set", () => {

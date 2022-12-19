@@ -1,13 +1,16 @@
 export type TypeTilePropsDimension = number | string;
 export type TypeTilePropsStack = 'horizontal' | 'vertical' | 'none';
-export type TypeTilePropsAlign = 'top' | 'bottom' | 'left' | 'right' | 'center';
 export type TypeTilePropsType = 'plain' | 'html' | 'svg';
+export type TypeTilePropsHAlign = 'left' | 'center' | 'right';
+export type TypeTilePropsVAlign = 'top' | 'center' | 'bottom';
 
 export type TypeTileProps = {
   width?: TypeTilePropsDimension;
   height?: TypeTilePropsDimension;
   stack?: TypeTilePropsStack;
-  align?: TypeTilePropsAlign;
   type?: TypeTilePropsType;
-  padding?: TypeTilePropsDimension;
+  innerPadding?: TypeTilePropsDimension;
+  outerPadding?: TypeTilePropsDimension;
+  hAlign?: TypeTilePropsHAlign;
+  vAlign?: TypeTilePropsVAlign;
 };
