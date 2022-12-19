@@ -33,6 +33,24 @@ describe('TileSpecsCalculation', () => {
     expect(childrenSpecs).toEqual([]);
   });
 
+  it('stacks horizontally with absolute widths', () => {
+    const root = new TileNodeFactory({
+      ...propsDimensions,
+      stack: 'horizontal',
+      outerPadding: 10,
+      innerPadding: 5,
+    }).build();
+    new TileNodeFactory({ width: 940 }, root).build();
+    new TileNodeFactory({ width: 35 }, root).build();
+
+    const childrenSpecs = new TileSpecsCalculation(root).call();
+
+    expect(childrenSpecs).toEqual([
+      new TileSpecs(940, 980, 10, 10, 10, 10, 5, 0, 'left', 'top'),
+      new TileSpecs(35, 980, 955, 10, 955, 10, 5, 0, 'left', 'top'),
+    ]);
+  });
+
   it('stacks horizontally (equally distributed as no widths are given)', () => {
     const root = new TileNodeFactory({
       ...propsDimensions,
