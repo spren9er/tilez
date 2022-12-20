@@ -52,7 +52,14 @@ export class TileSpecsCalculation {
   public call(): TileSpecs[] {
     if (this.nProps === 0) return [];
 
-    if (!this.isStack) return this.props.map(() => this.specs);
+    if (!this.isStack)
+      return this.props.map(() => {
+        const specs = this.specs;
+        specs.relX = 0;
+        specs.relY = 0;
+
+        return specs;
+      });
 
     if (this.stackFullSize <= 0)
       return Array(this.nProps).fill(

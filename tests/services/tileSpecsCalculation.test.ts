@@ -83,7 +83,7 @@ describe('TileSpecsCalculation', () => {
     ]);
   });
 
-  it('doesn\'t stack if no "stack" is provided', () => {
+  it('does not stack if no "stack" is provided', () => {
     const root = new TileNodeFactory(propsDimensions).build();
     new TileNodeFactory({}, root).build();
     new TileNodeFactory({}, root).build();
@@ -93,6 +93,30 @@ describe('TileSpecsCalculation', () => {
     expect(childrenSpecs).toEqual([
       new TileSpecs(1000, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
       new TileSpecs(1000, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+    ]);
+  });
+
+  it('sets relative positions of children to zero if no "stack" is provided', () => {
+    const root = new TileNodeFactory({
+      ...propsDimensions,
+      stack: 'horizontal',
+    }).build();
+    new TileNodeFactory({}, root).build();
+
+    // child has no "stack", but a child
+    const child = new TileNodeFactory({}, root).build();
+    new TileNodeFactory({}, child).build();
+
+    const childrenSpecs = new TileSpecsCalculation(root).call();
+    const childChildrenSpecs = new TileSpecsCalculation(child).call();
+
+    expect(childrenSpecs).toEqual([
+      new TileSpecs(500, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(500, 1000, 500, 0, 500, 0, 0, 0, 'left', 'top'),
+    ]);
+
+    expect(childChildrenSpecs).toEqual([
+      new TileSpecs(500, 1000, 500, 0, 0, 0, 0, 0, 'left', 'top'),
     ]);
   });
 
