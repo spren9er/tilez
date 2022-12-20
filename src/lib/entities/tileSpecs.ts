@@ -31,6 +31,34 @@ export class TileSpecs {
     public vAlign: 'top' | 'center' | 'bottom',
   ) {}
 
+  public copy(): TileSpecs {
+    const {
+      width,
+      height,
+      absX,
+      absY,
+      relX,
+      relY,
+      innerPadding,
+      outerPadding,
+      hAlign,
+      vAlign,
+    } = this;
+
+    return new TileSpecs(
+      width,
+      height,
+      absX,
+      absY,
+      relX,
+      relY,
+      innerPadding,
+      outerPadding,
+      hAlign,
+      vAlign,
+    );
+  }
+
   public domainX(domain: [number, number]) {
     this.coordsX = this.specsCoordsX(domain);
 

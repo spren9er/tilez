@@ -4,7 +4,6 @@ import type {
   TypeTileSpecsDimension,
   TypeTileSpecsCoords,
 } from '$lib/types/tileSpecs.type';
-import type { TileNode } from '$lib/entities/tileNode';
 import type {
   TileProps,
   TilePropsDimensionsAccessor,
@@ -13,9 +12,9 @@ import type {
 import { TileSpecs } from '$lib/entities/tileSpecs';
 
 export class TileSpecsCalculation {
-  private props: { idx: number; props: TileProps }[];
-  private stack?: TypeTilePropsStack;
+  private stack: TypeTilePropsStack;
   private specs: TileSpecs;
+  private props: { idx: number; props: TileProps }[];
 
   private stackFullSize: number;
   private fixedFullSize: number;
@@ -23,15 +22,10 @@ export class TileSpecsCalculation {
   private pctFullSize: number;
   private firstTile: boolean;
 
-  constructor(node: TileNode) {
-    if (!node.specs)
-      throw new Error(
-        'Specs of tile are required for calculating specs of children nodes!',
-      );
-
-    this.props = node.childrenProps.map((props, idx) => ({ idx, props }));
-    this.stack = node.props.stack;
-    this.specs = node.specs;
+  constructor(stack: TypeTilePropsStack, specs: TileSpecs, props: TileProps[]) {
+    this.stack = stack;
+    this.specs = specs;
+    this.props = props.map((props, idx) => ({ idx, props }));
 
     const { outerPadding } = this.specs;
 
@@ -53,12 +47,15 @@ export class TileSpecsCalculation {
     if (this.nProps === 0) return [];
 
     if (!this.isStack)
-      return this.props.map(() => {
-        const specs = this.specs;
-        specs.relX = 0;
-        specs.relY = 0;
+      return this.props.map(({ props }) => {
+        const specsCopy = this.specs.copy();
+        if (props.hAlign) specsCopy.hAlign = props.hAlign;
 
-        return specs;
+        const specs = new TileSpecsCalculation('horizontal', specsCopy, [
+          props,
+        ]).call();
+
+        return specs[0];
       });
 
     if (this.stackFullSize <= 0)

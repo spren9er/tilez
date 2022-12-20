@@ -10,8 +10,8 @@ import { TileSpecsCalculation } from '$lib/services/tileSpecsCalculation';
 export class TileNode {
   public props: TileProps;
   public specs?: TileSpecs;
-  private parent?: TileNode;
-  private children: TileNode[];
+  public parent?: TileNode;
+  public children: TileNode[];
   public subscribe;
   public update;
   public set;
@@ -58,7 +58,11 @@ export class TileNode {
   public updateChildrenSpecs() {
     if (!this.hasChildren || !this.specs) return;
 
-    const specs = new TileSpecsCalculation(this).call();
+    const specs = new TileSpecsCalculation(
+      this.props.stack,
+      this.specs,
+      this.children.map(({ props }) => props),
+    ).call();
 
     this.children.forEach((child, idx) => {
       child.update((node: TileNode) => {

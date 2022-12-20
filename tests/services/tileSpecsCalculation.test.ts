@@ -5,10 +5,9 @@ import type {
   TypeTilePropsVAlign,
 } from '$lib/types/tileProps.type';
 
-import { TileNode } from '$lib/entities/tileNode';
+import type { TileNode } from '$lib/entities/tileNode';
 import { TileSpecs } from '$lib/entities/tileSpecs';
 import { TileNodeFactory } from '$lib/factories/tileNodeFactory';
-import { TilePropsFactory } from '$lib/factories/tilePropsFactory';
 import { TileSpecsCalculation } from '$lib/services/tileSpecsCalculation';
 
 const propsDimensions = {
@@ -16,19 +15,18 @@ const propsDimensions = {
   height: 1000,
 };
 
+const calc = (node: TileNode) => {
+  return new TileSpecsCalculation(
+    node.props.stack,
+    node.specs!,
+    node.children.map(({ props }) => props),
+  ).call();
+};
+
 describe('TileSpecsCalculation', () => {
-  it('throws an error if no specs are available', () => {
-    const props = new TilePropsFactory(propsDimensions).build();
-    const node = new TileNode(props);
-
-    expect(() => new TileSpecsCalculation(node)).toThrowError(
-      'Specs of tile are required for calculating specs of children nodes!',
-    );
-  });
-
   it('creates no specs if there are no children', () => {
     const root = new TileNodeFactory(propsDimensions).build();
-    const childrenSpecs = new TileSpecsCalculation(root).call();
+    const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([]);
   });
@@ -43,7 +41,7 @@ describe('TileSpecsCalculation', () => {
     new TileNodeFactory({ width: 940 }, root).build();
     new TileNodeFactory({ width: 35 }, root).build();
 
-    const childrenSpecs = new TileSpecsCalculation(root).call();
+    const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
       new TileSpecs(940, 980, 10, 10, 10, 10, 5, 0, 'left', 'top'),
@@ -59,7 +57,7 @@ describe('TileSpecsCalculation', () => {
     new TileNodeFactory({}, root).build();
     new TileNodeFactory({}, root).build();
 
-    const childrenSpecs = new TileSpecsCalculation(root).call();
+    const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
       new TileSpecs(500, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
@@ -75,7 +73,7 @@ describe('TileSpecsCalculation', () => {
     new TileNodeFactory({}, root).build();
     new TileNodeFactory({}, root).build();
 
-    const childrenSpecs = new TileSpecsCalculation(root).call();
+    const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
       new TileSpecs(1000, 500, 0, 0, 0, 0, 0, 0, 'left', 'top'),
@@ -88,7 +86,7 @@ describe('TileSpecsCalculation', () => {
     new TileNodeFactory({}, root).build();
     new TileNodeFactory({}, root).build();
 
-    const childrenSpecs = new TileSpecsCalculation(root).call();
+    const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
       new TileSpecs(1000, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
@@ -107,8 +105,8 @@ describe('TileSpecsCalculation', () => {
     const child = new TileNodeFactory({}, root).build();
     new TileNodeFactory({}, child).build();
 
-    const childrenSpecs = new TileSpecsCalculation(root).call();
-    const childChildrenSpecs = new TileSpecsCalculation(child).call();
+    const childrenSpecs = calc(root);
+    const childChildrenSpecs = calc(child);
 
     expect(childrenSpecs).toEqual([
       new TileSpecs(500, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
@@ -129,7 +127,7 @@ describe('TileSpecsCalculation', () => {
     new TileNodeFactory({ width: '40%' }, root).build();
     new TileNodeFactory({ width: '60%' }, root).build();
 
-    const childrenSpecs = new TileSpecsCalculation(root).call();
+    const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
       new TileSpecs(500, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
@@ -147,7 +145,7 @@ describe('TileSpecsCalculation', () => {
     new TileNodeFactory({}, root).build();
     new TileNodeFactory({}, root).build();
 
-    const childrenSpecs = new TileSpecsCalculation(root).call();
+    const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
       new TileSpecs(600, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
@@ -164,7 +162,7 @@ describe('TileSpecsCalculation', () => {
     new TileNodeFactory({ width: '60%' }, root).build();
     new TileNodeFactory({ width: '60%' }, root).build();
 
-    const childrenSpecs = new TileSpecsCalculation(root).call();
+    const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
       new TileSpecs(600, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
@@ -180,7 +178,7 @@ describe('TileSpecsCalculation', () => {
     }).build();
     new TileNodeFactory({ innerPadding: 10 }, root).build();
 
-    const childrenSpecs = new TileSpecsCalculation(root).call();
+    const childrenSpecs = calc(root);
 
     expect(childrenSpecs[0].innerPadding).toEqual(10);
   });
@@ -193,7 +191,7 @@ describe('TileSpecsCalculation', () => {
     }).build();
     new TileNodeFactory({ width: 990 }, root).build();
 
-    const childrenSpecs = new TileSpecsCalculation(root).call();
+    const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
       new TileSpecs(980, 980, 10, 10, 10, 10, 0, 0, 'left', 'top'),
@@ -209,7 +207,7 @@ describe('TileSpecsCalculation', () => {
 
     if (root.specs) root.specs.width = 0; // hidden due to parent tiles
 
-    const childrenSpecs = new TileSpecsCalculation(root).call();
+    const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
       new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
@@ -224,11 +222,27 @@ describe('TileSpecsCalculation', () => {
     new TileNodeFactory({}, root).build();
     new TileNodeFactory({ width: 2000 }, root).build();
 
-    const childrenSpecs = new TileSpecsCalculation(root).call();
+    const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
       new TileSpecs(0, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
       new TileSpecs(1000, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+    ]);
+  });
+
+  it('considers "hAlign" and "vAlign" for non-stacked tiles', () => {
+    const root = new TileNodeFactory({
+      ...propsDimensions,
+    }).build();
+    new TileNodeFactory(
+      { width: '50%', height: '50%', hAlign: 'center', vAlign: 'center' },
+      root,
+    ).build();
+
+    const childrenSpecs = calc(root);
+
+    expect(childrenSpecs).toEqual([
+      new TileSpecs(500, 500, 250, 250, 250, 250, 0, 0, 'center', 'center'),
     ]);
   });
 
@@ -242,7 +256,7 @@ describe('TileSpecsCalculation', () => {
       new TileNodeFactory({ width: '30%', height: '60%' }, root).build();
       new TileNodeFactory({ width: '40%', height: '40%' }, root).build();
 
-      return new TileSpecsCalculation(root).call();
+      return calc(root);
     };
 
     expect(hAlignSpecsFor('left')).toEqual([
@@ -271,7 +285,7 @@ describe('TileSpecsCalculation', () => {
       new TileNodeFactory({ width: '30%', height: '60%' }, root).build();
       new TileNodeFactory({ width: '40%', height: '40%' }, root).build();
 
-      return new TileSpecsCalculation(root).call();
+      return calc(root);
     };
 
     expect(vAlignSpecsFor('top')).toEqual([
@@ -305,7 +319,7 @@ describe('TileSpecsCalculation', () => {
         root,
       ).build();
 
-      return new TileSpecsCalculation(root).call();
+      return calc(root);
     };
 
     expect(vAlignSpecsFor('top')).toEqual([
@@ -334,7 +348,7 @@ describe('TileSpecsCalculation', () => {
       new TileNodeFactory({ width: '60%', height: '30%' }, root).build();
       new TileNodeFactory({ width: '40%', height: '40%' }, root).build();
 
-      return new TileSpecsCalculation(root).call();
+      return calc(root);
     };
 
     expect(vAlignSpecsFor('top')).toEqual([
@@ -363,7 +377,7 @@ describe('TileSpecsCalculation', () => {
       new TileNodeFactory({ width: '30%', height: '60%' }, root).build();
       new TileNodeFactory({ width: '40%', height: '40%' }, root).build();
 
-      return new TileSpecsCalculation(root).call();
+      return calc(root);
     };
 
     expect(hAlignSpecsFor('left')).toEqual([
@@ -397,7 +411,7 @@ describe('TileSpecsCalculation', () => {
         root,
       ).build();
 
-      return new TileSpecsCalculation(root).call();
+      return calc(root);
     };
 
     expect(hAlignSpecsFor('left')).toEqual([
@@ -426,7 +440,7 @@ describe('TileSpecsCalculation', () => {
     new TileNodeFactory({ width: '400px' }, root).build();
 
     // during calculation children props/specs are sorted twice
-    const childrenSpecs = new TileSpecsCalculation(root).call();
+    const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
       new TileSpecs(450, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
@@ -443,7 +457,7 @@ describe('TileSpecsCalculation', () => {
     new TileNodeFactory({ width: propsDimensions.width + 1 }, root).build();
     new TileNodeFactory({ width: '400px' }, root).build();
 
-    const childrenSpecs = new TileSpecsCalculation(root).call();
+    const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
       new TileSpecs(1000, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
@@ -464,7 +478,7 @@ describe('TileSpecsCalculation', () => {
     new TileNodeFactory({}, root).build();
     new TileNodeFactory({}, root).build();
 
-    const childrenSpecs = new TileSpecsCalculation(root).call();
+    const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
       new TileSpecs(1, 1, 0, 0, 0, 0, 2, 0, 'left', 'top'),
@@ -488,7 +502,7 @@ describe('TileSpecsCalculation', () => {
     new TileNodeFactory({}, root).build();
     new TileNodeFactory({}, root).build();
 
-    const childrenSpecs = new TileSpecsCalculation(root).call();
+    const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
       new TileSpecs(1, 1, 8, 8, 8, 8, 8, 0, 'left', 'top'),
