@@ -3,8 +3,8 @@
 
 	import TilePlain from './TilePlain.svelte';
 
-	let width = 500;
-	let height = 500;
+	let width = 292;
+	let height = 194;
 	let innerPadding = 2;
 	let outerPadding = 8;
 
@@ -59,11 +59,19 @@
 </script>
 
 <div id="wrapper" style="width: {width}px; height: {height}px;">
-	<HTile {width} {height} {innerPadding} {outerPadding}>
+	<HTile {width} {height} {innerPadding} {outerPadding} vAlign="bottom">
 		<VTile>
-			<Tile height="30%">
-				<TilePlain />
-			</Tile>
+			<VTile height="30%" hAlign="center">
+				<Tile>
+					<TilePlain />
+				</Tile>
+				<Tile width="50%" height="50%">
+					<TilePlain />
+				</Tile>
+				<Tile>
+					<TilePlain />
+				</Tile>
+			</VTile>
 			<Tile>
 				<TilePlain />
 			</Tile>
@@ -71,10 +79,18 @@
 		<Tile>
 			<TilePlain />
 		</Tile>
-		<VTile width="100px" innerPadding="0" hAlign="right">
-			<Tile>
-				<TilePlain />
-			</Tile>
+		<VTile width="100px" hAlign="right">
+			<HTile>
+				<Tile>
+					<TilePlain />
+				</Tile>
+				<Tile>
+					<TilePlain />
+				</Tile>
+				<Tile>
+					<TilePlain />
+				</Tile>
+			</HTile>
 			<Tile>
 				<TilePlain />
 			</Tile>
@@ -87,7 +103,7 @@
 				</Tile>
 			</HTile>
 			<HTile vAlign="bottom">
-				<Tile height="50%">
+				<Tile height="50%" vAlign="top">
 					<TilePlain />
 				</Tile>
 				<Tile height="50%">
@@ -103,7 +119,7 @@
 				<TilePlain />
 			</Tile>
 		</VTile>
-		<VTile hAlign="center">
+		<VTile hAlign="center" height="60%">
 			<HTile width="60%" height="80%">
 				<Tile>
 					<TilePlain />
@@ -112,7 +128,7 @@
 					<TilePlain />
 				</Tile>
 			</HTile>
-			<Tile width="80" height="100px">
+			<Tile width="80px" height="100px" hAlign="right">
 				<TilePlain />
 			</Tile>
 			<Tile>

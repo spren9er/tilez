@@ -130,18 +130,78 @@ describe('TileNode', () => {
     expect(child.props.innerPadding).toBeUndefined();
   });
 
-  it('does not inherit props "outerPadding", "hAlign", "vAlign" from parent', () => {
+  it('does not inherit "outerPadding" from parent', () => {
     const props = new TilePropsFactory({
       outerPadding: 10,
-      hAlign: 'left',
-      vAlign: 'bottom',
     }).build();
     const node = new TileNode(props);
     const child = new TileNodeFactory({}, node).build();
 
     expect(child.props.outerPadding).toBeUndefined();
-    expect(child.props.hAlign).toBeUndefined();
+  });
+
+  it('does not inherit "vAlign" from parent if parent has vertical layout', () => {
+    const props = new TilePropsFactory({
+      vAlign: 'center',
+      stack: 'vertical',
+    }).build();
+    const node = new TileNode(props);
+    const child = new TileNodeFactory({}, node).build();
+
     expect(child.props.vAlign).toBeUndefined();
+  });
+
+  it('does not inherit "vAlign" from parent if parent has no stack', () => {
+    const props = new TilePropsFactory({
+      vAlign: 'center',
+    }).build();
+    const node = new TileNode(props);
+    const child = new TileNodeFactory({}, node).build();
+
+    expect(child.props.vAlign).toBeUndefined();
+  });
+
+  it('inherits "vAlign" from parent if parent has horizontal layout', () => {
+    const props = new TilePropsFactory({
+      vAlign: 'center',
+      stack: 'horizontal',
+    }).build();
+    const node = new TileNode(props);
+    const child = new TileNodeFactory({}, node).build();
+
+    expect(child.props.vAlign).toEqual('center');
+  });
+
+  it('does not inherit "hAlign" from parent if parent has horizontal layout', () => {
+    const props = new TilePropsFactory({
+      hAlign: 'center',
+      stack: 'horizontal',
+    }).build();
+    const node = new TileNode(props);
+    const child = new TileNodeFactory({}, node).build();
+
+    expect(child.props.hAlign).toBeUndefined();
+  });
+
+  it('does not inherit "hAlign" from parent if parent has no stack', () => {
+    const props = new TilePropsFactory({
+      hAlign: 'center',
+    }).build();
+    const node = new TileNode(props);
+    const child = new TileNodeFactory({}, node).build();
+
+    expect(child.props.hAlign).toBeUndefined();
+  });
+
+  it('inherits "hAlign" from parent if parent has vertical layout', () => {
+    const props = new TilePropsFactory({
+      hAlign: 'center',
+      stack: 'vertical',
+    }).build();
+    const node = new TileNode(props);
+    const child = new TileNodeFactory({}, node).build();
+
+    expect(child.props.hAlign).toEqual('center');
   });
 
   it('updates specs when specs given', () => {

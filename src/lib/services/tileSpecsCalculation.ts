@@ -268,26 +268,26 @@ export class TileSpecsCalculation {
       const fixedDiff = this.fixedFullSize - coords[this.fixedDimension];
       let fixedOffset = 0;
 
+      const { innerPadding, outerPadding, hAlign, vAlign } =
+        this.props[idx].props;
+
       if (this.isHorizontal) {
-        if (this.specs.vAlign === 'center') fixedOffset = fixedDiff / 2;
-        if (this.specs.vAlign === 'bottom') fixedOffset = fixedDiff;
+        if (vAlign === 'center') fixedOffset = fixedDiff / 2;
+        if (vAlign === 'bottom') fixedOffset = fixedDiff;
 
         coords.absX += stackOffset;
         coords.relX += stackOffset;
         coords.absY += fixedOffset;
         coords.relY += fixedOffset;
       } else {
-        if (this.specs.hAlign === 'center') fixedOffset = fixedDiff / 2;
-        if (this.specs.hAlign === 'right') fixedOffset = fixedDiff;
+        if (hAlign === 'center') fixedOffset = fixedDiff / 2;
+        if (hAlign === 'right') fixedOffset = fixedDiff;
 
         coords.absX += fixedOffset;
         coords.relX += fixedOffset;
         coords.absY += stackOffset;
         coords.relY += stackOffset;
       }
-
-      const { innerPadding, outerPadding, hAlign, vAlign } =
-        this.props[idx].props;
 
       return {
         ...coords,

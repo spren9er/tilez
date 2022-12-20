@@ -100,13 +100,29 @@ export class TileNode {
   }
 
   private derivePropsFrom(parent: TileNode) {
-    const parentType = get(parent).props.type;
+    const parentNode = get(parent);
+
+    const parentType = parentNode.props.type;
     const type = this.props.type;
     if (type && type !== 'svg' && parentType === 'svg')
       throw Error("SVG tile can't be embedded into a non-SVG tile!");
     if (!type) this.props.type = parentType;
 
     if (!this.props.innerPadding && this.props.innerPadding !== 0)
-      this.props.innerPadding = get(parent).props.innerPadding;
+      this.props.innerPadding = parentNode.props.innerPadding;
+
+    if (
+      !this.props.vAlign &&
+      parentNode.props.vAlign &&
+      parentNode.props.stack === 'horizontal'
+    )
+      this.props.vAlign = parentNode.props.vAlign;
+
+    if (
+      !this.props.hAlign &&
+      parentNode.props.hAlign &&
+      parentNode.props.stack === 'vertical'
+    )
+      this.props.hAlign = parentNode.props.hAlign;
   }
 }
