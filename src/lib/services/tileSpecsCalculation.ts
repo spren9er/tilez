@@ -203,8 +203,8 @@ export class TileSpecsCalculation {
 
     const end = this.isHorizontal ? 'right' : 'bottom';
     const endSize = this.stackSizeFor(end, specsDimensions);
-    const endAnchor = outerPadding + this.fixedFullSize - endSize;
-    const endSpecs = this.specsFor(end, specsDimensions, 0, endAnchor);
+    const endAnchor = outerPadding + this.stackFullSize - endSize;
+    const endSpecs = this.specsFor(end, specsDimensions, endAnchor);
 
     const centerSize = this.stackSizeFor('center', specsDimensions);
     const fullSize = this.stackFullSize + 2 * outerPadding;
@@ -220,12 +220,7 @@ export class TileSpecsCalculation {
       centerAnchor = endStart - centerSize;
     }
 
-    const centerSpecs = this.specsFor(
-      'center',
-      specsDimensions,
-      outerPadding,
-      centerAnchor,
-    );
+    const centerSpecs = this.specsFor('center', specsDimensions, centerAnchor);
 
     return [...startSpecs, ...endSpecs, ...centerSpecs]
       .sort((a, b) => (a.idx > b.idx ? 1 : -1))
@@ -235,13 +230,12 @@ export class TileSpecsCalculation {
   private specsFor(
     align: TypeTilePropsAlign,
     specsDimensions: TypeTileSpecsDimension[],
-    outerPadding: number,
     anchor = 0,
   ) {
-    const { absX, absY, innerPadding } = this.specs;
+    const { absX, absY, innerPadding, outerPadding } = this.specs;
 
-    let relX = (this.isHorizontal ? anchor : 0) + outerPadding;
-    let relY = (this.isHorizontal ? 0 : anchor) + outerPadding;
+    let relX = this.isHorizontal ? anchor : outerPadding;
+    let relY = this.isHorizontal ? outerPadding : anchor;
 
     return this.propsFor(align).map(({ idx, props }) => {
       const dimensions = specsDimensions[idx];
