@@ -183,7 +183,22 @@ describe('TileSpecsCalculation', () => {
     expect(childrenSpecs[0].innerPadding).toEqual(10);
   });
 
-  it('cuts of px tile when there is not enough space due to outer padding', () => {
+  it('cuts of px tile which does not fit because it is too long', () => {
+    const root = new TileNodeFactory({
+      ...propsDimensions,
+      stack: 'horizontal',
+      innerPadding: 10,
+    }).build();
+    new TileNodeFactory({ width: 2000 }, root).build();
+
+    const childrenSpecs = calc(root);
+
+    expect(childrenSpecs).toEqual([
+      new TileSpecs(1000, 1000, 0, 0, 0, 0, 10, 0, 'left', 'top'),
+    ]);
+  });
+
+  it('cuts of px tile which does not fit because of outer padding', () => {
     const root = new TileNodeFactory({
       ...propsDimensions,
       stack: 'horizontal',
@@ -225,7 +240,7 @@ describe('TileSpecsCalculation', () => {
     const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
-      new TileSpecs(0, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
       new TileSpecs(1000, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
     ]);
   });
@@ -251,10 +266,15 @@ describe('TileSpecsCalculation', () => {
       const root = new TileNodeFactory({
         ...propsDimensions,
         stack: 'horizontal',
-        hAlign,
       }).build();
-      new TileNodeFactory({ width: '30%', height: '60%' }, root).build();
-      new TileNodeFactory({ width: '40%', height: '40%' }, root).build();
+      new TileNodeFactory(
+        { width: '30%', height: '60%', hAlign },
+        root,
+      ).build();
+      new TileNodeFactory(
+        { width: '40%', height: '40%', hAlign },
+        root,
+      ).build();
 
       return calc(root);
     };
@@ -265,13 +285,13 @@ describe('TileSpecsCalculation', () => {
     ]);
 
     expect(hAlignSpecsFor('center')).toEqual([
-      new TileSpecs(300, 600, 150, 0, 150, 0, 0, 0, 'left', 'top'),
-      new TileSpecs(400, 400, 450, 0, 450, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(300, 600, 150, 0, 150, 0, 0, 0, 'center', 'top'),
+      new TileSpecs(400, 400, 450, 0, 450, 0, 0, 0, 'center', 'top'),
     ]);
 
     expect(hAlignSpecsFor('right')).toEqual([
-      new TileSpecs(300, 600, 300, 0, 300, 0, 0, 0, 'left', 'top'),
-      new TileSpecs(400, 400, 600, 0, 600, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(300, 600, 300, 0, 300, 0, 0, 0, 'right', 'top'),
+      new TileSpecs(400, 400, 600, 0, 600, 0, 0, 0, 'right', 'top'),
     ]);
   });
 
@@ -343,10 +363,15 @@ describe('TileSpecsCalculation', () => {
       const root = new TileNodeFactory({
         ...propsDimensions,
         stack: 'vertical',
-        vAlign,
       }).build();
-      new TileNodeFactory({ width: '60%', height: '30%' }, root).build();
-      new TileNodeFactory({ width: '40%', height: '40%' }, root).build();
+      new TileNodeFactory(
+        { width: '60%', height: '30%', vAlign },
+        root,
+      ).build();
+      new TileNodeFactory(
+        { width: '40%', height: '40%', vAlign },
+        root,
+      ).build();
 
       return calc(root);
     };
@@ -357,13 +382,13 @@ describe('TileSpecsCalculation', () => {
     ]);
 
     expect(vAlignSpecsFor('center')).toEqual([
-      new TileSpecs(600, 300, 0, 150, 0, 150, 0, 0, 'left', 'top'),
-      new TileSpecs(400, 400, 0, 450, 0, 450, 0, 0, 'left', 'top'),
+      new TileSpecs(600, 300, 0, 150, 0, 150, 0, 0, 'left', 'center'),
+      new TileSpecs(400, 400, 0, 450, 0, 450, 0, 0, 'left', 'center'),
     ]);
 
     expect(vAlignSpecsFor('bottom')).toEqual([
-      new TileSpecs(600, 300, 0, 300, 0, 300, 0, 0, 'left', 'top'),
-      new TileSpecs(400, 400, 0, 600, 0, 600, 0, 0, 'left', 'top'),
+      new TileSpecs(600, 300, 0, 300, 0, 300, 0, 0, 'left', 'bottom'),
+      new TileSpecs(400, 400, 0, 600, 0, 600, 0, 0, 'left', 'bottom'),
     ]);
   });
 
@@ -430,6 +455,41 @@ describe('TileSpecsCalculation', () => {
     ]);
   });
 
+  it('adds a gap between left and right ("hAlign") tiles and cuts off last px tile for horizontal layout', () => {
+    const root = new TileNodeFactory({
+      ...propsDimensions,
+      stack: 'horizontal',
+      innerPadding: 10,
+    }).build();
+    new TileNodeFactory({ width: '550px', hAlign: 'left' }, root).build();
+    new TileNodeFactory({ width: '600px', hAlign: 'right' }, root).build();
+
+    const childrenSpecs = calc(root);
+
+    expect(childrenSpecs).toEqual([
+      new TileSpecs(550, 1000, 0, 0, 0, 0, 10, 0, 'left', 'top'),
+      new TileSpecs(440, 1000, 560, 0, 560, 0, 10, 0, 'right', 'top'),
+    ]);
+  });
+
+  it('reorders tiles according to "hAlign" props in horizontal layout', () => {
+    const root = new TileNodeFactory({
+      ...propsDimensions,
+      stack: 'horizontal',
+    }).build();
+    new TileNodeFactory({ width: '40%', hAlign: 'center' }, root).build();
+    new TileNodeFactory({ width: '20%', hAlign: 'right' }, root).build();
+    new TileNodeFactory({ width: '30%', hAlign: 'left' }, root).build();
+
+    const childrenSpecs = calc(root);
+
+    expect(childrenSpecs).toEqual([
+      new TileSpecs(400, 1000, 300, 0, 300, 0, 0, 0, 'center', 'top'),
+      new TileSpecs(200, 1000, 800, 0, 800, 0, 0, 0, 'right', 'top'),
+      new TileSpecs(300, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+    ]);
+  });
+
   it('returns specs in same order as children', () => {
     const root = new TileNodeFactory({
       ...propsDimensions,
@@ -461,7 +521,7 @@ describe('TileSpecsCalculation', () => {
 
     expect(childrenSpecs).toEqual([
       new TileSpecs(1000, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
-      new TileSpecs(0, 1000, 1000, 0, 1000, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
     ]);
   });
 
@@ -484,8 +544,8 @@ describe('TileSpecsCalculation', () => {
       new TileSpecs(1, 1, 0, 0, 0, 0, 2, 0, 'left', 'top'),
       new TileSpecs(1, 1, 3, 0, 3, 0, 2, 0, 'left', 'top'),
       new TileSpecs(1, 1, 6, 0, 6, 0, 2, 0, 'left', 'top'),
-      new TileSpecs(0, 1, 9, 0, 9, 0, 2, 0, 'left', 'top'),
-      new TileSpecs(0, 1, 9, 0, 9, 0, 2, 0, 'left', 'top'),
+      new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
     ]);
   });
 
@@ -508,7 +568,7 @@ describe('TileSpecsCalculation', () => {
       new TileSpecs(1, 1, 8, 8, 8, 8, 8, 0, 'left', 'top'),
       new TileSpecs(1, 1, 8, 17, 8, 17, 8, 0, 'left', 'top'),
       new TileSpecs(1, 1, 8, 26, 8, 26, 8, 0, 'left', 'top'),
-      new TileSpecs(1, 0, 8, 35, 8, 35, 8, 0, 'left', 'top'),
+      new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
     ]);
   });
 });
