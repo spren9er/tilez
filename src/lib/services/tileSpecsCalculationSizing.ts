@@ -73,8 +73,8 @@ export class TileSpecsCalculationSizing extends TileSpecsCalculation {
 
         const padding = (n - 1) * innerPadding;
         const fullSize = this.pctFullSize - padding;
-        let availableSize = fullSize;
-        let flexFullSize = availableSize;
+        let pctSize = fullSize;
+        let flexFullSize = pctSize;
 
         let nPctTiles = 0;
         let success = true;
@@ -85,7 +85,7 @@ export class TileSpecsCalculationSizing extends TileSpecsCalculation {
             return true;
           }
 
-          if (availableSize < 1) {
+          if (pctSize < 1) {
             success = false;
             return false;
           }
@@ -95,7 +95,7 @@ export class TileSpecsCalculationSizing extends TileSpecsCalculation {
           let stackSize: number;
           if (stackDimension.unit === '%') {
             stackSize = stackDimension.relSize(fullSize)!;
-            stackSize = Math.min(stackSize, availableSize);
+            stackSize = Math.min(stackSize, pctSize);
             nPctTiles += 1;
             flexFullSize -= stackSize;
           } else {
@@ -108,7 +108,7 @@ export class TileSpecsCalculationSizing extends TileSpecsCalculation {
             }
           }
 
-          availableSize -= stackSize;
+          pctSize -= stackSize;
           sizes.push(stackSize);
 
           return true;

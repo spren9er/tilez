@@ -38,34 +38,59 @@ export class TileSpecsCalculationSpacing extends TileSpecsCalculation {
     const pctProps = this.sortedProps.filter(({ props }) => {
       return props.dim(this.stackDimension).unit !== 'px';
     });
-    const nPctSpecs = pctProps.length;
-
-    const nFlexSpecs = pctProps.filter(({ props }) => {
-      return props.dim(this.stackDimension).unit === undefined;
-    }).length;
+    const maxPctSpecs = pctProps.length;
 
     if (this.pctFullSize < innerPadding + 1)
-      return new Array(nPctSpecs).fill(0);
+      return new Array(maxPctSpecs).fill(0);
 
-    let pctSize = 0;
+    let sizes: number[] = [];
+    Array.from({ length: maxPctSpecs }, (_, i) => i + 1)
+      .reverse()
+      .every((n) => {
+        sizes = [];
 
-    return pctProps.map(({ props }) => {
-      const stackDimension = props.dim(this.stackDimension);
-      const { unit } = stackDimension;
+        let pctSize = 0;
 
-      let size =
-        stackDimension.relSize(this.pctFullSize) ??
-        (this.pctFullSize - pctSize) / nFlexSpecs;
+        let nPctTiles = 0;
+        let success = true;
 
-      if (unit === '%') {
-        size = Math.min(size, this.pctFullSize);
-        pctSize += size;
-      }
+        pctProps.every(({ props }, idx) => {
+          const stackDimension = props.dim(this.stackDimension);
+          const { unit } = stackDimension;
 
-      const stackSize = size - innerPadding;
+          if (idx >= n) {
+            sizes.push(0);
+            return true;
+          }
 
-      return stackSize >= 1 ? stackSize : 0;
-    });
+          const nFlexTiles = n - nPctTiles;
+
+          let size =
+            stackDimension.relSize(this.pctFullSize) ??
+            (this.pctFullSize - pctSize) / nFlexTiles;
+
+          if (unit === '%') {
+            nPctTiles += 1;
+            size = Math.min(size, this.pctFullSize - pctSize);
+            pctSize += size;
+          }
+
+          const stackSize = size - innerPadding;
+
+          if (stackSize < 1) {
+            success = false;
+            return false;
+          }
+
+          sizes.push(stackSize);
+
+          return true;
+        });
+
+        return !success;
+      });
+
+    return sizes;
   }
 
   protected calculateFixedSize(
@@ -155,7 +180,7 @@ export class TileSpecsCalculationSpacing extends TileSpecsCalculation {
       }
 
       const fixedSize = dimensions[this.fixedDimension];
-      const fixedDiff = this.fixedFullSize - fixedSize;
+      const fixedDiff = this.fixedFullSize - fixedSize - innerPadding;
 
       if (fixedDiff > 0) {
         if (this.isHorizontal) {
