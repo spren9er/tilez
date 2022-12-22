@@ -1,8 +1,10 @@
 export type TypeTilePropsDimension = number | string;
-export type TypeTilePropsStack = 'horizontal' | 'vertical' | 'none';
+export type TypeTilePropsStack = 'horizontal' | 'vertical';
 export type TypeTilePropsType = 'plain' | 'html' | 'svg';
 export type TypeTilePropsHAlign = 'left' | 'center' | 'right';
 export type TypeTilePropsVAlign = 'top' | 'center' | 'bottom';
+export type TypeTilePropsAlign = TypeTilePropsHAlign | TypeTilePropsVAlign;
+export type TypeTilePropsMode = 'spacing' | 'sizing';
 
 export type TypeTileProps = {
   width?: TypeTilePropsDimension;
@@ -13,4 +15,5 @@ export type TypeTileProps = {
   outerPadding?: TypeTilePropsDimension;
   hAlign?: TypeTilePropsHAlign;
   vAlign?: TypeTilePropsVAlign;
+  mode?: TypeTilePropsMode;
 };

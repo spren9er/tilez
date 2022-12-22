@@ -8,7 +8,7 @@ import type {
 import type { TileNode } from '$lib/entities/tileNode';
 import { TileSpecs } from '$lib/entities/tileSpecs';
 import { TileNodeFactory } from '$lib/factories/tileNodeFactory';
-import { TileSpecsCalculation } from '$lib/services/tileSpecsCalculation';
+import { TileSpecsCalculationSizing } from '$lib/services/tileSpecsCalculationSizing';
 
 const propsDimensions = {
   width: 1000,
@@ -16,14 +16,15 @@ const propsDimensions = {
 };
 
 const calc = (node: TileNode) => {
-  return new TileSpecsCalculation(
-    node.props.stack,
+  return new TileSpecsCalculationSizing(
     node.specs!,
     node.children.map(({ props }) => props),
+    node.isRoot,
+    node.props.stack,
   ).call();
 };
 
-describe('TileSpecsCalculation', () => {
+describe('TileSpecsCalculationSizing', () => {
   it('creates no specs if there are no children', () => {
     const root = new TileNodeFactory(propsDimensions).build();
     const childrenSpecs = calc(root);
@@ -295,36 +296,7 @@ describe('TileSpecsCalculation', () => {
     ]);
   });
 
-  it('considers "vAlign" of parent for horizontal layout', () => {
-    const vAlignSpecsFor = (vAlign: TypeTilePropsVAlign) => {
-      const root = new TileNodeFactory({
-        ...propsDimensions,
-        stack: 'horizontal',
-        vAlign,
-      }).build();
-      new TileNodeFactory({ width: '30%', height: '60%' }, root).build();
-      new TileNodeFactory({ width: '40%', height: '40%' }, root).build();
-
-      return calc(root);
-    };
-
-    expect(vAlignSpecsFor('top')).toEqual([
-      new TileSpecs(300, 600, 0, 0, 0, 0, 0, 0, 'left', 'top'),
-      new TileSpecs(400, 400, 300, 0, 300, 0, 0, 0, 'left', 'top'),
-    ]);
-
-    expect(vAlignSpecsFor('center')).toEqual([
-      new TileSpecs(300, 600, 0, 200, 0, 200, 0, 0, 'left', 'center'),
-      new TileSpecs(400, 400, 300, 300, 300, 300, 0, 0, 'left', 'center'),
-    ]);
-
-    expect(vAlignSpecsFor('bottom')).toEqual([
-      new TileSpecs(300, 600, 0, 400, 0, 400, 0, 0, 'left', 'bottom'),
-      new TileSpecs(400, 400, 300, 600, 300, 600, 0, 0, 'left', 'bottom'),
-    ]);
-  });
-
-  it('considers "vAlign" of child for horizontal layout', () => {
+  it('considers "vAlign" for horizontal layout', () => {
     const vAlignSpecsFor = (vAlign: TypeTilePropsVAlign) => {
       const root = new TileNodeFactory({
         ...propsDimensions,
@@ -392,36 +364,7 @@ describe('TileSpecsCalculation', () => {
     ]);
   });
 
-  it('considers "hAlign" of parent for vertical layout', () => {
-    const hAlignSpecsFor = (hAlign: TypeTilePropsHAlign) => {
-      const root = new TileNodeFactory({
-        ...propsDimensions,
-        stack: 'vertical',
-        hAlign,
-      }).build();
-      new TileNodeFactory({ width: '30%', height: '60%' }, root).build();
-      new TileNodeFactory({ width: '40%', height: '40%' }, root).build();
-
-      return calc(root);
-    };
-
-    expect(hAlignSpecsFor('left')).toEqual([
-      new TileSpecs(300, 600, 0, 0, 0, 0, 0, 0, 'left', 'top'),
-      new TileSpecs(400, 400, 0, 600, 0, 600, 0, 0, 'left', 'top'),
-    ]);
-
-    expect(hAlignSpecsFor('center')).toEqual([
-      new TileSpecs(300, 600, 350, 0, 350, 0, 0, 0, 'center', 'top'),
-      new TileSpecs(400, 400, 300, 600, 300, 600, 0, 0, 'center', 'top'),
-    ]);
-
-    expect(hAlignSpecsFor('right')).toEqual([
-      new TileSpecs(300, 600, 700, 0, 700, 0, 0, 0, 'right', 'top'),
-      new TileSpecs(400, 400, 600, 600, 600, 600, 0, 0, 'right', 'top'),
-    ]);
-  });
-
-  it('considers "hAlign" of child for vertical layout', () => {
+  it('considers "hAlign" for vertical layout', () => {
     const hAlignSpecsFor = (hAlign: TypeTilePropsHAlign) => {
       const root = new TileNodeFactory({
         ...propsDimensions,

@@ -1,7 +1,6 @@
 import type {
   TypeTilePropsStack,
-  TypeTilePropsHAlign,
-  TypeTilePropsVAlign,
+  TypeTilePropsAlign,
 } from '$lib/types/tileProps.type';
 import type { TypeTileSpecsDimension } from '$lib/types/tileSpecs.type';
 import type {
@@ -16,22 +15,26 @@ type TypeIndexedProps = {
   props: TileProps;
 };
 
-type TypeTilePropsAlign = TypeTilePropsHAlign | TypeTilePropsVAlign;
+export abstract class TileSpecsCalculation {
+  protected specs: TileSpecs;
+  protected props: TypeIndexedProps[];
+  protected root: boolean;
+  protected stack?: TypeTilePropsStack;
 
-export class TileSpecsCalculation {
-  private stack: TypeTilePropsStack;
-  private specs: TileSpecs;
-  private props: TypeIndexedProps[];
+  protected stackFullSize: number;
+  protected fixedFullSize: number;
+  protected pctFullSize: number;
 
-  private stackFullSize: number;
-  private fixedFullSize: number;
-  private pctFullSize: number;
-  private firstTile: boolean;
-
-  constructor(stack: TypeTilePropsStack, specs: TileSpecs, props: TileProps[]) {
-    this.stack = stack;
+  constructor(
+    specs: TileSpecs,
+    props: TileProps[],
+    root: boolean,
+    stack?: TypeTilePropsStack,
+  ) {
     this.specs = specs;
     this.props = props.map((props, idx) => ({ idx, props }));
+    this.root = root;
+    this.stack = stack;
 
     const { outerPadding } = this.specs;
 
@@ -45,7 +48,6 @@ export class TileSpecsCalculation {
     );
 
     this.pctFullSize = this.stackFullSize;
-    this.firstTile = true;
   }
 
   public call(): TileSpecs[] {
@@ -53,11 +55,14 @@ export class TileSpecsCalculation {
 
     if (!this.isStack)
       return this.props.map(({ props }) => {
-        const specs = new TileSpecsCalculation('horizontal', this.specs, [
-          props,
-        ]).call();
+        const [specs] = new (this.constructor as new (
+          specs: TileSpecs,
+          props: TileProps[],
+          root: boolean,
+          stack?: TypeTilePropsStack,
+        ) => typeof this)(this.specs, [props], this.root, 'horizontal').call();
 
-        return specs[0];
+        return specs;
       });
 
     if (this.stackFullSize <= 0)
@@ -97,225 +102,35 @@ export class TileSpecsCalculation {
       .map(({ specs }) => specs);
   }
 
-  private calculatePxSizes(): number[] {
-    const { innerPadding } = this.specs;
+  protected abstract calculatePxSizes(): number[];
 
-    const pxProps = this.sortedProps.filter(({ props }) => {
-      return props.dim(this.stackDimension).unit === 'px';
-    });
+  protected abstract calculatePctSizes(): number[];
 
-    return pxProps.map(({ props }) => {
-      if (this.pctFullSize <= innerPadding) return 0;
+  protected abstract calculateFixedSize(
+    fixedDimension: TilePropsDimensionsAccessor,
+    fixedFullSize: number,
+  ): number;
 
-      const stackDimension = props.dim(this.stackDimension);
-      const stackSize = Math.min(
-        stackDimension.size!,
-        this.firstTile ? this.pctFullSize : this.pctFullSize - innerPadding,
-      );
-
-      const step = this.firstTile ? stackSize : innerPadding + stackSize;
-
-      if (stackSize > 0) {
-        this.pctFullSize -= step;
-        this.firstTile = false;
-      }
-
-      return stackSize;
-    });
-  }
-
-  private calculatePctSizes(): number[] {
-    const { innerPadding } = this.specs;
-
-    const pctProps = this.sortedProps.filter(({ props }) => {
-      return props.dim(this.stackDimension).unit !== 'px';
-    });
-    const maxPctSpecs = pctProps.length;
-
-    // there are already some px tiles (add single inner padding add the end)
-    if (!this.firstTile) this.pctFullSize -= innerPadding;
-
-    if (this.pctFullSize < 1) return new Array(maxPctSpecs).fill(0);
-
-    let sizes: number[] = [];
-    Array.from({ length: maxPctSpecs }, (_, i) => i + 1)
-      .reverse()
-      .every((n) => {
-        sizes = [];
-
-        const padding = (n - 1) * innerPadding;
-        const fullSize = this.pctFullSize - padding;
-        let availableSize = fullSize;
-        let flexFullSize = availableSize;
-
-        let nPctTiles = 0;
-        let success = true;
-
-        pctProps.every(({ props }, idx) => {
-          if (idx >= n) {
-            sizes.push(0);
-            return true;
-          }
-
-          if (availableSize < 1) {
-            success = false;
-            return false;
-          }
-
-          const stackDimension = props.dim(this.stackDimension);
-
-          let stackSize: number;
-          if (stackDimension.unit === '%') {
-            stackSize = stackDimension.relSize(fullSize)!;
-            stackSize = Math.min(stackSize, availableSize);
-            nPctTiles += 1;
-            flexFullSize -= stackSize;
-          } else {
-            const nFlexTiles = n - nPctTiles;
-            stackSize = flexFullSize / nFlexTiles;
-
-            if (nFlexTiles <= 0 || stackSize < 1) {
-              success = false;
-              return false;
-            }
-          }
-
-          availableSize -= stackSize;
-          sizes.push(stackSize);
-
-          return true;
-        });
-
-        return !success;
-      });
-
-    return sizes;
-  }
-
-  private applyAlignAndCoords(
+  protected abstract applyAlignAndCoords(
     specsDimensions: TypeTileSpecsDimension[],
-  ): TileSpecs[] {
-    const { innerPadding, outerPadding } = this.specs;
+  ): TileSpecs[];
 
-    const start = this.isHorizontal ? 'left' : 'top';
-    const startSize = this.stackSizeFor(start, specsDimensions);
-    const startSpecs = this.specsFor(start, specsDimensions, outerPadding);
-
-    const end = this.isHorizontal ? 'right' : 'bottom';
-    const endSize = this.stackSizeFor(end, specsDimensions);
-    const endAnchor = outerPadding + this.stackFullSize - endSize;
-    const endSpecs = this.specsFor(end, specsDimensions, endAnchor);
-
-    const centerSize = this.stackSizeFor('center', specsDimensions);
-    const fullSize = this.stackFullSize + 2 * outerPadding;
-    let centerAnchor = (fullSize - centerSize) / 2;
-
-    const startEnd = outerPadding + startSize + innerPadding;
-    const endStart = fullSize - outerPadding - endSize - innerPadding;
-    const centerEnd = centerAnchor + centerSize;
-
-    if (startEnd > centerAnchor) {
-      centerAnchor = startEnd;
-    } else if (centerEnd > endStart) {
-      centerAnchor = endStart - centerSize;
-    }
-
-    const centerSpecs = this.specsFor('center', specsDimensions, centerAnchor);
-
-    return [...startSpecs, ...endSpecs, ...centerSpecs]
-      .sort((a, b) => (a.idx > b.idx ? 1 : -1))
-      .map(({ specs }) => specs);
-  }
-
-  private specsFor(
+  protected abstract specsFor(
     align: TypeTilePropsAlign,
     specsDimensions: TypeTileSpecsDimension[],
-    anchor = 0,
-  ) {
-    const { absX, absY, innerPadding, outerPadding } = this.specs;
+    anchor: number,
+  ): { idx: number; specs: TileSpecs }[];
 
-    let relX = this.isHorizontal ? anchor : outerPadding;
-    let relY = this.isHorizontal ? outerPadding : anchor;
-
-    return this.propsFor(align).map(({ idx, props }) => {
-      const dimensions = specsDimensions[idx];
-      const stackSize = dimensions[this.stackDimension];
-
-      if (stackSize === 0)
-        return {
-          idx,
-          specs: new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
-        };
-
-      // align orthogonal to stack direction
-      let offsetX = 0;
-      let offsetY = 0;
-
-      const fixedSize = dimensions[this.fixedDimension];
-      const fixedDiff = this.fixedFullSize - fixedSize;
-
-      if (fixedDiff > 0) {
-        if (this.isHorizontal) {
-          if (props.vAlign === 'center') offsetY = fixedDiff / 2;
-          if (props.vAlign === 'bottom') offsetY = fixedDiff;
-        } else {
-          if (props.hAlign === 'center') offsetX = fixedDiff / 2;
-          if (props.hAlign === 'right') offsetX = fixedDiff;
-        }
-      }
-
-      const specs = new TileSpecs(
-        dimensions.width,
-        dimensions.height,
-        absX + relX + offsetX,
-        absY + relY + offsetY,
-        relX + offsetX,
-        relY + offsetY,
-        props.innerPadding ?? 0,
-        props.outerPadding ?? 0,
-        props.hAlign || 'left',
-        props.vAlign || 'top',
-      );
-
-      const step = innerPadding + stackSize;
-
-      if (this.isHorizontal) {
-        relX += step;
-      } else {
-        relY += step;
-      }
-
-      return { idx, specs };
-    });
-  }
-
-  private stackSizeFor(
+  protected abstract stackSizeFor(
     align: TypeTilePropsAlign,
     specsDimensions: TypeTileSpecsDimension[],
-  ) {
-    const { innerPadding } = this.specs;
+  ): number;
 
-    let nProps = 0;
-
-    let stackSize = this.propsFor(align).reduce((agg: number, { idx }) => {
-      const dimensions = specsDimensions[idx];
-      const size = dimensions[this.stackDimension];
-
-      if (size > 0) nProps += 1;
-
-      return agg + size;
-    }, 0);
-
-    stackSize += (nProps - 1) * innerPadding;
-
-    return stackSize;
-  }
-
-  private propsFor(align: TypeTilePropsAlign) {
+  protected propsFor(align: TypeTilePropsAlign) {
     return (this.groupedProps.get(align) || []) as TypeIndexedProps[];
   }
 
-  private get groupedProps() {
+  protected get groupedProps() {
     return this.props.reduce((agg, { idx, props }) => {
       const align = this.isHorizontal
         ? props.hAlign || 'left'
@@ -325,19 +140,7 @@ export class TileSpecsCalculation {
     }, new Map());
   }
 
-  private calculateFixedSize(
-    fixedDimension: TilePropsDimensionsAccessor,
-    fixedFullSize: number,
-  ) {
-    const fixedSize =
-      fixedDimension.size ??
-      fixedDimension.relSize(fixedFullSize) ??
-      fixedFullSize;
-
-    return Math.min(fixedSize, fixedFullSize);
-  }
-
-  private get sortedProps() {
+  protected get sortedProps() {
     return [...this.props].sort((a, b) => {
       // reverse order w.r.t. unit ('px' > '%' > undefined)!
       const result = b.props.dim(this.stackDimension).compare(a.props);
@@ -348,27 +151,27 @@ export class TileSpecsCalculation {
     });
   }
 
-  private get nProps() {
+  protected get nProps() {
     return this.props.length;
   }
 
-  private get stackDimension(): 'width' | 'height' {
+  protected get stackDimension(): 'width' | 'height' {
     if (this.stack === 'horizontal') return 'width';
 
     return 'height';
   }
 
-  private get fixedDimension(): 'width' | 'height' {
+  protected get fixedDimension(): 'width' | 'height' {
     if (this.stack === 'horizontal') return 'height';
 
     return 'width';
   }
 
-  private get isHorizontal(): boolean {
-    return this.isStack && this.stack === 'horizontal';
+  protected get isHorizontal(): boolean {
+    return this.stack === 'horizontal';
   }
 
-  private get isStack(): boolean {
-    return this.stack !== 'none';
+  protected get isStack(): boolean {
+    return !!this.stack;
   }
 }

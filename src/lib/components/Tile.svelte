@@ -5,6 +5,7 @@
 		TypeTilePropsHAlign,
 		TypeTilePropsVAlign,
 		TypeTilePropsType,
+		TypeTilePropsMode,
 	} from '$lib/types/tileProps.type';
 	import type { TileNode } from '$lib/entities/tileNode';
 
@@ -23,6 +24,7 @@
 	export let hAlign: TypeTilePropsHAlign | undefined = undefined;
 	export let vAlign: TypeTilePropsVAlign | undefined = undefined;
 	export let type: TypeTilePropsType | undefined = undefined;
+	export let mode: TypeTilePropsMode | undefined = undefined;
 
 	const node = setNodeContext({
 		stack,
@@ -33,6 +35,7 @@
 		hAlign,
 		vAlign,
 		type,
+		mode,
 	});
 	const root = $node.isRoot;
 

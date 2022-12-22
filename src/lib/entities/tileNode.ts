@@ -5,7 +5,7 @@ import type { TileProps } from '$lib/valueObjects/tileProps';
 import type { TileSpecs } from '$lib/entities/tileSpecs';
 
 import { TilePropsDimensionFactory } from '$lib/factories/tilePropsDimensionFactory';
-import { TileSpecsCalculation } from '$lib/services/tileSpecsCalculation';
+import { TileSpecsCalculationFactory } from '$lib/factories/tileSpecsCalculationFactory';
 
 export class TileNode {
   public props: TileProps;
@@ -58,11 +58,14 @@ export class TileNode {
   public updateChildrenSpecs() {
     if (!this.hasChildren || !this.specs) return;
 
-    const specs = new TileSpecsCalculation(
-      this.props.stack,
+    const tileSpecsCalculation = new TileSpecsCalculationFactory(
+      this.props.mode || 'sizing',
       this.specs,
       this.children.map(({ props }) => props),
-    ).call();
+      this.isRoot,
+      this.props.stack,
+    ).build();
+    const specs = tileSpecsCalculation.call();
 
     this.children.forEach((child, idx) => {
       child.update((node: TileNode) => {
@@ -115,18 +118,6 @@ export class TileNode {
     if (!this.props.innerPadding && this.props.innerPadding !== 0)
       this.props.innerPadding = parentNode.props.innerPadding;
 
-    if (
-      !this.props.vAlign &&
-      parentNode.props.vAlign &&
-      parentNode.props.stack === 'horizontal'
-    )
-      this.props.vAlign = parentNode.props.vAlign;
-
-    if (
-      !this.props.hAlign &&
-      parentNode.props.hAlign &&
-      parentNode.props.stack === 'vertical'
-    )
-      this.props.hAlign = parentNode.props.hAlign;
+    if (!this.props.mode) this.props.mode = parentNode.props.mode;
   }
 }

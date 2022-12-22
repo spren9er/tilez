@@ -5,24 +5,27 @@ import type {
   TypeTilePropsType,
   TypeTilePropsHAlign,
   TypeTilePropsVAlign,
+  TypeTilePropsMode,
 } from '$lib/types/tileProps.type';
 
 import { TilePropsFactory } from '$lib/factories/tilePropsFactory';
 
 describe('TilePropsFactory', () => {
-  it('passes through "stack" and "align" props', () => {
+  it('passes through "stack", "mode" and "align" props', () => {
     const stack = 'horizontal';
     const hAlign = 'center';
     const vAlign = 'center';
-    const props = new TilePropsFactory({ stack, hAlign, vAlign }).build();
+    const mode = 'spacing';
+    const props = new TilePropsFactory({ stack, hAlign, vAlign, mode }).build();
 
     expect(props.stack).toEqual(stack);
     expect(props.hAlign).toEqual(hAlign);
     expect(props.vAlign).toEqual(vAlign);
+    expect(props.mode).toEqual(mode);
   });
 
   it('validates prop "stack"', () => {
-    ['horizontal', 'vertical', 'none'].forEach((stack: string) => {
+    ['horizontal', 'vertical'].forEach((stack: string) => {
       const props = new TilePropsFactory({
         stack: stack as TypeTilePropsStack,
       }).build();
@@ -32,12 +35,12 @@ describe('TilePropsFactory', () => {
 
     const props = new TilePropsFactory({}).build();
 
-    expect(props.stack).toEqual('none');
+    expect(props.stack).toBeUndefined();
 
     expect(() => {
       new TilePropsFactory({ stack: 'diagonal' as TypeTilePropsStack }).build();
     }).toThrowError(
-      'Tile prop "stack" must be one of "horizontal", "vertical", "none"!',
+      'Tile prop "stack" must be one of "horizontal" or "vertical"!',
     );
   });
 
@@ -123,5 +126,23 @@ describe('TilePropsFactory', () => {
     }).toThrowError(
       'Tile prop "vAlign" must be one of "top", "center", "bottom"!',
     );
+  });
+
+  it('validates prop "mode"', () => {
+    ['spacing', 'sizing'].forEach((mode: string) => {
+      const props = new TilePropsFactory({
+        mode: mode as TypeTilePropsMode,
+      }).build();
+
+      expect(props.mode).toEqual(mode);
+    });
+
+    const props = new TilePropsFactory({}).build();
+
+    expect(props.mode).toBeUndefined();
+
+    expect(() => {
+      new TilePropsFactory({ mode: 'fit' as TypeTilePropsMode }).build();
+    }).toThrowError('Tile prop "mode" must be one of "spacing" or "sizing"!');
   });
 });

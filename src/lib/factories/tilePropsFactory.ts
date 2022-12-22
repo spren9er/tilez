@@ -23,6 +23,7 @@ export class TilePropsFactory {
       outerPadding,
       hAlign,
       vAlign,
+      mode,
     } = this.rawProps;
 
     const propsDimensions = new TilePropsDimensionsFactory(
@@ -32,19 +33,20 @@ export class TilePropsFactory {
 
     return new TileProps(
       propsDimensions,
-      this.parseStack(stack) || 'none',
+      this.parseStack(stack),
       this.parseType(type),
       this.parsePadding(innerPadding),
       this.parsePadding(outerPadding),
       this.parseHAlign(hAlign),
       this.parseVAlign(vAlign),
+      this.parseMode(mode),
     );
   }
 
   private parseStack(stack?: TypeTilePropsStack) {
-    if (stack && !['horizontal', 'vertical', 'none'].includes(stack))
+    if (stack && !['horizontal', 'vertical'].includes(stack))
       throw Error(
-        'Tile prop "stack" must be one of "horizontal", "vertical", "none"!',
+        'Tile prop "stack" must be one of "horizontal" or "vertical"!',
       );
 
     return stack;
@@ -77,5 +79,12 @@ export class TilePropsFactory {
       );
 
     return vAlign;
+  }
+
+  private parseMode(mode: TypeTileProps['mode']) {
+    if (mode && !['spacing', 'sizing'].includes(mode))
+      throw Error('Tile prop "mode" must be one of "spacing" or "sizing"!');
+
+    return mode;
   }
 }
