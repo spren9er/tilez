@@ -1,14 +1,21 @@
 import { getContext, setContext } from 'svelte';
-import { writable, type Writable } from 'svelte/store';
+import { derived, type Writable } from 'svelte/store';
 
 import type { TypeTileProps } from '$lib/types/tileProps.type';
 import type { TileNode } from '$lib/entities/tileNode';
 import type { TileSpecs } from '$lib/entities/tileSpecs';
 
+import { LinearScale } from '$lib/utils/linearScale';
 import { TileNodeFactory } from '$lib/factories/tileNodeFactory';
 
-export function getSpecsContext(): Writable<TileSpecs> {
-  return getContext('tilez-specs');
+type TypeTileContext = {
+  specs: Writable<TileSpecs>;
+  xScale: Writable<LinearScale>;
+  yScale: Writable<LinearScale>;
+};
+
+export function getTileContext(): TypeTileContext {
+  return getContext('tilez');
 }
 
 export function setNodeContext(props: TypeTileProps) {
@@ -17,22 +24,25 @@ export function setNodeContext(props: TypeTileProps) {
   const node = new TileNodeFactory(props, parent).build();
 
   setContext('tilez-nodes', node);
-  setSpecsContext('tilez-specs', node);
+  setTileContext('tilez', node);
 
   return node;
 }
 
-function setSpecsContext(name: string, node: TileNode) {
-  const specs = writable(node.specs);
+function setTileContext(name: string, node: TileNode) {
+  const specs = derived(node, ($node) => $node.specs!);
 
-  // copy specs from node store
-  node.subscribe((_node: TileNode) => {
-    specs.update((specs: TileSpecs) => {
-      specs = _node.specs!;
+  const xScale = derived(specs, ($specs) => {
+    const width = $specs.width;
 
-      return specs;
-    });
+    return new LinearScale().range([0, width]);
   });
 
-  setContext(name, specs);
+  const yScale = derived(specs, ($specs) => {
+    const height = $specs.height;
+
+    return new LinearScale().range([0, height]);
+  });
+
+  setContext(name, { specs, xScale, yScale });
 }

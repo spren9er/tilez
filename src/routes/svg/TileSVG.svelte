@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { getSpecsContext } from '$lib';
+	import { getTileContext } from '$lib';
 
-	const specs = getSpecsContext();
+	const { specs } = getTileContext();
 </script>
 
 {#if $specs}

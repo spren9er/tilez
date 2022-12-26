@@ -3,10 +3,7 @@ import type {
   TypeTilePropsAlign,
 } from '$lib/types/tileProps.type';
 import type { TypeTileSpecsDimension } from '$lib/types/tileSpecs.type';
-import type {
-  TileProps,
-  TilePropsDimensionsAccessor,
-} from '$lib/valueObjects/tileProps';
+import type { TileProps } from '$lib/valueObjects/tileProps';
 
 import { TileSpecs } from '$lib/entities/tileSpecs';
 import { TileSpecsCalculation } from './tileSpecsCalculation';
@@ -91,9 +88,10 @@ export class TileSpecsCalculationSizing extends TileSpecsCalculation {
           }
 
           const stackDimension = props.dim(this.stackDimension);
+          const { unit } = stackDimension;
 
           let stackSize: number;
-          if (stackDimension.unit === '%') {
+          if (unit === '%') {
             stackSize = stackDimension.relSize(fullSize)!;
             stackSize = Math.min(stackSize, pctSize);
             nPctTiles += 1;
@@ -120,51 +118,12 @@ export class TileSpecsCalculationSizing extends TileSpecsCalculation {
     return sizes;
   }
 
-  protected calculateFixedSize(
-    fixedDimension: TilePropsDimensionsAccessor,
-    fixedFullSize: number,
-  ) {
-    const fixedSize =
-      fixedDimension.size ??
-      fixedDimension.relSize(fixedFullSize) ??
-      fixedFullSize;
-
-    return Math.min(fixedSize, fixedFullSize);
-  }
-
   protected applyAlignAndCoords(
     specsDimensions: TypeTileSpecsDimension[],
   ): TileSpecs[] {
-    const { innerPadding, outerPadding } = this.specs;
+    const { innerPadding } = this.specs;
 
-    const start = this.isHorizontal ? 'left' : 'top';
-    const startSize = this.stackSizeFor(start, specsDimensions);
-    const startSpecs = this.specsFor(start, specsDimensions, outerPadding);
-
-    const end = this.isHorizontal ? 'right' : 'bottom';
-    const endSize = this.stackSizeFor(end, specsDimensions);
-    const endAnchor = outerPadding + this.stackFullSize - endSize;
-    const endSpecs = this.specsFor(end, specsDimensions, endAnchor);
-
-    const centerSize = this.stackSizeFor('center', specsDimensions);
-    const fullSize = this.stackFullSize + 2 * outerPadding;
-    let centerAnchor = (fullSize - centerSize) / 2;
-
-    const startEnd = outerPadding + startSize + innerPadding;
-    const endStart = fullSize - outerPadding - endSize - innerPadding;
-    const centerEnd = centerAnchor + centerSize;
-
-    if (startEnd > centerAnchor) {
-      centerAnchor = startEnd;
-    } else if (centerEnd > endStart) {
-      centerAnchor = endStart - centerSize;
-    }
-
-    const centerSpecs = this.specsFor('center', specsDimensions, centerAnchor);
-
-    return [...startSpecs, ...endSpecs, ...centerSpecs]
-      .sort((a, b) => (a.idx > b.idx ? 1 : -1))
-      .map(({ specs }) => specs);
+    return super.applyAlignAndCoords(specsDimensions, innerPadding);
   }
 
   protected specsFor(

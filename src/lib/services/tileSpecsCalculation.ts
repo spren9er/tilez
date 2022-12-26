@@ -106,15 +106,6 @@ export abstract class TileSpecsCalculation {
 
   protected abstract calculatePctSizes(): number[];
 
-  protected abstract calculateFixedSize(
-    fixedDimension: TilePropsDimensionsAccessor,
-    fixedFullSize: number,
-  ): number;
-
-  protected abstract applyAlignAndCoords(
-    specsDimensions: TypeTileSpecsDimension[],
-  ): TileSpecs[];
-
   protected abstract specsFor(
     align: TypeTilePropsAlign,
     specsDimensions: TypeTileSpecsDimension[],
@@ -128,6 +119,54 @@ export abstract class TileSpecsCalculation {
 
   protected propsFor(align: TypeTilePropsAlign) {
     return (this.groupedProps.get(align) || []) as TypeIndexedProps[];
+  }
+
+  protected applyAlignAndCoords(
+    specsDimensions: TypeTileSpecsDimension[],
+    padding = 0,
+  ): TileSpecs[] {
+    const { outerPadding } = this.specs;
+
+    const start = this.isHorizontal ? 'left' : 'top';
+    const startSize = this.stackSizeFor(start, specsDimensions);
+    const startSpecs = this.specsFor(start, specsDimensions, outerPadding);
+
+    const end = this.isHorizontal ? 'right' : 'bottom';
+    const endSize = this.stackSizeFor(end, specsDimensions);
+    const endAnchor = outerPadding + this.stackFullSize - endSize;
+    const endSpecs = this.specsFor(end, specsDimensions, endAnchor);
+
+    const centerSize = this.stackSizeFor('center', specsDimensions);
+    const fullSize = this.stackFullSize + 2 * outerPadding;
+    let centerAnchor = (fullSize - centerSize) / 2;
+
+    const startEnd = outerPadding + startSize + padding;
+    const endStart = fullSize - outerPadding - endSize - padding;
+    const centerEnd = centerAnchor + centerSize;
+
+    if (startEnd > centerAnchor) {
+      centerAnchor = startEnd;
+    } else if (centerEnd > endStart) {
+      centerAnchor = endStart - centerSize;
+    }
+
+    const centerSpecs = this.specsFor('center', specsDimensions, centerAnchor);
+
+    return [...startSpecs, ...endSpecs, ...centerSpecs]
+      .sort((a, b) => (a.idx > b.idx ? 1 : -1))
+      .map(({ specs }) => specs);
+  }
+
+  protected calculateFixedSize(
+    fixedDimension: TilePropsDimensionsAccessor,
+    fixedFullSize: number,
+  ) {
+    const fixedSize =
+      fixedDimension.size ??
+      fixedDimension.relSize(fixedFullSize) ??
+      fixedFullSize;
+
+    return Math.min(fixedSize, fixedFullSize);
   }
 
   protected get groupedProps() {

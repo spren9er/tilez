@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { getSpecsContext } from '$lib';
+	import { getTileContext } from '$lib';
 
 	export let fill = true;
 
-	const specs = getSpecsContext();
+	const { specs } = getTileContext();
 </script>
 
 <rect

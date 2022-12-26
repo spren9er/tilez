@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { getSpecsContext } from '$lib';
+	import { getTileContext } from '$lib';
 
-	const specs = getSpecsContext();
+	const { specs } = getTileContext();
 
 	const format = (number: number) => Number(number).toFixed(0);
 </script>
