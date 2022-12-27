@@ -21,11 +21,6 @@ export class LinearScale extends ExtensibleFunction {
     this._range = _range || [0, 1];
 
     this.validateDomain();
-
-    const [x1, x2] = this._domain!;
-    const [y1, y2] = this._range!;
-
-    if (x1 > x2) return new LinearScale([x2, x1], [y2, y1]);
   }
 
   public call(x: number): number {
