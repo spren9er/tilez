@@ -5,6 +5,14 @@
 
 The original idea of **_tilez_** was to build an abstraction layer for creating compositions of arbitrary SVG charts in Svelte, where the result is a single SVG file. However, it is not limited to this use case. By default, all tiles — the building blocks of a layout — are renderless components. You define your layout via nested stackable tiles, where each tile has its own coordinate space, which is then accessible via a Svelte store (within a tile's context).
 
+_**tilez**_ is
+
+- easy-to-use (declare your layout in a simple manner)
+- light-weight (does not add more than a few KB to your code base)
+- flexible (can be used as SVG, HTML or renderless components)
+- reactive (all tiles adapt to root tile changes)
+- free of dependencies (except of Svelte)
+- opinionated (the way the layout algorithm works when not enough space is available, see [here](#notes-on-rendering-algorithm))
 
 ## Installation
 
