@@ -3,16 +3,17 @@
 
 # ![Logo](https://github.com/spren9er/tilez/blob/main/static/tilez.svg?raw=true) tilez
 
-The original idea of **_tilez_** was to build an abstraction layer for creating compositions of arbitrary SVG charts in Svelte, where the result is a single SVG file. However, it is not limited to this use case. By default, all tiles — the building blocks of a layout — are renderless components. You define your layout via nested stackable tiles, where each tile has its own coordinate space, which is then accessible via a Svelte store (within a tile's context).
+The original idea of **_tilez_** was to build an abstraction layer for creating compositions of arbitrary SVG charts in Svelte, where the result is a single SVG file. However, it is not limited to this use case. By default, all tiles – the building blocks of a layout – are renderless components. You define your layout via nested stackable tiles, where each tile has its own coordinate space, which is then accessible via a Svelte store (within a tile's context).
 
 _**tilez**_ is
 
 - easy-to-use (declare your layout in a simple manner)
-- light-weight (does not add more than a few KB to your code base)
 - flexible (can be used as SVG, HTML or renderless components)
 - reactive (all tiles adapt to changes of root tile)
 - free of dependencies (except for Svelte)
-- opinionated (the way the layout algorithm works, especially when not enough space is available, see [here](#notes-on-rendering-algorithm))
+- opinionated (the way the layout algorithm works, especially when not enough space is available, see [here](#how-does-the-layout-algorithm-work))
+- robust (handles edge cases very well)
+- light-weight (does not add more than a few KB to your code base)
 
 ## Installation
 
@@ -93,50 +94,50 @@ These components have the same props available as basic **Tile** component (exce
 
 A **Tile** has the following props:
 
-<a name="stack" href="#stack">#</a> Tile.<b>stack</b>
+<a name="stack" href="#stack">#</a> tilez.Tile.<b>stack</b>
 
 When this property is not given, all children tiles will have the same coordinate space like current tile.
 Otherwise, children tiles will be distributed within current tile according to their props in _horizontal_ or _vertical_ direction.
 
 
-<a name="width" href="#width">#</a> Tile.<b>width</b>
+<a name="width" href="#width">#</a> tilez.Tile.<b>width</b>
 
 Argument can be an absolute or relative number. Accepts strings like _"500px"_, _"500"_, _"50%"_, _"0.5"_ or numbers like _500_ or _0.5_. Numbers less than 1 are interpreted as percentages, otherwise they represent absolute widths.
 The given width will result in different tile widths, depending on the layout [mode](#mode).
 When there is no width given (default), available space in parent tile will be distributed equally between current tile and other tiles having no width specification.
 
 
-<a name="height" href="#height">#</a> Tile.<b>height</b>
+<a name="height" href="#height">#</a> tilez.Tile.<b>height</b>
 
 Analogue to [width](#width) above.
 
 
-<a name="inner_padding" href="#inner_padding">#</a> Tile.<b>innerPadding</b> · [default: 0 / inherits]
+<a name="inner_padding" href="#inner_padding">#</a> tilez.Tile.<b>innerPadding</b> · [default: 0 / inherits]
 
 Defines the padding **between** children tiles of current tile. Format must be either a string like _"10px"_, _"10"_ or a number like _10_. Relative values are not supported.
 For layout mode _'spacing'_ it adds half of the given inner padding to the left and right of the outer tiles (or tile if there is only one).
 This property will be inherited, thus all children tiles will have the same inner padding unless not specified explicitly in children tile. If inner padding of children tile is given, this value will be considered instead of inner padding of parent tile.
 
 
-<a name="outer_padding" href="#outer_padding">#</a> Tile.<b>outerPadding</b> · [default: 0]
+<a name="outer_padding" href="#outer_padding">#</a> tilez.Tile.<b>outerPadding</b> · [default: 0]
 
 Defines the padding **around** children tile(s) of current tile. It is similar to CSS padding of a HTML container.
 This property won't be inherited.
 
 
-<a name="h_align" href="#h_align">#</a> Tile.<b>hAlign</b> · (_'left'_ | _'center'_ | _'right'_) [default: _'left'_]
+<a name="h_align" href="#h_align">#</a> tilez.Tile.<b>hAlign</b> · (_'left'_ | _'center'_ | _'right'_) [default: _'left'_]
 
 Defines the horizontal alignment w.r.t. parent tile. Accepts _'left'_, _'center'_ and _'right'_.
 When several children tiles share the same alignment property, they will be positioned as a group according to their given order within parent tile. For _'center'_ applies: If centered group can't be positioned in the center because there will be an overlap with _'left'_ or _'right'_ groups, it will be shifted to the right or left, respectively.
 
 
-<a name="v_align" href="#v_align">#</a> Tile.<b>vAlign</b> · (_'top'_ |  _'center'_ | _'bottom'_) [default: _'top'_]
+<a name="v_align" href="#v_align">#</a> tilez.Tile.<b>vAlign</b> · (_'top'_ |  _'center'_ | _'bottom'_) [default: _'top'_]
 
 Defines the vertical alignment w.r.t. parent tile. Accepts _'top'_, _'center'_ and _'bottom'_.
 It behaves like [hAlign](#h_align), but in vertical direction.
 
 
-<a name="type" href="#type">#</a> Tile.<b>type</b> · (_'plain'_ | _'svg'_ |  _'html'_ ) [default: _'plain'_] [inherits]
+<a name="type" href="#type">#</a> tilez.Tile.<b>type</b> · (_'plain'_ | _'svg'_ |  _'html'_ ) [default: _'plain'_] [inherits]
 
 By default, using **_tilez_** won't create any HTML containers. All components are renderless components.
 Available types are _'plain'_, _'svg'_ and _'html'_. Using an _'svg'_ layout, parent tile will be an SVG container and all children tiles will be rendered as SVG group. This property inherits from parent tile unless not specified explicitly.
@@ -145,7 +146,7 @@ You could use **_tilez_** as _'html'_ layout engine (all containers are implicit
 Note that an _'html'_ tile can't be embedded into an _'svg'_ tile.
 
 
-<a name="mode" href="#mode">#</a> Tile.<b>mode</b> · (_'spacing'_ | _'sizing'_ ) [default: _'spacing'_] [inherits]
+<a name="mode" href="#mode">#</a> tilez.Tile.<b>mode</b> · (_'spacing'_ | _'sizing'_ ) [default: _'spacing'_] [inherits]
 
 There are two layout modes available: one which is optimized for _'spacing'_ and one for _'sizing'_. They differ on how to interpret sizes when you specify a non-zero inner padding. When no inner padding is given, both modes produce the same layout.
 
@@ -175,9 +176,9 @@ import { getTileContext } from 'tilez';
 const {specs, xScale, yScale } = getTileContext();
 ```
 
-All three objects – which you obtain from the tile's context – are Svelte stores.
+All three objects – which you obtain from a tile's context – are Svelte stores.
 
-Alternatively you can use `getContext` from Svelte. The name of the context is simply _'tilez'_.
+Alternatively, you can use `getContext` from Svelte. The name of the context is simply _'tilez'_.
 
 <a name="get_tile_context" href="#get_tile_context">#</a> tilez.<b>getTileContext()</b>
 
@@ -187,6 +188,6 @@ Returns an object containing three Svelte stores [specs](#specs), [xScale](#x_sc
 
 TBD
 
-## Notes on Rendering Algorithm
+## How does the layout algorithm work?
 
 TBD
