@@ -3,9 +3,10 @@
 
 # ![Logo](https://github.com/spren9er/tilez/blob/main/static/tilez.svg?raw=true) tilez
 
-The original idea of **_tilez_** was to build a light-weight Svelte component framework for easily creating compositions of arbitrary SVG charts, where the result is a single SVG file. However, it is not limited to this. By default, all tiles — the building blocks of a layout — are renderless components. You define your layout via nested tiles, where each tile has its own coordinate space, which is then accessible as Svelte store (within a tile's context).
+The original idea of **_tilez_** was to build an abstraction layer for creating compositions of arbitrary SVG charts in Svelte, where the result is a single SVG file. However, it is not limited to this use case. By default, all tiles — the building blocks of a layout — are renderless components. You define your layout via nested stackable tiles, where each tile has its own coordinate space, which is then accessible via a Svelte store (within a tile's context).
 
-## Installing
+
+## Installation
 
 Install **_tilez_** as npm package via
 
@@ -14,9 +15,32 @@ npm install tilez
 ```
 
 
+## How to specify layouts?
+
+A **Tile** component is a building block of a layout.
+By defining props of nested tiles, you define the whole layout within an arbitrary rectangular area in a declarative way.
+
+### Tile Layouts
+
+Here is an example of a simple layout
+
+```html
+<Tile stack="horizontal" width="800px" height="600px">
+  <Tile width="400px">
+    <SomeComponent />
+  </Tile>
+  <Tile>
+    <AnotherComponent />
+  </Tile>
+  <Tile height="300px" vAlign="center">
+    <YetAnotherComponent />
+  </Tile>
+</Tile>
+```
+
 ### Tile Component
 
-Example of a _Tile_ with all available props
+A **Tile** component has the following available props
 
 ```html
 <Tile
@@ -46,40 +70,44 @@ However, there is one exception: the root (most outer) tile must have an absolut
 
 ### Stacking Tiles
 
-The main concept of _**tilez**_ is that you can stack tiles in _horizontal_ or _vertical_ direction repeatedly.
-A tile starts where the last tile ends. For stacking you use the property [stack](#stack) which defines in which direction children tiles will be stacked.
+The main concept of _**tilez**_ is that you can stack tiles in _horizontal_ or _vertical_ direction, recursively.
+Within a stack, a tile starts where the last tile ends. For stacking you use the property [stack](#stack) which defines in which direction children tiles should be stacked.
 
 For convenience  there are shortcuts available
 
 - **HTile** for _horizontal_ stacking
 - **VTile** for _vertical_ stacking
 
-These components have the same props available as **Tile** component (except of [stack](#stack) property).
+These components have the same props available as basic **Tile** component (except of [stack](#stack) property).
 
+
+### Tile Props
+
+A **Tile** has the following props:
 
 <a name="stack" href="#stack">#</a> Tile.<b>stack</b>
 
 When this property is not given, all children tiles will have the same coordinate space like current tile.
-Otherwise children tiles will be distributed within current tile according to their props in _horizontal_ or _vertical_ direction.
+Otherwise, children tiles will be distributed within current tile according to their props in _horizontal_ or _vertical_ direction.
 
 
 <a name="width" href="#width">#</a> Tile.<b>width</b>
 
 Argument can be an absolute or relative number. Accepts strings like _"500px"_, _"500"_, _"50%"_, _"0.5"_ or numbers like _500_ or _0.5_. Numbers less than 1 are interpreted as percentages, otherwise they represent absolute widths.
-The given width will result in different tile widths, depending on the layout mode.
+The given width will result in different tile widths, depending on the layout [mode](#mode).
 When there is no width given (default), available space in parent tile will be distributed equally between current tile and other tiles having no width specification.
 
 
 <a name="height" href="#height">#</a> Tile.<b>height</b>
 
-Same as [width](#width) above.
+Analogue to [width](#width) above.
 
 
 <a name="inner_padding" href="#inner_padding">#</a> Tile.<b>innerPadding</b> · [default: 0 / inherits]
 
-Defines the padding **between** children tiles of current tile. Format must be either a string like _"10px"_ or _"10"_ or a number like _10_. Relative values are not supported.
+Defines the padding **between** children tiles of current tile. Format must be either a string like _"10px"_, _"10"_ or a number like _10_. Relative values are not supported.
 For layout mode _'spacing'_ it adds half of the given inner padding to the left and right of the outer tiles (or tile if there is only one).
-This property will be inherited, thus all children tiles will have the same inner padding unless not specified explicitly in children tile. If inner padding of children tile is given, it will override inner padding of parent tile.
+This property will be inherited, thus all children tiles will have the same inner padding unless not specified explicitly in children tile. If inner padding of children tile is given, this value will be considered instead of inner padding of parent tile.
 
 
 <a name="outer_padding" href="#outer_padding">#</a> Tile.<b>outerPadding</b> · [default: 0]
@@ -91,7 +119,7 @@ This property won't be inherited.
 <a name="h_align" href="#h_align">#</a> Tile.<b>hAlign</b> · (_'left'_ | _'center'_ | _'right'_) [default: _'left'_]
 
 Defines the horizontal alignment w.r.t. parent tile. Accepts _'left'_, _'center'_ and _'right'_.
-When several children tiles share the same alignment property, they will be positioned as a group according to their order within parent tile. For _'center'_ applies: If centered group can't be positioned in the center because there will be an overlap with _'left'_ or _'right'_ groups, it will be shifted to the right or left, respectively.
+When several children tiles share the same alignment property, they will be positioned as a group according to their given order within parent tile. For _'center'_ applies: If centered group can't be positioned in the center because there will be an overlap with _'left'_ or _'right'_ groups, it will be shifted to the right or left, respectively.
 
 
 <a name="v_align" href="#v_align">#</a> Tile.<b>vAlign</b> · (_'top'_ |  _'center'_ | _'bottom'_) [default: _'top'_]
@@ -104,14 +132,14 @@ It behaves like [hAlign](#h_align), but in vertical direction.
 
 By default, using **_tilez_** won't create any HTML containers. All components are renderless components.
 Available types are _'plain'_, _'svg'_ and _'html'_. Using an _'svg'_ layout, parent tile will be an SVG container and all children tiles will be rendered as SVG group. This property inherits from parent tile unless not specified explicitly.
-Otherwise given type will override type of parent tile.
+Otherwise, given type will be taken into consideration.
 You could use **_tilez_** as _'html'_ layout engine (all containers are implicitly absolute positioned), but in that case CSS flexbox and CSS grid are more powerful and flexible.
 Note that an _'html'_ tile can't be embedded into an _'svg'_ tile.
 
 
 <a name="mode" href="#mode">#</a> Tile.<b>mode</b> · (_'spacing'_ | _'sizing'_ ) [default: _'spacing'_] [inherits]
 
-There are two layout modes available: one which is optimized for _'spacing'_ and one for _sizing_. They differ on how to interpret sizes when you specify a non-zero inner padding. When no inner padding is given, both modes produce the same layout.
+There are two layout modes available: one which is optimized for _'spacing'_ and one for _'sizing'_. They differ on how to interpret sizes when you specify a non-zero inner padding. When no inner padding is given, both modes produce the same layout.
 
 #### Tile Layout Mode _Spacing_
 
@@ -119,10 +147,19 @@ In layout mode _'spacing'_ (default mode), inner padding is part of the size spe
 
 Note, that there will be empty space of 50% inner padding on all sides of the most outer tile. If you want equidistant paddings throughout the whole tile hierarchy, you can add an outer padding in parent tile of inner padding / 2.
 
-When you use absolute sizes together with relative sizes to define your layout, make sure to add outer padding to your size beforehand. As example: You want to work with a width of 200px and outer padding is given as 10px. Then a tile of width 100px corresponds to a tile of 50% only when the initial width is defined as 220px, **not** 200px.
+When you use absolute sizes together with relative sizes to define your layout, make sure to add outer padding to your size beforehand. As an example: You want to work with a width of 200px and outer padding is given as 10px. Then a tile of width 100px corresponds to a tile of 50% only when the initial width is defined as 220px, **not** 200px.
 
 #### Tile Layout Mode _Sizing_
 
-When layout mode _sizing_ is used, all tiles have exactly the size which is specified in tile props, i.e. for a given width of 100px, the tile has exactly a width of 100px (when there is enough space to render). Also, a tile of width 50% has twice the width of a tile of width 25%, which does not apply to _'spacing'_ layout mode.
+When layout mode _'sizing'_ is used, all tiles have exactly the size which is specified in tile props, i.e. for a given width of 100px, the tile has exactly a width of 100px (when there is enough space to render). Also, a tile of width 50% has twice the width of a tile of width 25%, which does not apply to _'spacing'_ layout mode.
 
 It depends on your use case, which mode you choose. You can also mix modes, start with one mode and change to the other mode in an inner tile.
+
+
+## How to get tile specs?
+
+TBD
+
+## Notes on Rendering Algorithm
+
+TBD
