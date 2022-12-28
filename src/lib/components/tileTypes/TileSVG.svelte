@@ -20,3 +20,9 @@
 		<slot />
 	</g>
 {/if}
+
+<style>
+	svg {
+		display: block;
+	}
+</style>

@@ -514,4 +514,25 @@ describe('TileSpecsCalculationSizing', () => {
       new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
     ]);
   });
+
+  it('renders single fixed tile with correct inner and outer padding when pct tile does not fit', () => {
+    const root = new TileNodeFactory({
+      width: 100,
+      height: 7,
+      stack: 'vertical',
+      innerPadding: 4,
+      outerPadding: 2,
+    }).build();
+    new TileNodeFactory({}, root).build();
+    new TileNodeFactory({ height: 88 }, root).build();
+    new TileNodeFactory({ height: 0.2 }, root).build();
+
+    const childrenSpecs = calc(root);
+
+    expect(childrenSpecs).toEqual([
+      new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(96, 3, 2, 2, 2, 2, 4, 0, 'left', 'top'),
+      new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+    ]);
+  });
 });

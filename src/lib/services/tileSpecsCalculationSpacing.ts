@@ -44,7 +44,7 @@ export class TileSpecsCalculationSpacing extends TileSpecsCalculation {
       return new Array(maxPctSpecs).fill(0);
 
     let sizes: number[] = [];
-    Array.from({ length: maxPctSpecs }, (_, i) => i + 1)
+    Array.from(Array(maxPctSpecs + 1).keys())
       .reverse()
       .every((n) => {
         sizes = [];

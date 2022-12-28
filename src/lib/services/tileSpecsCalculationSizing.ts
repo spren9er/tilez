@@ -30,7 +30,7 @@ export class TileSpecsCalculationSizing extends TileSpecsCalculation {
     });
 
     return pxProps.map(({ props }) => {
-      if (this.pctFullSize <= innerPadding) return 0;
+      if (this.pctFullSize < 1) return 0;
 
       const stackDimension = props.dim(this.stackDimension);
       const stackSize = Math.min(
@@ -40,7 +40,7 @@ export class TileSpecsCalculationSizing extends TileSpecsCalculation {
 
       const step = this.firstTile ? stackSize : innerPadding + stackSize;
 
-      if (stackSize > 0) {
+      if (stackSize >= 1) {
         this.pctFullSize -= step;
         this.firstTile = false;
       }
@@ -57,13 +57,13 @@ export class TileSpecsCalculationSizing extends TileSpecsCalculation {
     });
     const maxPctSpecs = pctProps.length;
 
-    // there are already some px tiles (add single inner padding add the end)
+    // there are already some px tiles (add single inner padding at the end)
     if (!this.firstTile) this.pctFullSize -= innerPadding;
 
     if (this.pctFullSize < 1) return new Array(maxPctSpecs).fill(0);
 
     let sizes: number[] = [];
-    Array.from({ length: maxPctSpecs }, (_, i) => i + 1)
+    Array.from(Array(maxPctSpecs + 1).keys())
       .reverse()
       .every((n) => {
         sizes = [];
