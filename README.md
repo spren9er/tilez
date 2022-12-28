@@ -10,9 +10,9 @@ _**tilez**_ is
 - easy-to-use (declare your layout in a simple manner)
 - light-weight (does not add more than a few KB to your code base)
 - flexible (can be used as SVG, HTML or renderless components)
-- reactive (all tiles adapt to root tile changes)
-- free of dependencies (except of Svelte)
-- opinionated (the way the layout algorithm works when not enough space is available, see [here](#notes-on-rendering-algorithm))
+- reactive (all tiles adapt to changes of root tile)
+- free of dependencies (except for Svelte)
+- opinionated (the way the layout algorithm works, especially when not enough space is available, see [here](#notes-on-rendering-algorithm))
 
 ## Installation
 
@@ -86,7 +86,7 @@ For convenience  there are shortcuts available
 - **HTile** for _horizontal_ stacking
 - **VTile** for _vertical_ stacking
 
-These components have the same props available as basic **Tile** component (except of [stack](#stack) property).
+These components have the same props available as basic **Tile** component (except for [stack](#stack) property).
 
 
 ### Tile Props
@@ -159,12 +159,31 @@ When you use absolute sizes together with relative sizes to define your layout, 
 
 #### Tile Layout Mode _Sizing_
 
-When layout mode _'sizing'_ is used, all tiles have exactly the size which is specified in tile props, i.e. for a given width of 100px, the tile has exactly a width of 100px (when there is enough space to render). Also, a tile of width 50% has twice the width of a tile of width 25%, which does not apply to _'spacing'_ layout mode.
+When layout mode _'sizing'_ is used, all tiles have exactly the size which is specified in tile props, i.e. for a given width of 100px, the tile has exactly a width of 100px (when there is enough space to render). Also, a tile of width 50% has twice the width of a tile of width 25%, which generally does not apply to _'spacing'_ layout mode.
 
 It depends on your use case, which mode you choose. You can also mix modes, start with one mode and change to the other mode in an inner tile.
 
 
-## How to get tile specs?
+## How to access tile specs?
+
+Now, after defining your layout, you embed your components in your tiles, exactly where you want to place them.
+In your component you retrieve access to tile specs and linear scales of local coordinate system by adding the following lines:
+
+```js
+import { getTileContext } from 'tilez';
+
+const {specs, xScale, yScale } = getTileContext();
+```
+
+All three objects – which you obtain from the tile's context – are Svelte stores.
+
+Alternatively you can use `getContext` from Svelte. The name of the context is simply _'tilez'_.
+
+<a name="get_tile_context" href="#get_tile_context">#</a> tilez.<b>getTileContext()</b>
+
+Returns an object containing three Svelte stores [specs](#specs), [xScale](#x_scale) and [yScale](#y_scale), which are described below.
+
+<a name="specs" href="#specs">#</a> tilez.<b>TileSpecs</b>
 
 TBD
 
