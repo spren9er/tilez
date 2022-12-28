@@ -59,7 +59,7 @@ export class TileNode {
     if (!this.hasChildren || !this.specs) return;
 
     const tileSpecsCalculation = new TileSpecsCalculationFactory(
-      this.props.mode || 'sizing',
+      this.props.mode || 'spacing',
       this.specs,
       this.children.map(({ props }) => props),
       this.isRoot,
