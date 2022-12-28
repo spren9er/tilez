@@ -3,7 +3,7 @@
 
 # ![Logo](https://github.com/spren9er/tilez/blob/main/static/tilez.svg?raw=true) tilez
 
-The original idea of **_tilez_** was to build an abstraction layer for creating compositions of arbitrary SVG charts in Svelte, where the result is a single SVG file. However, it is not limited to this use case. By default, all tiles – the building blocks of a layout – are renderless components. You define your layout via nested stackable tiles, where each tile has its own coordinate space, which is then accessible via a Svelte store (within a tile's context).
+The original idea of **_tilez_** was to build an abstraction layer for creating compositions of arbitrary SVG charts in Svelte, where the result is a single SVG file. However, it is not limited to this use case. By default, all tiles – the building blocks of a layout – are renderless components. You define your layout via nested stackable tiles, where each tile has its own coordinate space, which is then accessible via Svelte stores (within a tile's context).
 
 _**tilez**_ is
 
@@ -13,7 +13,7 @@ _**tilez**_ is
 - free of dependencies (except for Svelte)
 - opinionated (the way the layout algorithm works, especially when not enough space is available, see [here](#how-does-the-layout-algorithm-work))
 - robust (handles edge cases very well)
-- light-weight (does not add more than a few KB to your code base)
+- light-weight (does not add more than a few KB to your application)
 
 ## Installation
 
@@ -143,7 +143,7 @@ By default, using **_tilez_** won't create any HTML containers. All components a
 Available types are _'plain'_, _'svg'_ and _'html'_. Using an _'svg'_ layout, parent tile will be an SVG container and all children tiles will be rendered as SVG group. This property inherits from parent tile unless not specified explicitly.
 Otherwise, given type will be taken into consideration.
 You could use **_tilez_** as _'html'_ layout engine (all containers are implicitly absolute positioned), but in that case CSS flexbox and CSS grid are more powerful and flexible.
-Note that an _'html'_ tile can't be embedded into an _'svg'_ tile.
+Note, that an _'html'_ tile can't be embedded into an _'svg'_ tile.
 
 
 <a name="mode" href="#mode">#</a> tilez.Tile.<b>mode</b> · (_'spacing'_ | _'sizing'_ ) [default: _'spacing'_] [inherits]
@@ -168,7 +168,7 @@ It depends on your use case, which mode you choose. You can also mix modes, star
 ## How to access tile specs?
 
 Now, after defining your layout, you embed your components in your tiles, exactly where you want to place them.
-In your component you retrieve access to tile specs and linear scales of local coordinate system by adding the following lines:
+In your component you get access to tile specs and linear scales of local coordinate system by adding the following lines:
 
 ```js
 import { getTileContext } from 'tilez';
@@ -178,7 +178,7 @@ const {specs, xScale, yScale } = getTileContext();
 
 All three objects – which you obtain from a tile's context – are Svelte stores.
 
-Alternatively, you can use `getContext` from Svelte. The name of the context is simply _'tilez'_.
+Alternatively, you can use `getContext` from Svelte. The name of the context is _'tilez'_.
 
 <a name="get_tile_context" href="#get_tile_context">#</a> tilez.<b>getTileContext()</b>
 
@@ -189,5 +189,25 @@ Returns an object containing three Svelte stores [specs](#specs), [xScale](#x_sc
 TBD
 
 ## How does the layout algorithm work?
+
+The layout algorithm should behave well in all circumstances, also when there is not enough space to render all given tiles.
+But which tiles should be rendered and which should be ignored?
+We consider the following opinionated rendering algorithm which is implemented in _**tilez**_:
+
+### Tiles Priorization
+
+Before tiles are rendered within a stack, they are sorted according to the following order:
+
+1. First, tiles with absolute sizes are selected. They have higher priority for rendering than all other tiles. For this selection, the natural order in which tiles are given within parent tile is considered.
+2. All other tiles (tiles with relative sizes or no size specification) are sorted first w.r.t. to their resulting percentage in ascending order, second w.r.t. natural order. The size where all percentages apply to, is the remaining size which is available after all tiles with absolute sizes are rendered. For layout mode _'sizing'_, more work is required, see below.
+
+Note, that alignment props are **not** taken into consideration when sorting!
+Thus, tile _B_ which comes **after** tile _A_ in natural order could be aligned **before** tile _A_.
+This fact can be used to take influence in the rendering behavior.
+
+The layout algorithm takes one tile after the other in above order and determines its size, as long as enough space is available. Otherwise, the size of a tile will be zero and the tile won't be shown.
+A tile which doesn't fit completely in available space is cut off. Then, rest of tiles won't be rendered at all.
+This applies to tiles of first step above.
+For tiles of second step above, rendering takes place in the following way:
 
 TBD
