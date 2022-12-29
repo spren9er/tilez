@@ -248,8 +248,8 @@ Before tiles are rendered within a stack, they are sorted according to the follo
 Within each group, tiles are sorted according to the natural order given (ascending order of children tiles within parent tile).
 The order gives information about the priority for rendering. First tiles of above order have high priority and will be rendered first, while last tiles won't be rendered at all, if there is not enough space left.
 
-Note, that alignment props are **not** taken into consideration when sorting!
-Thus, tile _B_ which comes **after** tile _A_ in natural order and belongs to same group could be aligned **before** tile _A_. This fact can be used to take influence in the rendering behavior.
+_**Note:** Alignment props are **not** taken into consideration when sorting!
+Thus, tile _B_ which comes **after** tile _A_ in natural order and belongs to same group, could be aligned as such that it appears **before** tile _A_. This fact can be used to take influence in the rendering behavior._
 
 ### Layout Algorithm
 
