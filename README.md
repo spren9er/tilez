@@ -257,7 +257,14 @@ Thus, tile _B_ which comes **after** tile _A_ in natural order and belongs to sa
 2. If sizes of all tiles of first group are determined and there is still space left, the available space will be distributed between all remaining tiles in the following way:
    1. Filter out tiles of relative size which can't be rendered, because their calculated size is less than 1px (or 1px + _inner padding_ for _'spacing'_ layout).
    2. For all remaining tiles of second group (tiles of relative sizes), we will process tiles like in step 1: Resulting sizes will be determined one by one. If there is not enough space available, tile will be cut off and all remaining tiles will have zero size.
-   3. If sizes of all tiles of relative sizes are determined and there is still space left, we consider the last group of tiles (flex tiles w/o size specification). Let's assume there are _n_ flex tiles left. Their size will be calculated by distributing remaining space equally across flex tiles (each flex tile will have same size). Again, if sizes are less than 1px or 1px + _inner padding_, respectively, we try to distribute remaining space across n-1 flex tiles, then n-2 flex tiles, and so on. Finally, we either render some flex tiles or no flex tile at all, if a single flex tile does not fit.
+   3. If sizes of all tiles of relative sizes are determined and there is still space left, we consider the last group of tiles (flex tiles w/o size specification). Let's assume there are _n_ flex tiles left. Their size will be calculated by distributing remaining space equally across flex tiles (each flex tile will have same size). Again, if sizes are less than 1px or 1px + _inner padding_, respectively, we try to distribute remaining space across n-1 flex tiles, then n-2 flex tiles, and so on. Finally, we either have some flex tiles with large enoug size to render all flex tiles will have zero size.
 
+So far, we only computed the resulting size for each tile.
+Now, we consider the rendering algorithm. When all sizes are determined with the process above, tiles are grouped according to their alignment w.r.t. stack direction (_'hAlign'_ for _'horizontal'_ and _'vAlign'_ for _'vertical'_).
+This will generate three groups. We process them in the following way:
 
+1. Render all tiles of _'left'_ or _'top'_ group according to their natural order.
+2. Render all tiles of _'right'_ or _'bottom'_ group according to their natural order (here descending) from right to left or bottom to top.
+3. Render all tiles of _'center'_ group, such that there is no overlap with tiles from first and last group. This can be achieved by shifting the center group to the right or left (this group then won't appear in the center).
 
+In each step above, zero-sized tiles are ignored.
