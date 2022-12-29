@@ -263,8 +263,8 @@ So far, we only computed the resulting size for each tile.
 Now, we consider the rendering algorithm. When all sizes are determined with the process above, tiles are grouped according to their alignment w.r.t. stack direction (_'hAlign'_ for _'horizontal'_ and _'vAlign'_ for _'vertical'_).
 This will generate three groups. We process them in the following way:
 
-1. Render all tiles of _'left'_ or _'top'_ group according to their natural order.
+1. Render all tiles of _'left'_ or _'top'_ group according to their natural order from left to right or top to bottom.
 2. Render all tiles of _'right'_ or _'bottom'_ group according to their natural order (here descending) from right to left or bottom to top.
-3. Render all tiles of _'center'_ group, such that there is no overlap with tiles from first and last group. This can be achieved by shifting the center group to the right or left (this group then won't appear in the center).
+3. Render all tiles of _'center'_ group according to their natural order in the middle of parent tile, such that there is no overlap with tiles from first and last group. This can be achieved by shifting the center group to the right or left (this group then won't appear in the center).
 
 In each step above, zero-sized tiles are ignored.
