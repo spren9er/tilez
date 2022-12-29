@@ -167,8 +167,7 @@ It depends on your use case, which mode you choose. You can also mix modes, star
 
 ## How to access tile specs?
 
-Now, after defining your layout, you embed your components in your tiles, exactly where you want to place them.
-In your component you get access to tile specs and linear scales of local coordinate system by adding the following lines:
+Now, after defining your layout, you embed your components in your tiles, exactly in the tile where you want to place them. In your component you get access to tile specs and linear scales of local coordinate system by adding the following lines:
 
 ```js
 import { getTileContext } from 'tilez';
@@ -182,32 +181,88 @@ Alternatively, you can use `getContext` from Svelte. The name of the context is 
 
 <a name="get_tile_context" href="#get_tile_context">#</a> tilez.<b>getTileContext()</b>
 
-Returns an object containing three Svelte stores [specs](#specs), [xScale](#x_scale) and [yScale](#y_scale), which are described below.
+Returns an object containing three Svelte stores
+
+- [specs](#specs) of class **Writable\<TileSpec\>**
+- [xScale](#x_scale) of class **Writable\<LinearScale\>**
+- [yScale](#y_scale) of class **Writable\<LinearScale\>**
+
+Classes are described below.
+
+### Tile Specs
 
 <a name="specs" href="#specs">#</a> tilez.<b>TileSpecs</b>
 
-TBD
+The **TileSpecs** class has following properties:
+
+| property     | description                                                                         |
+| ------------ | ----------------------------------------------------------------------------------- |
+| width        | width of tile                                                                       |
+| height       | height of tile                                                                      |
+| absX         | absolute x-coordinate (w.r.t. root tile)                                            |
+| absY         | absolute y-coordinate (w.r.t. root tile)                                            |
+| relX         | relative x-coordinate (w.r.t. parent tile)                                          |
+| relY         | relative y-coordinate (w.r.t. parent tile)                                          |
+| innerPadding | padding between children tiles                                                      |
+| outerPadding | padding around children tiles                                                       |
+| hAlign       | horizontal alignment (w.r.t. parent tile) [one of  _'left'_, _'center'_, _'right'_] |
+| vAlign       | vertical alignment (w.r.t. parent tile) [one of _'top'_, _'center'_, _'bottom'_]    |
+
+### Linear Scales
+
+For each tile, there are two linear scales `$xScale` and `$yScale` available, one for x-axis and one for y-axis.
+Their domain is `[0, 1]` and their range is `[0, $specs.width]` or `[0, $specs.height]`, respectively.
+You can modify the domain for each scale.
+
+```js
+import { getTileContext } from 'tilez';
+
+const { xScale, yScale } = getTileContext();
+
+$: x = $xScale.domain([-5, 5]);
+$: y = $yScale.domain([0, 400]);
+
+$: console.log([x(0.5), y(150)]);
+```
+
+Both scales are directly callable using `()`.
+Domains are also supported, where upper bound is less than lower bound, e.g. using `[1, 0]` will map `0` to full size and `1` to `0`.
+
+<a name="linear_scale" href="#linear_scale">#</a> tilez.<b>LinearScale</b>
+
+
+Note: If you need more powerful, non-linear scales, consider using _d3-scale_ with given tile [specs](#specs).
+
 
 ## How does the layout algorithm work?
 
-The layout algorithm should behave well in all circumstances, also when there is not enough space to render all given tiles.
-But which tiles should be rendered and which should be ignored?
-We consider the following opinionated rendering algorithm which is implemented in _**tilez**_:
+The underlying layout algorithm should behave well in all circumstances, also when there is not enough space to render all given tiles. But which tiles should be rendered and which should be ignored?
+
+We take a closer look at the following opinionated rendering algorithm which is implemented in _**tilez**_:
 
 ### Tiles Priorization
 
+For rendering, we consider one tile with a non-trivial stack direction (_'horizontal'_ or _'vertical'_) and  its direct children tiles. This algorithm then can be applied to each stack of the tiles hierarchy.
+
 Before tiles are rendered within a stack, they are sorted according to the following order:
 
-1. First, tiles with absolute sizes are selected. They have higher priority for rendering than all other tiles. For this selection, the natural order in which tiles are given within parent tile is considered.
-2. All other tiles (tiles with relative sizes or no size specification) are sorted first w.r.t. to their resulting percentage in ascending order, second w.r.t. natural order. The size where all percentages apply to, is the remaining size which is available after all tiles with absolute sizes are rendered. For layout mode _'sizing'_, more work is required, see below.
+1. Tiles of absolute sizes
+2. Tiles of relative sizes
+3. Tiles of flex sizes (no size specification)
+
+Within each group, tiles are sorted according to the natural order given (ascending order of children tiles within parent tile).
+The order gives information about the priority for rendering. First tiles of above order have high priority and will be rendered first, while last tiles won't be rendered at all, if there is not enough space left.
 
 Note, that alignment props are **not** taken into consideration when sorting!
-Thus, tile _B_ which comes **after** tile _A_ in natural order could be aligned **before** tile _A_.
-This fact can be used to take influence in the rendering behavior.
+Thus, tile _B_ which comes **after** tile _A_ in natural order and belongs to same group could be aligned **before** tile _A_. This fact can be used to take influence in the rendering behavior.
 
-The layout algorithm takes one tile after the other in above order and determines its size, as long as enough space is available. Otherwise, the size of a tile will be zero and the tile won't be shown.
-A tile which doesn't fit completely in available space is cut off. Then, rest of tiles won't be rendered at all.
-This applies to tiles of first step above.
-For tiles of second step above, rendering takes place in the following way:
+### Layout Algorithm
 
-TBD
+1. We take one tile after the other of first sorted group above (tiles of absolute sizes) and for each tile we determine its size, as long as enough space is available. A tile which doesn't fit completely in available space is cut off. Then, rest of tiles will have zero size.
+2. If sizes of all tiles of first group are determined and there is still space left, the available space will be distributed between all remaining tiles in the following way:
+   1. Filter out tiles of relative size which can't be rendered, because their calculated size is less than 1px (or 1px + _inner padding_ for _'spacing'_ layout).
+   2. For all remaining tiles of second group (tiles of relative sizes), we will process tiles like in step 1: Resulting sizes will be determined one by one. If there is not enough space available, tile will be cut off and all remaining tiles will have zero size.
+   3. If sizes of all tiles of relative sizes are determined and there is still space left, we consider the last group of tiles (flex tiles w/o size specification). Let's assume there are _n_ flex tiles left. Their size will be calculated by distributing remaining space equally across flex tiles (each flex tile will have same size). Again, if sizes are less than 1px or 1px + _inner padding_, respectively, we try to distribute remaining space across n-1 flex tiles, then n-2 flex tiles, and so on. Finally, we either render some flex tiles or no flex tile at all, if a single flex tile does not fit.
+
+
+
