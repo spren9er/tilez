@@ -191,8 +191,6 @@ Classes are described below.
 
 ### Tile Specs
 
-<a name="specs" href="#specs">#</a> tilez.<b>TileSpecs</b>
-
 The **TileSpecs** class has following properties:
 
 | property     | description                                                                         |
@@ -227,9 +225,6 @@ $: console.log([x(0.5), y(150)]);
 
 Both scales are directly callable using `()`.
 Domains are also supported, where upper bound is less than lower bound, e.g. using `[1, 0]` will map `0` to full size and `1` to `0`.
-
-<a name="linear_scale" href="#linear_scale">#</a> tilez.<b>LinearScale</b>
-
 
 Note: If you need more powerful, non-linear scales, consider using _d3-scale_ with given tile [specs](#specs).
 
