@@ -15,6 +15,7 @@ _**tilez**_ is
 - robust (handles edge cases very well)
 - light-weight (does not add more than a few KB to your application)
 
+
 ## Installation
 
 Install **_tilez_** as npm package via
@@ -89,7 +90,6 @@ For convenience  there are shortcuts available
 
 These components have the same props available as basic **Tile** component (except for [stack](#stack) property).
 
-
 ### Tile Props
 
 A **Tile** has the following props:
@@ -99,18 +99,15 @@ A **Tile** has the following props:
 When this property is not given, all children tiles will have the same coordinate space like current tile.
 Otherwise, children tiles will be distributed within current tile according to their props in _horizontal_ or _vertical_ direction.
 
-
 <a name="width" href="#width">#</a> tilez.Tile.<b>width</b>
 
 Argument can be an absolute or relative number. Accepts strings like _"500px"_, _"500"_, _"50%"_, _"0.5"_ or numbers like _500_ or _0.5_. Numbers less than 1 are interpreted as percentages, otherwise they represent absolute widths.
 The given width will result in different tile widths, depending on the layout [mode](#mode).
 When there is no width given (default), available space in parent tile will be distributed equally between current tile and other tiles having no width specification.
 
-
 <a name="height" href="#height">#</a> tilez.Tile.<b>height</b>
 
 Analogue to [width](#width) above.
-
 
 <a name="inner_padding" href="#inner_padding">#</a> tilez.Tile.<b>innerPadding</b> · [default: 0 / inherits]
 
@@ -118,24 +115,20 @@ Defines the padding **between** children tiles of current tile. Format must be e
 For layout mode _'spacing'_ it adds half of the given inner padding to the left and right of the outer tiles (or tile if there is only one).
 This property will be inherited, thus all children tiles will have the same inner padding unless not specified explicitly in children tile. If inner padding of children tile is given, this value will be considered instead of inner padding of parent tile.
 
-
 <a name="outer_padding" href="#outer_padding">#</a> tilez.Tile.<b>outerPadding</b> · [default: 0]
 
 Defines the padding **around** children tile(s) of current tile. It is similar to CSS padding of a HTML container.
 This property won't be inherited.
-
 
 <a name="h_align" href="#h_align">#</a> tilez.Tile.<b>hAlign</b> · (_'left'_ | _'center'_ | _'right'_) [default: _'left'_]
 
 Defines the horizontal alignment w.r.t. parent tile. Accepts _'left'_, _'center'_ and _'right'_.
 When several children tiles share the same alignment property, they will be positioned as a group according to their given order within parent tile. For _'center'_ applies: If centered group can't be positioned in the center because there will be an overlap with _'left'_ or _'right'_ groups, it will be shifted to the right or left, respectively.
 
-
 <a name="v_align" href="#v_align">#</a> tilez.Tile.<b>vAlign</b> · (_'top'_ |  _'center'_ | _'bottom'_) [default: _'top'_]
 
 Defines the vertical alignment w.r.t. parent tile. Accepts _'top'_, _'center'_ and _'bottom'_.
 It behaves like [hAlign](#h_align), but in vertical direction.
-
 
 <a name="type" href="#type">#</a> tilez.Tile.<b>type</b> · (_'plain'_ | _'svg'_ |  _'html'_ ) [default: _'plain'_] [inherits]
 
@@ -144,7 +137,6 @@ Available types are _'plain'_, _'svg'_ and _'html'_. Using an _'svg'_ layout, pa
 Otherwise, given type will be taken into consideration.
 You could use **_tilez_** as _'html'_ layout engine (all containers are implicitly absolute positioned), but in that case CSS flexbox and CSS grid are more powerful and flexible.
 Note, that an _'html'_ tile can't be embedded into an _'svg'_ tile.
-
 
 <a name="mode" href="#mode">#</a> tilez.Tile.<b>mode</b> · (_'spacing'_ | _'sizing'_ ) [default: _'spacing'_] [inherits]
 
@@ -217,16 +209,16 @@ import { getTileContext } from 'tilez';
 
 const { xScale, yScale } = getTileContext();
 
-$: x = $xScale.domain([-5, 5]);
-$: y = $yScale.domain([0, 400]);
+const x = $xScale.domain([-5, 5]);
+const y = $yScale.domain([0, 400]);
 
-$: console.log([x(0.5), y(150)]);
+const sampleCoords = [x(0.5), y(150)];
 ```
 
 Both scales are directly callable using `()`.
 Domains are also supported, where upper bound is less than lower bound, e.g. using `[1, 0]` will map `0` to full size and `1` to `0`.
 
-Note: If you need more powerful, non-linear scales, consider using _d3-scale_ with given tile [specs](#specs).
+_**Note:** If you need more powerful, non-linear scales, consider using _d3-scale_ with given tile [specs](#specs)._
 
 
 ## How does the layout algorithm work?
@@ -239,7 +231,7 @@ We take a closer look at the following opinionated rendering algorithm which is 
 
 ### Tiles Priorization
 
-For rendering, we consider one tile with a non-trivial stack direction (_'horizontal'_ or _'vertical'_) and  its direct children tiles. This algorithm then can be applied to each stack of the tiles hierarchy.
+We consider the rendering algorithm for one tile with a non-trivial stack direction (_'horizontal'_ or _'vertical'_) and its direct children tiles. This algorithm then can be applied to each stack of the tiles hierarchy.
 
 Before tiles are rendered within a stack, they are sorted according to the following order:
 
@@ -256,10 +248,16 @@ Thus, tile _B_ which comes **after** tile _A_ in natural order and belongs to sa
 ### Layout Algorithm
 
 1. We take one tile after the other of first sorted group above (tiles of absolute sizes) and for each tile we determine its size, as long as enough space is available. A tile which doesn't fit completely in available space is cut off. Then, rest of tiles will have zero size.
-2. If sizes of all tiles of first group are determined and there is still space left, the available space will be distributed between all remaining tiles in the following way:
-   1. Filter out tiles of relative size which can't be rendered, because their calculated size is less than 1px (or 1px + _inner padding_ for _'spacing'_ layout).
-   2. For all remaining tiles of second group (tiles of relative sizes), we will process tiles like in step 1: Resulting sizes will be determined one by one. If there is not enough space available, tile will be cut off and all remaining tiles will have zero size.
-   3. If sizes of all tiles of relative sizes are determined and there is still space left, we consider the last group of tiles (flex tiles w/o size specification). Let's assume there are _n_ flex tiles left. Their size will be calculated by distributing remaining space equally across flex tiles (each flex tile will have same size). If sizes are less than 1px or 1px + _inner padding_, respectively, we try to distribute remaining space across n-1 flex tiles, then n-2 flex tiles, and so on. Finally, we either have some flex tiles with large enough sizes to render or all flex tiles will have zero size.
+2. For determining other tiles sizes, we have to look at each specific layout mode
+   1. [_'spacing'_] If sizes of all tiles of first group are determined and there is still space left, the available space will be distributed between all remaining tiles in the following way:
+      1. Filter out tiles of relative size which can't be rendered, because their calculated size is less than _1px + inner padding_.
+      2. For all remaining tiles of second group (tiles of relative sizes), we will process tiles like in step 1: Resulting sizes will be determined one by one. If there is not enough space available, tile will be cut off and all remaining tiles will have zero size.
+      3. If sizes of all tiles of relative sizes are determined and there is still space left, we consider the last group of tiles (flex tiles w/o size specification). Assuming there are _n_ flex tiles left. Their size will be calculated by distributing remaining space equally across flex tiles (each flex tile will have same size). If sizes are less than _1px + inner padding_, we try to distribute remaining space across n-1 flex tiles, then n-2 flex tiles, and so on. Finally, we either have some flex tiles with large enough sizes to render or all flex tiles will have zero size.
+   2. [_'sizing'_] Let _m_ be the number of tiles with relative and flex sizes. We try to distribute _k <= m_ tiles (with _k_ max.).
+      1. We start with _k=m_ and determine sizes of first _k_ tiles with relative and flex sizes.
+      2. First, we subtract _(k - 1) x inner padding_ from available space.
+      3. Then, for the remaining space we apply above steps like in _'spacing'_ mode, with one difference: minimum render size is now _1px_.
+      4. If steps are not successful (_k_ tiles can't be rendered), then we decrement _k_ and try again. Algorithm stops latest when _k=0_ and all tiles have zero size.
 
 So far, we only computed the resulting size for each tile.
 Now, we consider the rendering algorithm. When all sizes are determined with the process above, tiles are grouped according to their alignment w.r.t. stack direction (_'hAlign'_ for _'horizontal'_ and _'vAlign'_ for _'vertical'_).
