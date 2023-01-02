@@ -1,6 +1,6 @@
 {
   "name": "tilez",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "author": "Torsten Sprenger <mail@spren9er.de>",
   "scripts": {
     "dev": "vite dev",
