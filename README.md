@@ -74,7 +74,7 @@ All props are optional, i.e. you can have tiles with no props at all
 
 ```html
 <Tile>
-  <Component1 />
+  ...
 </Tile>
 ```
 
@@ -85,7 +85,7 @@ However, there is one exception: the root (most outer) tile must have an absolut
 The main concept of _**tilez**_ is that you can stack tiles in _horizontal_ or _vertical_ direction, recursively.
 Within a stack, a tile starts at the point where the last tile ends. For stacking you use the property [stack](#stack) which defines in which direction children tiles should be stacked.
 
-For convenience  there are shortcuts available
+For convenience there are shortcuts available
 
 - **HTile** for _horizontal_ stacking
 - **VTile** for _vertical_ stacking
