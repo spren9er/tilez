@@ -3,15 +3,15 @@
 
 	export let fill = true;
 
-	const { specs } = getTileContext();
+	const { xScale, yScale } = getTileContext();
 </script>
 
 <rect
 	x={0}
 	y={0}
-	width={$specs.width}
-	height={$specs.height}
-	fill={fill ? '#999999' : 'transparent'}
-	stroke="#777777"
-	stroke-width="2.5"
+	width={$xScale(1)}
+	height={$yScale(1)}
+	fill={fill ? '#adbac7' : 'transparent'}
+	stroke="#242931"
+	stroke-width="2"
 />

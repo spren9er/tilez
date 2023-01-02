@@ -4,8 +4,8 @@
 	import TileLogo from './TileLogo.svelte';
 
 	let size = 64;
-	let innerPadding = 3;
-	let outerPadding = 3;
+	let innerPadding = 4;
+	let outerPadding = 4;
 
 	const goldenRatio = 1.61803398875;
 	const ratio = 1 - 1 / goldenRatio;
