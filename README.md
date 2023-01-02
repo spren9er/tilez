@@ -225,7 +225,7 @@ _**Note:** If you need non-linear scales, consider using _d3-scale_ with given t
 
 ## How does the layout algorithm work?
 
-The underlying layout algorithm should behave well in all circumstances, also when there is not enough space to render all given tiles.
+The underlying layout algorithm should behave well in all circumstances, especially when there is not enough space to render all given tiles.
 
 But which tiles should be rendered and which should be ignored?
 
@@ -256,8 +256,8 @@ Thus, tile _B_ which comes **after** tile _A_ in natural order and belongs to sa
    2. [_'sizing'_] Let _m_ be the number of tiles with relative and flex sizes. We want to distribute _k <= m_ tiles (with _k_ max.) and start with _k = m_.
       1. We try to determine _k_ tiles with non-zero relative and flex sizes.
       2. We subtract _(k - 1) x inner padding_ from available space.
-      3. For remaining space we apply above steps of _'spacing'_ mode.
-      4. If last step is not successful (there aren't _k_ tiles which have non-zero size), then we decrement _k_ and repeat steps above. Algorithm stops at the latest when _k = 0_ and all tiles have zero size.
+      3. For remaining space we apply above steps of _'spacing'_ mode. Assuming _l_ tiles of relative size have non-zero size,  then in last step we only check if _n = k - l_ flex tiles can be rendered or not. 
+      4. If last step is not successful (there aren't _k_ tiles in total which have non-zero size), then we decrement _k_ and repeat steps above. Algorithm stops at the latest when _k = 0_ and all tiles have zero size.
 
 So far, we only computed the resulting size for each tile.
 Now, we consider the rendering algorithm. When all sizes are determined with the process above, tiles are grouped according to their alignment w.r.t. stack direction (_'hAlign'_ for _'horizontal'_ and _'vAlign'_ for _'vertical'_).
