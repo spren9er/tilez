@@ -10,12 +10,12 @@ The original idea of **_tilez_** was to build an abstraction layer for creating 
 _**tilez**_ is
 
 - easy-to-use (declare your layout in a simple manner)
-- flexible (can be used as SVG, HTML or renderless components)
+- flexible (can be used with SVG, HTML or renderless components)
 - reactive (all tiles adapt to changes of root tile)
 - free of dependencies (except for Svelte)
 - opinionated (the way the layout algorithm works, especially when not enough space is available, see [here](#how-does-the-layout-algorithm-work))
 - robust (handles edge cases very well)
-- light-weight (does not add more than a few KB to your application)
+- light-weight (does not add more than a few KB to your Svelte application)
 
 
 ## Installation
@@ -30,7 +30,7 @@ npm install tilez
 ## How to specify layouts?
 
 A **Tile** component is a building block of a layout.
-By defining props of nested tiles, you define the whole layout within an arbitrary rectangular area in a declarative way.
+The whole layout within an arbitrary rectangular area can be described in a declarative way, by defining props of nested tiles.
 
 ### Tile Layouts
 
@@ -52,7 +52,7 @@ Here is an example of a simple layout
 
 ### Tile Component
 
-A **Tile** component has the following available props
+A **Tile** component has following available props
 
 ```html
 <Tile
@@ -83,18 +83,18 @@ However, there is one exception: the root (most outer) tile must have an absolut
 ### Stacking Tiles
 
 The main concept of _**tilez**_ is that you can stack tiles in _horizontal_ or _vertical_ direction, recursively.
-Within a stack, a tile starts where the last tile ends. For stacking you use the property [stack](#stack) which defines in which direction children tiles should be stacked.
+Within a stack, a tile starts at the point where the last tile ends. For stacking you use the property [stack](#stack) which defines in which direction children tiles should be stacked.
 
 For convenience  there are shortcuts available
 
 - **HTile** for _horizontal_ stacking
 - **VTile** for _vertical_ stacking
 
-These components have the same props available as basic **Tile** component (except for [stack](#stack) property).
+These components have the same props available as a basic **Tile** component (except for [stack](#stack) property).
 
 ### Tile Props
 
-A **Tile** has the following props:
+A **Tile** has following props
 
 <a name="stack" href="#stack">#</a> tilez.Tile.<b>stack</b>
 
@@ -220,7 +220,7 @@ const sampleCoords = [x(0.5), y(150)];
 Both scales are directly callable using `()`.
 Domains are also supported, where upper bound is less than lower bound, e.g. using `[1, 0]` will map `0` to full size and `1` to `0`.
 
-_**Note:** If you need more powerful, non-linear scales, consider using _d3-scale_ with given tile [specs](#specs)._
+_**Note:** If you need non-linear scales, consider using _d3-scale_ with given tile [specs](#specs)._
 
 
 ## How does the layout algorithm work?
@@ -229,11 +229,9 @@ The underlying layout algorithm should behave well in all circumstances, also wh
 
 But which tiles should be rendered and which should be ignored?
 
-We take a closer look at the following opinionated rendering algorithm which is implemented in _**tilez**_:
+In the following, we take a closer look at an opinionated rendering algorithm, which is implemented in _**tilez**_. We consider the algorithm for one tile with a non-trivial stack direction (_'horizontal'_ or _'vertical'_) and its direct children tiles. This algorithm then can be applied to each stack of the tiles hierarchy.
 
 ### Tiles Priorization
-
-We consider the rendering algorithm for one tile with a non-trivial stack direction (_'horizontal'_ or _'vertical'_) and its direct children tiles. This algorithm then can be applied to each stack of the tiles hierarchy.
 
 Before tiles are rendered within a stack, they are sorted according to the following order:
 
