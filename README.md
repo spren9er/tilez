@@ -253,12 +253,11 @@ Thus, tile _B_ which comes **after** tile _A_ in natural order and belongs to sa
       1. Filter out tiles of relative size which can't be rendered, because their calculated size is less than _1px_.
       2. For all remaining tiles of second group (tiles of relative sizes), we will process tiles like in step 1: Resulting sizes will be determined one by one. If there is not enough space available, tile will be cut off and all remaining tiles will have zero size.
       3. If sizes of all tiles of relative sizes are determined and there is still space left, we consider the last group of tiles (flex tiles w/o size specification). Assuming there are _n_ flex tiles left. Their size will be calculated by distributing remaining space equally across flex tiles (each flex tile will have same size). If sizes are less than _1px_, we try to distribute remaining space across n-1 flex tiles, then n-2 flex tiles, and so on. Finally, we either have some flex tiles with large enough sizes to render or all flex tiles will have zero size.
-   2. [_'sizing'_] Let _m_ be the number of tiles with relative and flex sizes. We try to distribute _k <= m_ tiles (with _k_ max.).
-      1. We start with _k=m_.
-      2. We try to determine at least _k_ tiles with non-zero relative and flex sizes.
-      3. First, we subtract _(k - 1) x inner padding_ from available space.
-      4. Then, for the remaining space we apply above steps like in _'spacing'_ mode.
-      5. If steps are not successful (there are not _k_ tiles which have non-zero size), then we decrement _k_ and try again. Algorithm stops at the latest when _k=0_ and all tiles have zero size.
+   2. [_'sizing'_] Let _m_ be the number of tiles with relative and flex sizes. We want to distribute _k <= m_ tiles (with _k_ max.) and start with _k = m_.
+      1. We try to determine _k_ tiles with non-zero relative and flex sizes.
+      2. We subtract _(k - 1) x inner padding_ from available space.
+      3. For remaining space we apply above steps of _'spacing'_ mode.
+      4. If last step is not successful (there aren't _k_ tiles which have non-zero size), then we decrement _k_ and repeat steps above. Algorithm stops at the latest when _k=0_ and all tiles have zero size.
 
 So far, we only computed the resulting size for each tile.
 Now, we consider the rendering algorithm. When all sizes are determined with the process above, tiles are grouped according to their alignment w.r.t. stack direction (_'hAlign'_ for _'horizontal'_ and _'vAlign'_ for _'vertical'_).
