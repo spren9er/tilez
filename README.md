@@ -30,7 +30,7 @@ npm install tilez
 ## How to specify layouts?
 
 A **Tile** component is a building block of a layout.
-The whole layout within an arbitrary rectangular area can be described in a declarative way, by defining props of nested tiles.
+The whole layout of an arbitrary rectangular area can be described in a declarative way, by defining props of nested tiles.
 
 ### Tile Layouts
 
@@ -83,7 +83,7 @@ However, there is one exception: the root (most outer) tile must have an absolut
 ### Stacking Tiles
 
 The main concept of _**tilez**_ is that you can stack tiles in _horizontal_ or _vertical_ direction, recursively.
-Within a stack, a tile starts at the point where the last tile ends. For stacking you use the property [stack](#stack) which defines in which direction children tiles should be stacked.
+Within a stack, a tile starts at the point where the last tile ends. For stacking you use the property [stack](#stack), which defines in which direction children tiles should be stacked.
 
 For convenience there are shortcuts available
 
