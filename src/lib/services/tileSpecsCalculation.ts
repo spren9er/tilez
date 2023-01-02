@@ -23,7 +23,7 @@ export abstract class TileSpecsCalculation {
 
   protected stackFullSize: number;
   protected fixedFullSize: number;
-  protected pctFullSize: number;
+  protected fullSize: number;
 
   constructor(
     specs: TileSpecs,
@@ -47,7 +47,7 @@ export abstract class TileSpecsCalculation {
       0,
     );
 
-    this.pctFullSize = this.stackFullSize;
+    this.fullSize = this.stackFullSize;
   }
 
   public call(): TileSpecs[] {
@@ -75,7 +75,7 @@ export abstract class TileSpecsCalculation {
   }
 
   private calculateSizes(): TypeTileSpecsDimension[] {
-    const sizes = [...this.calculatePxSizes(), ...this.calculatePctSizes()];
+    const sizes = [...this.calculateAbsSizes(), ...this.calculateNonAbsSizes()];
 
     const specsDimensions = this.sortedProps.map(
       ({ idx, props }, sortedIdx) => {
@@ -102,9 +102,27 @@ export abstract class TileSpecsCalculation {
       .map(({ specs }) => specs);
   }
 
-  protected abstract calculatePxSizes(): number[];
+  protected abstract calculateAbsSizes(): number[];
 
-  protected abstract calculatePctSizes(): number[];
+  protected abstract calculateNonAbsSizes(): number[];
+
+  protected calculateRelSizes(
+    props: TypeIndexedProps[],
+    nonAbsSize: number,
+    padding = 0,
+  ): number[] {
+    return props.map(({ props }) => {
+      const stackDimension = props.dim(this.stackDimension);
+      const step = Math.min(stackDimension.relSize(nonAbsSize)!, this.fullSize);
+      const stackSize = step - padding;
+
+      if (stackSize < 1) return 0;
+
+      this.fullSize -= step;
+
+      return stackSize;
+    });
+  }
 
   protected abstract specsFor(
     align: TypeTilePropsAlign,

@@ -6,91 +6,81 @@ import { TileSpecs } from '$lib/entities/tileSpecs';
 import { TileSpecsCalculation } from './tileSpecsCalculation';
 
 export class TileSpecsCalculationSpacing extends TileSpecsCalculation {
-  protected calculatePxSizes(): number[] {
+  protected calculateAbsSizes(): number[] {
     const { innerPadding } = this.specs;
 
+    // extend available sizes by "inner padding / 2" on each side if inner tile
     if (!this.root) {
-      this.pctFullSize += innerPadding;
+      this.fullSize += innerPadding;
       this.stackFullSize += innerPadding;
       this.fixedFullSize += innerPadding;
     }
 
-    const pxProps = this.sortedProps.filter(({ props }) => {
+    const absProps = this.sortedProps.filter(({ props }) => {
       return props.dim(this.stackDimension).unit === 'px';
     });
 
-    return pxProps.map(({ props }) => {
+    return absProps.map(({ props }) => {
       const stackDimension = props.dim(this.stackDimension);
-      const size = Math.min(stackDimension.size!, this.pctFullSize);
-      const stackSize = size - innerPadding;
+      const step = Math.min(stackDimension.size!, this.fullSize);
+      const stackSize = step - innerPadding;
 
       if (stackSize < 1) return 0;
 
-      this.pctFullSize -= size;
+      this.fullSize -= step;
 
       return stackSize;
     });
   }
 
-  protected calculatePctSizes(): number[] {
+  protected calculateNonAbsSizes(): number[] {
     const { innerPadding } = this.specs;
 
-    const pctProps = this.sortedProps.filter(({ props }) => {
+    const nonAbsProps = this.sortedProps.filter(({ props }) => {
       return props.dim(this.stackDimension).unit !== 'px';
     });
-    const maxPctSpecs = pctProps.length;
+    const nNonAbsProps = nonAbsProps.length;
 
-    if (this.pctFullSize < innerPadding + 1)
-      return new Array(maxPctSpecs).fill(0);
+    if (this.fullSize < innerPadding + 1)
+      return new Array(nNonAbsProps).fill(0);
 
-    let sizes: number[] = [];
-    Array.from(Array(maxPctSpecs + 1).keys())
-      .reverse()
-      .every((n) => {
-        sizes = [];
+    const relProps = nonAbsProps.filter(({ props }) => {
+      return props.dim(this.stackDimension).unit === '%';
+    });
 
-        let pctSize = 0;
+    const relSizes = this.calculateRelSizes(
+      relProps,
+      this.fullSize,
+      innerPadding,
+    );
 
-        let nPctTiles = 0;
-        let success = true;
+    const flexProps = nonAbsProps.filter(({ props }) => {
+      return !props.dim(this.stackDimension).unit;
+    });
+    const nFlexProps = flexProps.length;
 
-        pctProps.every(({ props }, idx) => {
-          if (idx >= n) {
-            sizes.push(0);
-            return true;
-          }
+    if (this.fullSize < innerPadding + 1)
+      return [...relSizes, ...new Array(nFlexProps).fill(0)];
 
-          const stackDimension = props.dim(this.stackDimension);
-          const { unit } = stackDimension;
+    let n = nFlexProps;
+    let stackSize = 0;
 
-          const nFlexTiles = n - nPctTiles;
+    while (n > 0) {
+      const size = (this.fullSize - n * innerPadding) / n;
 
-          let size =
-            stackDimension.relSize(this.pctFullSize) ??
-            (this.pctFullSize - pctSize) / nFlexTiles;
+      if (size >= 1) {
+        stackSize = size;
+        break;
+      }
 
-          if (unit === '%') {
-            nPctTiles += 1;
-            size = Math.min(size, this.pctFullSize - pctSize);
-            pctSize += size;
-          }
+      n--;
+    }
 
-          const stackSize = size - innerPadding;
-
-          if (stackSize < 1) {
-            success = false;
-            return false;
-          }
-
-          sizes.push(stackSize);
-
-          return true;
-        });
-
-        return !success;
-      });
-
-    return sizes;
+    return [
+      ...relSizes,
+      ...new Array(n).fill(stackSize),
+      ...new Array(nFlexProps - n).fill(0),
+    ];
   }
 
   protected calculateFixedSize(

@@ -515,7 +515,7 @@ describe('TileSpecsCalculationSpacing', () => {
     ]);
   });
 
-  it('renders single fixed tile with correct inner and outer padding when pct tile does not fit', () => {
+  it('does not render tile with relative size when it does not fit', () => {
     const root = new TileNodeFactory({
       width: 100,
       height: 100,
@@ -530,8 +530,31 @@ describe('TileSpecsCalculationSpacing', () => {
     const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
+      new TileSpecs(92, 4, 4, 4, 4, 4, 4, 0, 'left', 'top'),
+      new TileSpecs(92, 84, 4, 12, 4, 12, 4, 0, 'left', 'top'),
       new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
-      new TileSpecs(92, 84, 4, 4, 4, 4, 4, 0, 'left', 'top'),
+    ]);
+  });
+
+  it('renders correctly when tile with relative size is smaller than tiles w/o height', () => {
+    const root = new TileNodeFactory({
+      width: 100,
+      height: 178,
+      stack: 'vertical',
+      innerPadding: 4,
+      outerPadding: 2,
+    }).build();
+    new TileNodeFactory({}, root).build();
+    new TileNodeFactory({}, root).build();
+    new TileNodeFactory({ height: 150 }, root).build();
+    new TileNodeFactory({ height: 0.2 }, root).build();
+
+    const childrenSpecs = calc(root);
+
+    expect(childrenSpecs).toEqual([
+      new TileSpecs(92, 8, 4, 4, 4, 4, 4, 0, 'left', 'top'),
+      new TileSpecs(92, 8, 4, 16, 4, 16, 4, 0, 'left', 'top'),
+      new TileSpecs(92, 146, 4, 28, 4, 28, 4, 0, 'left', 'top'),
       new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
     ]);
   });

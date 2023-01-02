@@ -22,100 +22,91 @@ export class TileSpecsCalculationSizing extends TileSpecsCalculation {
     this.firstTile = true;
   }
 
-  protected calculatePxSizes(): number[] {
+  protected calculateAbsSizes(): number[] {
     const { innerPadding } = this.specs;
 
-    const pxProps = this.sortedProps.filter(({ props }) => {
+    const absProps = this.sortedProps.filter(({ props }) => {
       return props.dim(this.stackDimension).unit === 'px';
     });
 
-    return pxProps.map(({ props }) => {
-      if (this.pctFullSize < 1) return 0;
+    return absProps.map(({ props }) => {
+      const minSize = this.firstTile ? 1 : 1 + innerPadding;
+      if (this.fullSize < minSize) return 0;
 
       const stackDimension = props.dim(this.stackDimension);
       const stackSize = Math.min(
         stackDimension.size!,
-        this.firstTile ? this.pctFullSize : this.pctFullSize - innerPadding,
+        this.firstTile ? this.fullSize : this.fullSize - innerPadding,
       );
 
       const step = this.firstTile ? stackSize : innerPadding + stackSize;
 
-      if (stackSize >= 1) {
-        this.pctFullSize -= step;
-        this.firstTile = false;
-      }
+      if (stackSize < 1) return 0;
+
+      this.fullSize -= step;
+      this.firstTile = false;
 
       return stackSize;
     });
   }
 
-  protected calculatePctSizes(): number[] {
+  protected calculateNonAbsSizes(): number[] {
     const { innerPadding } = this.specs;
 
-    const pctProps = this.sortedProps.filter(({ props }) => {
+    const nonAbsProps = this.sortedProps.filter(({ props }) => {
       return props.dim(this.stackDimension).unit !== 'px';
     });
-    const maxPctSpecs = pctProps.length;
+    const nNonAbsProps = nonAbsProps.length;
 
-    // there are already some px tiles (add single inner padding at the end)
-    if (!this.firstTile) this.pctFullSize -= innerPadding;
+    // there are already some tiles with absolute size (add single inner padding at the end)
+    if (!this.firstTile) this.fullSize -= innerPadding;
 
-    if (this.pctFullSize < 1) return new Array(maxPctSpecs).fill(0);
+    if (this.fullSize < 1) return new Array(nNonAbsProps).fill(0);
 
-    let sizes: number[] = [];
-    Array.from(Array(maxPctSpecs + 1).keys())
-      .reverse()
-      .every((n) => {
-        sizes = [];
+    const relProps = nonAbsProps.filter(({ props }) => {
+      return props.dim(this.stackDimension).unit === '%';
+    });
 
-        const padding = (n - 1) * innerPadding;
-        const fullSize = this.pctFullSize - padding;
-        let pctSize = fullSize;
-        let flexFullSize = pctSize;
+    const flexProps = nonAbsProps.filter(({ props }) => {
+      return !props.dim(this.stackDimension).unit;
+    });
+    const nFlexProps = flexProps.length;
 
-        let nPctTiles = 0;
-        let success = true;
+    const nonAbsSize = this.fullSize;
+    let n = nNonAbsProps;
+    while (n > 0) {
+      const padding = (n - 1) * innerPadding;
+      const fullSize = nonAbsSize - padding;
 
-        pctProps.every(({ props }, idx) => {
-          if (idx >= n) {
-            sizes.push(0);
-            return true;
-          }
+      if (fullSize < n) {
+        n--;
+        continue;
+      }
 
-          if (pctSize < 1) {
-            success = false;
-            return false;
-          }
+      this.fullSize = fullSize;
+      const relSizes = this.calculateRelSizes(relProps, fullSize);
 
-          const stackDimension = props.dim(this.stackDimension);
-          const { unit } = stackDimension;
+      const nNonZeroRelSizes = relSizes.filter((size) => size > 0).length;
+      const nFlexSizes = n - nNonZeroRelSizes;
 
-          let stackSize: number;
-          if (unit === '%') {
-            stackSize = stackDimension.relSize(fullSize)!;
-            stackSize = Math.min(stackSize, pctSize);
-            nPctTiles += 1;
-            flexFullSize -= stackSize;
-          } else {
-            const nFlexTiles = n - nPctTiles;
-            stackSize = flexFullSize / nFlexTiles;
+      if (nFlexSizes === 0)
+        return [...relSizes, ...new Array(nFlexProps).fill(0)];
 
-            if (nFlexTiles <= 0 || stackSize < 1) {
-              success = false;
-              return false;
-            }
-          }
+      if (nFlexSizes > 0 && nFlexSizes <= nFlexProps) {
+        const stackSize = this.fullSize / nFlexSizes;
 
-          pctSize -= stackSize;
-          sizes.push(stackSize);
+        if (stackSize >= 1)
+          return [
+            ...relSizes,
+            ...new Array(nFlexSizes).fill(stackSize),
+            ...new Array(nFlexProps - nFlexSizes).fill(0),
+          ];
+      }
 
-          return true;
-        });
+      n--;
+    }
 
-        return !success;
-      });
-
-    return sizes;
+    return new Array(nNonAbsProps).fill(0);
   }
 
   protected applyAlignAndCoords(
