@@ -257,7 +257,7 @@ Thus, tile _B_ which comes **after** tile _A_ in natural order and belongs to sa
       1. We try to determine _k_ tiles with non-zero relative and flex sizes.
       2. We subtract _(k - 1) x inner padding_ from available space.
       3. For remaining space we apply above steps of _'spacing'_ mode.
-      4. If last step is not successful (there aren't _k_ tiles which have non-zero size), then we decrement _k_ and repeat steps above. Algorithm stops at the latest when _k=0_ and all tiles have zero size.
+      4. If last step is not successful (there aren't _k_ tiles which have non-zero size), then we decrement _k_ and repeat steps above. Algorithm stops at the latest when _k = 0_ and all tiles have zero size.
 
 So far, we only computed the resulting size for each tile.
 Now, we consider the rendering algorithm. When all sizes are determined with the process above, tiles are grouped according to their alignment w.r.t. stack direction (_'hAlign'_ for _'horizontal'_ and _'vAlign'_ for _'vertical'_).
