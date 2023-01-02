@@ -40,9 +40,6 @@ export class TileSpecsCalculationSizing extends TileSpecsCalculation {
       );
 
       const step = this.firstTile ? stackSize : innerPadding + stackSize;
-
-      if (stackSize < 1) return 0;
-
       this.fullSize -= step;
       this.firstTile = false;
 

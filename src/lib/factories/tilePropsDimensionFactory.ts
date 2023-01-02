@@ -27,6 +27,8 @@ export class TilePropsDimensionFactory {
         return { value: sizeNumber, unit: 'px' };
       } else if (this.rawPropsDimension.includes('.')) {
         return { value: pSizeNumber, unit: '%' };
+      } else if (pSizeNumber >= 0 && pSizeNumber < 1) {
+        return { value: pSizeNumber, unit: '%' };
       }
 
       return { value: sizeNumber, unit: 'px' };

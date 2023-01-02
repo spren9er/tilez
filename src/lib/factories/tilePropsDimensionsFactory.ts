@@ -12,11 +12,11 @@ export class TilePropsDimensionsFactory {
   public build(): TilePropsDimensions {
     const propsDimensions = [];
 
-    if (this.width)
+    if (this.width || this.width === 0)
       propsDimensions.push(
         new TilePropsDimensionFactory('width', this.width).build(),
       );
-    if (this.height)
+    if (this.height || this.height === 0)
       propsDimensions.push(
         new TilePropsDimensionFactory('height', this.height).build(),
       );

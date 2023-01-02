@@ -48,4 +48,13 @@ describe('TilePropsDimensionFactory', () => {
     expect(jsonFrom(propsWidth)).toEqual({ value: 10, unit: 'px' });
     expect(jsonFrom(propsHeight)).toEqual({ value: 90, unit: 'px' });
   });
+
+  it('handles zero and interprets number as percentage', () => {
+    const propsWidth = new TilePropsDimensionFactory('width', 0).build();
+    const propsHeight = new TilePropsDimensionFactory('height', '0').build();
+
+    const zeroPercentage = { value: 0, unit: '%' };
+    expect(jsonFrom(propsWidth)).toEqual(zeroPercentage);
+    expect(jsonFrom(propsHeight)).toEqual(zeroPercentage);
+  });
 });

@@ -492,7 +492,7 @@ describe('TileSpecsCalculationSizing', () => {
     ]);
   });
 
-  it('selects number of vertical flex tiles such that each tile has size >= 1', () => {
+  it('selects number of vertical flex tiles such that each tile has size >= 1 and number is max.', () => {
     const root = new TileNodeFactory({
       width: 17,
       height: 35,
@@ -515,7 +515,7 @@ describe('TileSpecsCalculationSizing', () => {
     ]);
   });
 
-  it('renders single fixed tile with correct inner and outer padding when pct tile does not fit', () => {
+  it('renders single fixed tile with correct inner and outer padding when tile of relative size does not fit', () => {
     const root = new TileNodeFactory({
       width: 100,
       height: 7,
@@ -532,6 +532,38 @@ describe('TileSpecsCalculationSizing', () => {
     expect(childrenSpecs).toEqual([
       new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
       new TileSpecs(96, 3, 2, 2, 2, 2, 4, 0, 'left', 'top'),
+      new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+    ]);
+  });
+
+  it('renders nothing if tile with relative zero size does not fit', () => {
+    const root = new TileNodeFactory({
+      width: 100,
+      height: 4,
+      stack: 'vertical',
+      innerPadding: 2,
+    }).build();
+    new TileNodeFactory({ height: 0 }, root).build();
+
+    const childrenSpecs = calc(root);
+
+    expect(childrenSpecs).toEqual([
+      new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+    ]);
+  });
+
+  it('renders nothing if tile with relative size does not fit', () => {
+    const root = new TileNodeFactory({
+      width: 100,
+      height: 4,
+      stack: 'vertical',
+      innerPadding: 2,
+    }).build();
+    new TileNodeFactory({ height: 0.2 }, root).build();
+
+    const childrenSpecs = calc(root);
+
+    expect(childrenSpecs).toEqual([
       new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
     ]);
   });
