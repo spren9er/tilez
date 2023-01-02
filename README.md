@@ -146,9 +146,9 @@ There are two layout modes available: one which is optimized for _'spacing'_ and
 
 #### Tile Layout Mode _Spacing_
 
-In layout mode _'spacing'_ (default mode), inner padding is part of the size specification of a tile. For a given width of 100px and an inner padding of 20px, the resulting width of the tile is 80px. On each side of a tile, there is a gap of 50% of inner padding, in our example 10px. The consequence is that in this layout spacings are aligned properly, e.g. the first gap of a tile with 50% width is aligned with the second gap of two tiles of 25% width each.
+In layout mode _'spacing'_ (default mode), inner padding is part of the size specification of a tile. For a given width of 100px and an inner padding of 20px, the resulting width of the tile is 80px. On each side of a tile, there is an empty space of 50% of inner padding, in our example 10px. The consequence is that in this layout spacings are aligned properly, e.g. the first gap of a tile with 50% width is aligned with the second gap of two stacked tiles of 25% width each.
 
-Note, that there will be empty space of 50% inner padding on all sides of the most outer tile. If you want equidistant paddings throughout the whole tile hierarchy, you can add an outer padding in parent tile of inner padding / 2.
+Note, that there will be empty space of 50% inner padding on all sides of the most outer tile. If you want equidistant paddings throughout the whole tile hierarchy, you can add an outer padding in root tile of _inner padding / 2_.
 
 When you use absolute sizes together with relative sizes to define your layout, make sure to add outer padding to your size beforehand. As an example: You want to work with a width of 200px and outer padding is given as 10px. Then a tile of width 100px corresponds to a tile of 50% only when the initial width is defined as 220px, **not** 200px.
 
