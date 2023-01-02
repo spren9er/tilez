@@ -3,6 +3,8 @@
 
 # ![Logo](https://github.com/spren9er/tilez/blob/main/static/tilez.svg?raw=true) tilez
 
+**_tilez_** is a layout engine for Svelte components.
+
 The original idea of **_tilez_** was to build an abstraction layer for creating compositions of arbitrary SVG charts in Svelte, where the result is a single SVG file. However, it is not limited to this use case. By default, all tiles – the building blocks of a layout – are renderless components. You define your layout via nested stackable tiles, where each tile has its own coordinate space, which is then accessible via Svelte stores (within a tile's context).
 
 _**tilez**_ is
@@ -35,17 +37,17 @@ By defining props of nested tiles, you define the whole layout within an arbitra
 Here is an example of a simple layout
 
 ```html
-<Tile stack="horizontal" width="800px" height="600px">
+<HTile width="800px" height="600px">
   <Tile width="400px">
-    <SomeComponent />
+    <Component1 />
   </Tile>
   <Tile>
-    <AnotherComponent />
+    <Component2 />
   </Tile>
   <Tile height="300px" vAlign="center">
-    <YetAnotherComponent />
+    <Component3 />
   </Tile>
-</Tile>
+</HTile>
 ```
 
 ### Tile Component
@@ -72,7 +74,7 @@ All props are optional, i.e. you can have tiles with no props at all
 
 ```html
 <Tile>
-  <SomeComponent />
+  <Component1 />
 </Tile>
 ```
 
