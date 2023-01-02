@@ -536,7 +536,7 @@ describe('TileSpecsCalculationSizing', () => {
     ]);
   });
 
-  it('renders nothing if tile with relative zero size does not fit', () => {
+  it('renders nothing if tile with relative zero size is given', () => {
     const root = new TileNodeFactory({
       width: 100,
       height: 4,
