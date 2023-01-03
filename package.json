@@ -1,5 +1,6 @@
 {
   "name": "tilez",
+  "description": "Layout engine for Svelte components",
   "version": "0.0.12",
   "author": "Torsten Sprenger <mail@spren9er.de>",
   "scripts": {
