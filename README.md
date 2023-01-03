@@ -7,7 +7,7 @@
 
 ![Layout-Demo-Animation](https://github.com/spren9er/tilez/blob/main/static/tilez_example.gif?raw=true)
 
-By default, all tiles – the building blocks of a layout – are renderless components. Layout is defined via nested, stackable tiles, where each tile has its own coordinate space, which is then accessible through Svelte stores within a tile's context.
+By default, all tiles – the building blocks of a layout – are renderless components. Layout is defined via nested, stackable tiles, where each tile has its own coordinate space, which is accessible through Svelte stores within a tile's context.
 
 _**tilez**_ is
 
@@ -20,7 +20,9 @@ _**tilez**_ is
 - light-weight — _does not add more than a few KB to your Svelte application_
 
 
-The original idea of **_tilez_** was to build an abstraction layer for creating compositions of arbitrary SVG charts in Svelte, where the result is a single SVG file, like this
+The original idea of **_tilez_** was to build an abstraction layer for creating compositions of arbitrary SVG charts in Svelte, where the result is a single SVG file.
+
+Here is an example of a composition of several different _Observable Plot_ charts, which makes up an [UpSet plot](https://upset.app). Charts are embedded in a simple **tilez** layout.
 
 ![SVG-Demo](https://github.com/spren9er/tilez/blob/main/static/tilez_upset.svg?raw=true)
 
@@ -110,7 +112,7 @@ Otherwise, children tiles will be distributed within current tile according to t
 
 Argument can be an absolute or relative number. Accepts strings like _"500px"_, _"500"_, _"50%"_, _"0.5"_ or numbers like _500_ or _0.5_. Numbers less than _1_ are interpreted as percentages, otherwise they represent absolute widths.
 The given width will result in different tile widths, depending on the layout [mode](#mode).
-When there is no width given (default), available space in parent tile will be distributed equally between current tile and other tiles having no width specification.
+When there is no width given (default), remaining space in parent tile — after rendering tiles with absolute and relative width — will be distributed equally between current tile and other tiles having no width specification.
 
 <a name="height" href="#height">#</a> tilez.<b>Tile</b>.<i>height</i>
 
@@ -120,7 +122,7 @@ Analogue to [width](#width) above.
 
 Defines the padding **between** children tiles of current tile. Format must be either a string like _"10px"_, _"10"_ or a number like _10_. Relative values are not supported.
 For layout mode _'spacing'_ it adds half of the given inner padding to the left and right of the outer tiles (or tile if there is only one).
-This property will be inherited, thus all children tiles will have the same inner padding unless not specified explicitly in children tile. If inner padding of children tile is given, this value will be considered instead of inner padding of parent tile.
+This property will be inherited, thus all children tiles will have the same inner padding for their children unless not specified explicitly in children tile. In other words, if inner padding of children tile is given, this value will be considered instead of inner padding of parent tile.
 
 <a name="outer_padding" href="#outer_padding">#</a> tilez.<b>Tile</b>.<i>outerPadding</i> · [default: 0]
 
@@ -139,7 +141,7 @@ It behaves like [hAlign](#h_align), but in vertical direction.
 
 <a name="type" href="#type">#</a> tilez.<b>Tile</b>.<i>type</i> · (_'plain'_ | _'svg'_ |  _'html'_ ) [default: _'plain'_] [inherits]
 
-By default, using **_tilez_** won't create any HTML containers. All components are renderless components.
+By default, using **_tilez_** won't create any HTML containers, i.e. all components are renderless components (_type_ is _'plain'_).
 Available types are _'plain'_, _'svg'_ and _'html'_. Using an _'svg'_ layout, parent tile will be an SVG container and all children tiles will be rendered as SVG group. This property inherits from parent tile unless not specified explicitly.
 Otherwise, given type will be taken into consideration.
 You could use **_tilez_** as _'html'_ layout engine (all containers are implicitly absolute positioned), but in that case CSS flexbox and CSS grid are more powerful and flexible.
