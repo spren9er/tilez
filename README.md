@@ -151,7 +151,7 @@ There are two layout modes available: one which is optimized for _'spacing'_ and
 
 #### Tile Layout Mode _Spacing_
 
-In layout mode _'spacing'_ (default mode), inner padding is part of the size specification of a tile. For a given width of _100px_ and an inner padding of _20px_, the resulting width of the tile is _80px_. On each side of a tile, there is an empty space of _50% of inner padding_, in our example _10px_. The consequence is that in this layout spacings are aligned properly, e.g. the first gap of a tile with _50%_ width is aligned with the fifth gap of five stacked tiles of _10%_ width each.
+In layout mode _'spacing'_ (default mode), inner padding is part of the size specification of a tile. For a given width of _100px_ and an inner padding of _20px_, the resulting width of the tile is _80px_. On each side of a tile, there is an empty space of _50% of inner padding_, in our example _10px_. The consequence is that in this layout spacings are aligned properly across stacks, e.g. the first gap of a tile with _50%_ width is aligned with the fifth gap of five stacked tiles of _10%_ width each.
 
 ![Layout-Mode-Spacing](https://github.com/spren9er/tilez/blob/main/static/tilez_layout_spacing.png?raw=true)
 
@@ -161,7 +161,7 @@ When you use absolute sizes together with relative sizes to define your layout, 
 
 #### Tile Layout Mode _Sizing_
 
-When layout mode _'sizing'_ is used, all tiles have exactly the size which is specified in tile props, i.e. for a given width of _100px_, the tile has exactly a width of _100px_ (when there is enough space to render). Also, a tile of width _50%_ has _5_ times the width of a tile of width _10%_, which generally does not apply to _'spacing'_ layout mode.
+When layout mode _'sizing'_ is used, all tiles have exactly the size which is specified in tile props, i.e. for a given width of _100px_, the tile has exactly a width of _100px_ (when there is enough space to render). Also, a tile of width _50%_ has _5_ times the width of a tile of width _10%_ (if they are in the same stack!), which generally does not apply to _'spacing'_ layout mode.
 
 ![Layout-Mode-Sizing](https://github.com/spren9er/tilez/blob/main/static/tilez_layout_sizing.png?raw=true)
 
@@ -170,7 +170,7 @@ It depends on your use case, which mode you choose. You can also mix modes, star
 
 ## How to access tile specs?
 
-Now, after defining your layout, you embed your components in your tiles, exactly in the tile where you want to place them. In your component you get access to tile specs and linear scales of local coordinate system by adding the following lines:
+Now, after defining a layout, arbitrary Svelte components can be embedded in your tiles. In your component you get access to tile specs and linear scales of local coordinate system by adding the following lines
 
 ```js
 import { getTileContext } from 'tilez';
@@ -194,20 +194,20 @@ Classes are described below.
 
 ### Tile Specs
 
-The **TileSpecs** class has following properties:
+The **TileSpecs** class has following properties
 
-| property       | description                                                                         |
-| -------------- | ----------------------------------------------------------------------------------- |
-| _width_        | width of tile                                                                       |
-| _height_       | height of tile                                                                      |
-| _absX_         | absolute x-coordinate (w.r.t. root tile)                                            |
-| _absY_         | absolute y-coordinate (w.r.t. root tile)                                            |
-| _relX_         | relative x-coordinate (w.r.t. parent tile)                                          |
-| _relY_         | relative y-coordinate (w.r.t. parent tile)                                          |
-| _innerPadding_ | padding between children tiles                                                      |
-| _outerPadding_ | padding around children tiles                                                       |
-| _hAlign_       | horizontal alignment (w.r.t. parent tile) [one of  _'left'_, _'center'_, _'right'_] |
-| _vAlign_       | vertical alignment (w.r.t. parent tile) [one of _'top'_, _'center'_, _'bottom'_]    |
+| property       | type                                    | description                                |
+| -------------- | --------------------------------------- | ------------------------------------------ |
+| _width_        | number                                  | width of tile                              |
+| _height_       | number                                  | height of tile                             |
+| _absX_         | number                                  | absolute x-coordinate (w.r.t. root tile)   |
+| _absY_         | number                                  | absolute y-coordinate (w.r.t. root tile)   |
+| _relX_         | number                                  | relative x-coordinate (w.r.t. parent tile) |
+| _relY_         | number                                  | relative y-coordinate (w.r.t. parent tile) |
+| _innerPadding_ | number                                  | padding between children tiles             |
+| _outerPadding_ | number                                  | padding around children tiles              |
+| _hAlign_       | one of  _'left'_, _'center'_, _'right'_ | horizontal alignment (w.r.t. parent tile)  |
+| _vAlign_       | one of _'top'_, _'center'_, _'bottom'_  | vertical alignment (w.r.t. parent tile)    |
 
 ### Linear Scale
 
@@ -257,12 +257,12 @@ Thus, tile _B_ which comes **after** tile _A_ in natural order and belongs to sa
 ### Layout Algorithm
 
 1. We take one tile after the other of first sorted group above (tiles of absolute sizes) and for each tile we determine its size, as long as enough space is available. A tile which doesn't fit completely in available space is cut off. Then, rest of tiles will have zero size.
-2. For determining other tiles sizes, we have to look at each specific layout mode separately:
-   1. [_'spacing'_] If sizes of all tiles of first group are determined and there is still space left, the available space will be distributed between all remaining tiles in the following way:
+2. For determining other tiles sizes, we have to look at each specific layout mode separately
+   1. **Spacing Mode:** If sizes of all tiles of first group are determined and there is still space left, the available space will be distributed between all remaining tiles in the following way
       1. Filter out tiles of relative size which can't be rendered, because their calculated size is less than _1px_.
       2. For all remaining tiles of second group (tiles of relative sizes), we will process tiles like in first step: Resulting sizes will be determined one by one. If there is not enough space available, tile will be cut off and all remaining tiles will have zero size.
       3. If sizes of all tiles of relative sizes are determined and there is still space left, we consider the last group of tiles (flex tiles w/o size specification). Assuming there are _n_ flex tiles left. Their size will be calculated by distributing remaining space equally across flex tiles (each flex tile will have same size). If sizes are less than _1px_, we try to distribute remaining space across _n - 1_ flex tiles, then _n - 2_ flex tiles, and so on. Finally, we either have some flex tiles with large enough sizes to render or all flex tiles will have zero size.
-   2. [_'sizing'_] Let _m_ be the number of tiles with relative and flex sizes. We want to distribute _k <= m_ tiles (with _k_ max.) and start with _k = m_.
+   2. **Sizing Mode:** Let _m_ be the number of tiles with relative and flex sizes. We want to distribute _k <= m_ tiles (with _k_ max.) and start with _k = m_.
       1. We try to determine _k_ tiles with non-zero relative and flex sizes.
       2. We subtract _(k - 1) x inner padding_ from available space.
       3. For remaining space we apply above steps of _'spacing'_ mode. Assuming _p_ tiles of relative size have non-zero size,  then in last step we only check if _n = k - p_ flex tiles can be rendered or not.
@@ -270,7 +270,7 @@ Thus, tile _B_ which comes **after** tile _A_ in natural order and belongs to sa
 
 So far, we only computed the resulting size for each tile.
 Now, we consider the rendering algorithm. When all sizes are determined with the process above, tiles are grouped according to their alignment w.r.t. stack direction (_'hAlign'_ for _'horizontal'_ and _'vAlign'_ for _'vertical'_).
-This will generate three groups. We process them in the following way:
+This will generate three groups. We process them in the following way
 
 1. Render all tiles of _'left'_ or _'top'_ group according to their natural order from left to right or top to bottom.
 2. Render all tiles of _'right'_ or _'bottom'_ group according to their natural order (here descending) from right to left or bottom to top.
