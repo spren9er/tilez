@@ -2,9 +2,9 @@
   xmlns="http://www.w3.org/2000/svg"
   width="750"
   height="550"
-  viewBox="0 0 750 550"
-  class="svelte-7epu6n"
+  viewBox="20 0 750 550"
 >
+  <rect width="750" height="550" fill="#ffffff"></rect>
   <g transform="translate(170.5, 32.5)">
     <g width="547" height="289">
       <text
