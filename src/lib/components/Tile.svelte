@@ -49,11 +49,20 @@
 		return componentMapping[node.props.type || 'plain'];
 	};
 
+	const typeHasChanged = (node: TileNode) => {
+		const parentType = node.parent?.props.type;
+
+		return parentType === 'html' && parentType !== node.props.type;
+	};
+
 	$: if (root) $node.updateSpecs(width!, height!);
 </script>
 
 <TileWrapper {root}>
-	<svelte:component this={componentFor($node)} {root}>
+	<svelte:component
+		this={componentFor($node)}
+		root={root || typeHasChanged($node)}
+	>
 		<slot />
 	</svelte:component>
 </TileWrapper>
