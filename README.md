@@ -111,7 +111,7 @@ The layout can be described in a declarative way, by defining props of nested ti
 </HTile>
 ```
 
-<img src="https://github.com/spren9er/tilez/blob/main/static/tilez_layout_example.png?raw=true" width="450px" height="341px" />
+<img src="https://github.com/spren9er/tilez/blob/main/static/tilez_layout_example.png?raw=true" width="225px" height="170px" />
 
 ### Tile Props
 
@@ -169,7 +169,7 @@ There are two layout modes available: one which is optimized for _'spacing'_ and
 
 In layout mode _'spacing'_ (default mode), inner padding is part of the size specification of a tile. For a given width of _100px_ and an inner padding of _20px_, the resulting width of the tile is _80px_. On each side of a tile, there is an empty space of _50% of inner padding_, in our example _10px_. The consequence is that in this layout spacings are aligned properly across stacks, e.g. the first gap of a tile with _50%_ width is aligned with the fifth gap of five stacked tiles with _10%_ width each.
 
-<img src="https://github.com/spren9er/tilez/blob/main/static/tilez_layout_spacing.png?raw=true" width="450px" height="341px" />
+<img src="https://github.com/spren9er/tilez/blob/main/static/tilez_layout_spacing.png?raw=true" width="225px" height="170px" />
 
 Note, that there will be empty space of _50% inner padding_ on all sides of the most outer tile. If you want equidistant paddings throughout the whole tile hierarchy, you can add an outer padding in root tile of _inner padding / 2_.
 
@@ -179,7 +179,7 @@ When you use absolute sizes together with relative sizes to define your layout, 
 
 When layout mode _'sizing'_ is used, all tiles have exactly the size which is specified in tile props, i.e. for a given width of _100px_, the tile has exactly a width of _100px_ (when there is enough space to render). Also, a tile of width _50%_ has _5_ times the width of a tile of width _10%_ (if they are in the same stack!), which generally does not apply to _'spacing'_ layout mode.
 
-<img src="https://github.com/spren9er/tilez/blob/main/static/tilez_layout_sizing.png?raw=true" width="450px" height="341px" />
+<img src="https://github.com/spren9er/tilez/blob/main/static/tilez_layout_sizing.png?raw=true" width="225px" height="170px" />
 
 It depends on your use case, which mode you choose. You can also mix modes, start with one mode and change to the other mode in an inner tile.
 
