@@ -19,7 +19,7 @@ _**tilez**_ is
 - free of dependencies — _except for Svelte_
 - opinionated — _the way the layout algorithm works (see [here](#how-does-the-layout-algorithm-work))_
 - robust — _handles edge cases very well_
-- light-weight — _does not add more than a few KB to your Svelte application_
+- light-weight — _does not add more than a few bytes to your Svelte application_
 
 
 The main application of **_tilez_** is to use it as an abstraction layer for creating compositions and layers of arbitrary SVG charts in Svelte, where the final result is a single SVG chart.
