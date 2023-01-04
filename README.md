@@ -22,7 +22,7 @@ _**tilez**_ is
 - light-weight — _does not add more than a few KB to your Svelte application_
 
 
-The original idea of **_tilez_** was to build an abstraction layer for creating compositions of arbitrary SVG charts in Svelte, where the result is a single SVG file.
+The original idea of **_tilez_** was to build an abstraction layer for creating compositions of arbitrary SVG charts in Svelte, where the result is a single SVG chart.
 
 Here is an example of a composition of several different _Observable Plot_ charts, which makes up an [UpSet plot](https://upset.app). Charts are embedded in a simple **tilez** layout.
 
@@ -167,7 +167,7 @@ There are two layout modes available: one which is optimized for _'spacing'_ and
 
 #### Tile Layout Mode _Spacing_
 
-In layout mode _'spacing'_ (default mode), inner padding is part of the size specification of a tile. For a given width of _100px_ and an inner padding of _20px_, the resulting width of the tile is _80px_. On each side of a tile, there is an empty space of _50% of inner padding_, in our example _10px_. The consequence is that in this layout spacings are aligned properly across stacks, e.g. the first gap of a tile with _50%_ width is aligned with the fifth gap of five stacked tiles of _10%_ width each.
+In layout mode _'spacing'_ (default mode), inner padding is part of the size specification of a tile. For a given width of _100px_ and an inner padding of _20px_, the resulting width of the tile is _80px_. On each side of a tile, there is an empty space of _50% of inner padding_, in our example _10px_. The consequence is that in this layout spacings are aligned properly across stacks, e.g. the first gap of a tile with _50%_ width is aligned with the fifth gap of five stacked tiles with _10%_ width each.
 
 <img src="https://github.com/spren9er/tilez/blob/main/static/tilez_layout_spacing.png?raw=true" width="450px" height="341px" />
 
