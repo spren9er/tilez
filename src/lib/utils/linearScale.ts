@@ -43,6 +43,12 @@ export class LinearScale extends ExtensibleFunction {
     return this;
   }
 
+  public inv(y: number) {
+    const invScale = new LinearScale(this._range, this._domain);
+
+    return invScale(y);
+  }
+
   private validateDomain() {
     const [x1, x2] = this._domain!;
 

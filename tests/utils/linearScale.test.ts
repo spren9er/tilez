@@ -53,4 +53,11 @@ describe('LinearScale', () => {
     expect(scale(1)).toEqual(4);
     expect(scale(2)).toEqual(3);
   });
+
+  it('calculates inverse value', () => {
+    const scale = new LinearScale([0, 1], [-5, 5]);
+
+    expect(scale.inv(-5)).toEqual(0);
+    expect(scale.inv(5)).toEqual(1);
+  });
 });

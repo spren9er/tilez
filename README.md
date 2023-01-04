@@ -3,7 +3,7 @@
 
 # ![Tilez-Logo](https://github.com/spren9er/tilez/blob/main/static/tilez_logo.svg?raw=true) tilez
 
-**_tilez_** is a layout engine for Svelte components.
+**_tilez_** is a generic layout engine for Svelte components.
 
 <img src="https://github.com/spren9er/tilez/blob/main/static/tilez_example.gif?raw=true" width="305px" height="207px">
 
@@ -17,14 +17,14 @@ _**tilez**_ is
 - flexible — _can be used with SVG, HTML or renderless components_
 - reactive — _all tiles adapt to changes of root tile_
 - free of dependencies — _except for Svelte_
-- opinionated — _the way the layout algorithm works, see [here](#how-does-the-layout-algorithm-work)_
+- opinionated — _the way the layout algorithm works (see [here](#how-does-the-layout-algorithm-work))_
 - robust — _handles edge cases very well_
 - light-weight — _does not add more than a few KB to your Svelte application_
 
 
-The original idea of **_tilez_** was to build an abstraction layer for creating compositions of arbitrary SVG charts in Svelte, where the result is a single SVG chart.
+The main application of **_tilez_** is to use it as an abstraction layer for creating compositions and layers of arbitrary SVG charts in Svelte, where the final result is a single SVG chart.
 
-Here is an example of a composition of several different _Observable Plot_ charts, which makes up an [UpSet plot](https://upset.app). Charts are embedded in a simple **tilez** layout.
+Here is an example of a composition of several different _Observable Plot_ charts, which makes up an [UpSet plot](https://upset.app). Individual charts are embedded in a simple **tilez** layout.
 
 <img src="https://github.com/spren9er/tilez/blob/main/static/tilez_upset.svg?raw=true" width="550px">
 
@@ -113,20 +113,23 @@ The layout can be described in a declarative way, by defining props of nested ti
 
 <img src="https://github.com/spren9er/tilez/blob/main/static/tilez_layout_example.png?raw=true" width="225px" height="170px" />
 
+Check it out in [Svelte REPL](https://svelte.dev/repl/1a8e45baea624a079255275a1473374b?version=3.55.0)!
+
 ### Tile Props
 
 A **Tile** has following props
 
 <a name="stack" href="#stack">#</a> tilez.<b>Tile</b>.<i>stack</i>
 
-When this property is not given, all children tiles will have the same coordinate space like current tile.
+When this property is not given, all children tiles will have the same coordinate space like current tile and they are layered in the natural order given.
 Otherwise, children tiles will be distributed within current tile according to their props in _horizontal_ or _vertical_ direction.
 
 <a name="width" href="#width">#</a> tilez.<b>Tile</b>.<i>width</i>
 
 Argument can be an absolute or relative number. Accepts strings like _"500px"_, _"500"_, _"50%"_, _"0.5"_ or numbers like _500_ or _0.5_. Numbers less than _1_ are interpreted as percentages, otherwise they represent absolute widths.
 The given width will result in different tile widths, depending on the layout [mode](#mode).
-When there is no width given (default), remaining space in parent tile — after rendering tiles with absolute and relative width — will be distributed equally between current tile and other tiles having no width specification.
+Relative widths refer to the width you obtain when you subtract all absolute tddile widths from full width.
+When there is no width given (default), remaining width in parent tile — after rendering tiles with absolute and relative width — will be distributed equally between current tile and other tiles having no width specification.
 
 <a name="height" href="#height">#</a> tilez.<b>Tile</b>.<i>height</i>
 
@@ -242,10 +245,13 @@ const y = $yScale.domain([0, 400]);
 const sampleCoords = [x(0.5), y(150)];
 ```
 
-Both scales are directly callable using `()`.
-Domains are also supported, where upper bound is less than lower bound, e.g. using `[1, 0]` will map `0` to full size and `1` to `0`.
+More information about linear scales
 
-_**Note:** If you need non-linear scales, consider using _d3-scale_ with given tile specs.
+- Both scales are directly callable using `()`.
+- Domains are also supported, where upper bound is less than lower bound, e.g. using `[1, 0]` will map `0` to full size and `1` to `0`.
+- There is also an `inv(y: number)` method available, which computes the _x_ value for a given _y_ w.r.t. the inverse function (useful for working with coords of mouse position).
+
+_**Note:** If you need non-linear scales, consider using _d3-scale_ with given tile specs._
 
 
 ## How does the layout algorithm work?
@@ -282,7 +288,7 @@ Thus, tile _B_ which comes **after** tile _A_ in natural order and belongs to sa
       1. We try to determine _k_ tiles with non-zero relative and flex sizes.
       2. We subtract _(k - 1) x inner padding_ from available space.
       3. For remaining space we apply above steps of _'spacing'_ mode. Assuming _p_ tiles of relative size have non-zero size,  then in last step we only check if _n = k - p_ flex tiles can be rendered or not.
-      4. If last step is not successful (there aren't _k_ tiles in total which have non-zero size), then we decrement _k_ and repeat steps above. Algorithm stops at the latest when _k = 0_ and all tiles have zero size.
+      4. If previous step is not successful (there aren't _k_ tiles in total which have non-zero size), then we decrement _k_ and repeat steps above. Algorithm stops at the latest when _k = 0_ and all tiles have zero size.
 
 So far, we only computed the resulting size for each tile.
 Now, we consider the rendering algorithm. When all sizes are determined with the process above, tiles are grouped according to their alignment w.r.t. stack direction (_'hAlign'_ for _'horizontal'_ and _'vAlign'_ for _'vertical'_).
