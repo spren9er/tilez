@@ -202,9 +202,9 @@ Alternatively, you can use `getContext` from Svelte. The name of the context is 
 
 Returns an object containing three Svelte stores
 
-- [specs](#specs) of class **Writable\<TileSpec\>**
-- [xScale](#x_scale) of class **Writable\<LinearScale\>**
-- [yScale](#y_scale) of class **Writable\<LinearScale\>**
+- _specs_ of class **Writable\<TileSpec\>**
+- _xScale_ of class **Writable\<LinearScale\>**
+- _yScale_ of class **Writable\<LinearScale\>**
 
 Classes are described below.
 
@@ -245,7 +245,7 @@ const sampleCoords = [x(0.5), y(150)];
 Both scales are directly callable using `()`.
 Domains are also supported, where upper bound is less than lower bound, e.g. using `[1, 0]` will map `0` to full size and `1` to `0`.
 
-_**Note:** If you need non-linear scales, consider using _d3-scale_ with given tile [specs](#specs)._
+_**Note:** If you need non-linear scales, consider using _d3-scale_ with given tile specs.
 
 
 ## How does the layout algorithm work?
