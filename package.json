@@ -1,8 +1,23 @@
 {
   "name": "tilez",
-  "description": "Layout engine for Svelte components",
   "version": "0.0.12",
   "author": "Torsten Sprenger <mail@spren9er.de>",
+  "description": "Layout engine for Svelte components",
+  "keywords": [
+    "svelte",
+    "layout",
+    "svg",
+    "composition",
+    "chart"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/spren9er/tilez.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/spren9er/tilez/issues"
+  },
   "scripts": {
     "dev": "vite dev",
     "build": "svelte-kit sync && svelte-package",
