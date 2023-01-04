@@ -215,18 +215,18 @@ Classes are described below.
 
 The **TileSpecs** class has following properties
 
-| property       | type                                    | description                                |
-| -------------- | --------------------------------------- | ------------------------------------------ |
-| _width_        | number                                  | width of tile                              |
-| _height_       | number                                  | height of tile                             |
-| _absX_         | number                                  | absolute x-coordinate (w.r.t. root tile)   |
-| _absY_         | number                                  | absolute y-coordinate (w.r.t. root tile)   |
-| _relX_         | number                                  | relative x-coordinate (w.r.t. parent tile) |
-| _relY_         | number                                  | relative y-coordinate (w.r.t. parent tile) |
-| _innerPadding_ | number                                  | padding between children tiles             |
-| _outerPadding_ | number                                  | padding around children tiles              |
-| _hAlign_       | one of  _'left'_, _'center'_, _'right'_ | horizontal alignment (w.r.t. parent tile)  |
-| _vAlign_       | one of _'top'_, _'center'_, _'bottom'_  | vertical alignment (w.r.t. parent tile)    |
+| property       | type                                    | description                                  |
+| -------------- | --------------------------------------- | -------------------------------------------- |
+| _width_        | number                                  | width of tile                                |
+| _height_       | number                                  | height of tile                               |
+| _absX_         | number                                  | absolute _x_-coordinate (w.r.t. root tile)   |
+| _absY_         | number                                  | absolute _y_-coordinate (w.r.t. root tile)   |
+| _relX_         | number                                  | relative _x_-coordinate (w.r.t. parent tile) |
+| _relY_         | number                                  | relative _y_-coordinate (w.r.t. parent tile) |
+| _innerPadding_ | number                                  | padding between children tiles               |
+| _outerPadding_ | number                                  | padding around children tiles                |
+| _hAlign_       | one of  _'left'_, _'center'_, _'right'_ | horizontal alignment (w.r.t. parent tile)    |
+| _vAlign_       | one of _'top'_, _'center'_, _'bottom'_  | vertical alignment (w.r.t. parent tile)      |
 
 ### Linear Scale
 
