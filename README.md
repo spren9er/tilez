@@ -69,7 +69,7 @@ All props are optional, i.e. you can have tiles with no props at all
 
 However, there is one exception: the root (most outer) tile must have an absolute width and height!
 
-There are two ways to import tile components, either
+There are two ways to import tile components, either by
 
 ```javascript
 import { Tile } from 'tilez';
@@ -199,7 +199,7 @@ const {specs, xScale, yScale } = getTileContext();
 
 All three objects – which you obtain from a tile's context – are Svelte stores.
 
-Alternatively, you can use `getContext` from Svelte. The name of the context is _'tilez'_.
+Alternatively, you can use `getContext` from Svelte to get the same objects. The name of the context is _'tilez'_.
 
 <a name="get_tile_context" href="#get_tile_context">#</a> tilez.<b>getTileContext()</b>
 
@@ -271,7 +271,7 @@ Before tiles are rendered within a stack, they are sorted according to following
 3. Tiles of flex sizes (no size specification)
 
 Within each group, tiles are sorted according to the natural order given (ascending order of children tiles within parent tile).
-The order gives information about the priority for rendering. First tiles of above order have high priority and will be rendered first, while last tiles won't be rendered at all, if there is not enough space left.
+The order gives information about the priority for rendering. First tiles of above order have high priority and will be rendered first, while last tiles have low priority and won't be rendered at all, if there is not enough space left.
 
 _**Note:** Alignment props are **not** taken into consideration when sorting!
 Thus, tile _B_ which comes **after** tile _A_ in natural order and belongs to same group, could be aligned as such that it appears **before** tile _A_. This fact can be used to take influence in the rendering behavior._
