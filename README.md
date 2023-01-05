@@ -263,8 +263,7 @@ Vertical alignment w.r.t. parent tile
 
 Aspect ratio (width / height) of tile
 
-
-### Linear Scale
+### Linear Scales from Tile Context
 
 For each tile, there are two linear scales `$xScale` and `$yScale` available, one for _x_-axis and one for _y_-axis.
 Their domain is `[0, 1]` and their range is `[0, $specs.width]` or `[0, $specs.height]`, respectively.
@@ -293,7 +292,7 @@ You can set a _domain_ which will be mapped to the tile range. Domains are also 
 
 <a name="linear_scale_range" href="#linear_scale_range">#</a> tilez.<b>LinearScale</b>.<i>range(range: [number, number])</i>
 
-Even though `xScale` and `yScale` are coming with predefined ranges, such that they span the full width or height of a tile, you can override the _range_ with this method.
+Even though `$xScale` and `$yScale` are coming with predefined ranges, such that they span the full width or height of a tile, you can override the _range_ with this method.
 
 <a name="linear_scale_call" href="#linear_scale_call">#</a> tilez.<b>LinearScale</b>.<i>(x: number)</i>
 
