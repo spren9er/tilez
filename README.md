@@ -48,12 +48,12 @@ A **Tile** component is a building block of a layout and has following available
   stack="horizontal"
   width="800px"
   height="600px"
-  innerPadding="5px"
+  innerPadding="10px"
   outerPadding="5px"
   hAlign="left"
-  vAlign="center"
-  type="svg"
-  mode="sizing"
+  vAlign="top"
+  type="plain"
+  mode="spacing"
 >
   ...
 </Tile>
@@ -67,7 +67,9 @@ All props are optional, i.e. you can have tiles with no props at all
 </Tile>
 ```
 
-However, there is one exception: the root (most outer) tile must have an absolute width and height!
+However, there is one exception: The root (most outer) tile must have an absolute width and height!
+
+### Import Tile Components
 
 There are two ways to import tile components, either by
 
@@ -95,7 +97,7 @@ These components have the same props available as a basic **Tile** component (ex
 
 ### Tile Layouts
 
-The layout can be described in a declarative way, by defining props of nested tiles. Here is an example of a simple layout
+Layouts can be described in a declarative way, by defining props of nested tiles. Here is an example of a simple layout
 
 ```html
 <HTile width="400px" height="300px" innerPadding="10px" outerPadding="5px">
@@ -115,7 +117,7 @@ The layout can be described in a declarative way, by defining props of nested ti
 
 Check it out in [Svelte REPL](https://svelte.dev/repl/1a8e45baea624a079255275a1473374b?version=3.55.0)!
 
-### Tile Props
+### API Tile Props
 
 A **Tile** has following props
 
@@ -128,12 +130,12 @@ Otherwise, children tiles will be distributed within current tile according to t
 
 Argument can be an absolute or relative number. Accepts strings like _"500px"_, _"500"_, _"50%"_, _"0.5"_ or numbers like _500_ or _0.5_. Numbers less than _1_ are interpreted as percentages, otherwise they represent absolute widths.
 The given width will result in different tile widths, depending on the layout [mode](#mode).
-Relative widths refer to the width you obtain when you subtract all absolute tddile widths from full width.
+Relative widths refer to the width you obtain when you subtract all absolute tile widths from full width.
 When there is no width given (default), remaining width in parent tile — after rendering tiles with absolute and relative width — will be distributed equally between current tile and other tiles having no width specification.
 
 <a name="height" href="#height">#</a> tilez.<b>Tile</b>.<i>height</i>
 
-Analogue to [width](#width) above.
+Analog to [width](#width) above.
 
 <a name="inner_padding" href="#inner_padding">#</a> tilez.<b>Tile</b>.<i>innerPadding</i> · [default: 0 / inherits]
 
@@ -201,32 +203,66 @@ All three objects – which you obtain from a tile's context – are Svelte stor
 
 Alternatively, you can use `getContext` from Svelte to get the same objects. The name of the context is _'tilez'_.
 
+### API Tile Context
+
 <a name="get_tile_context" href="#get_tile_context">#</a> tilez.<b>getTileContext()</b>
 
 Returns an object containing three Svelte stores
 
-- _specs_ of class **Writable\<TileSpec\>**
+- _specs_ of class **Writable\<TileSpecs\>**
 - _xScale_ of class **Writable\<LinearScale\>**
 - _yScale_ of class **Writable\<LinearScale\>**
 
-Classes are described below.
+Classes **TileSpecs** and **LinearScale** are described below.
 
-### Tile Specs
+### API Tile Specs
 
 The **TileSpecs** class has following properties
 
-| property       | type                                    | description                                  |
-| -------------- | --------------------------------------- | -------------------------------------------- |
-| _width_        | number                                  | width of tile                                |
-| _height_       | number                                  | height of tile                               |
-| _absX_         | number                                  | absolute _x_-coordinate (w.r.t. root tile)   |
-| _absY_         | number                                  | absolute _y_-coordinate (w.r.t. root tile)   |
-| _relX_         | number                                  | relative _x_-coordinate (w.r.t. parent tile) |
-| _relY_         | number                                  | relative _y_-coordinate (w.r.t. parent tile) |
-| _innerPadding_ | number                                  | padding between children tiles               |
-| _outerPadding_ | number                                  | padding around children tiles                |
-| _hAlign_       | one of  _'left'_, _'center'_, _'right'_ | horizontal alignment (w.r.t. parent tile)    |
-| _vAlign_       | one of _'top'_, _'center'_, _'bottom'_  | vertical alignment (w.r.t. parent tile)      |
+<a name="specs_width" href="#specs_width">#</a> tilez.<b>TileSpecs</b>.<i>width</i>
+
+Width of tile
+
+<a name="specs_height" href="#specs_height">#</a> tilez.<b>TileSpecs</b>.<i>height</i>
+
+Height of tile
+
+<a name="specs_abs_x" href="#specs_abs_x">#</a> tilez.<b>TileSpecs</b>.<i>absX</i>
+
+Absolute _x_-coordinate w.r.t. root tile
+
+<a name="specs_abs_y" href="#specs_abs_y">#</a> tilez.<b>TileSpecs</b>.<i>absY</i>
+
+Absolute _y_-coordinate w.r.t. root tile
+
+<a name="specs_rel_x" href="#specs_rel_x">#</a> tilez.<b>TileSpecs</b>.<i>relX</i>
+
+Relative _x_-coordinate w.r.t. parent tile
+
+<a name="specs_rel_y" href="#specs_rel_y">#</a> tilez.<b>TileSpecs</b>.<i>relY</i>
+
+Relative _y_-coordinate w.r.t. parent tile
+
+<a name="specs_inner_padding" href="#specs_inner_padding">#</a> tilez.<b>TileSpecs</b>.<i>innerPadding</i>
+
+Padding between children tiles
+
+<a name="specs_outer_padding" href="#specs_outer_padding">#</a> tilez.<b>TileSpecs</b>.<i>outerPadding</i>
+
+Padding around children tiles
+
+<a name="specs_h_align" href="#specs_h_align">#</a> tilez.<b>TileSpecs</b>.<i>hAlign</i> · (_'left'_ |  _'center'_ | _'right'_)
+
+Horizontal alignment w.r.t. parent tile
+
+<a name="specs_v_align" href="#specs_v_align">#</a> tilez.<b>TileSpecs</b>.<i>vAlign</i> · (_'top'_ |  _'center'_ | _'bottom'_)
+
+Vertical alignment w.r.t. parent tile
+
+<a name="specs_aspect_ratio" href="#specs_aspect_ratio">#</a> tilez.<b>TileSpecs</b>.<i>aspectRatio</i>
+
+Aspect ratio (width / height) of tile
+
 
 ### Linear Scale
 
@@ -245,13 +281,27 @@ const y = $yScale.domain([0, 400]);
 const sampleCoords = [x(0.5), y(150)];
 ```
 
-More information about linear scales
-
-- Both scales are directly callable using `()`.
-- Domains are also supported, where upper bound is less than lower bound, e.g. using `[1, 0]` will map `0` to full size and `1` to `0`.
-- There is also an `inv(y: number)` method available, which computes the _x_ value for a given _y_ w.r.t. the inverse function (useful for working with coords of mouse position).
-
 _**Note:** If you need non-linear scales, consider using _d3-scale_ with given tile specs._
+
+### API Linear Scale
+
+Class **Linear Scale** has following methods
+
+<a name="linear_scale_domain" href="#linear_scale_domain">#</a> tilez.<b>LinearScale</b>.<i>domain(domain: [number, number])</i> · [default: `[0, 1]`]
+
+You can set a _domain_ which will be mapped to the tile range. Domains are also supported, where upper bound is less than lower bound, e.g. using `[1, 0]` will map `0` to full size and `1` to `0`.
+
+<a name="linear_scale_range" href="#linear_scale_range">#</a> tilez.<b>LinearScale</b>.<i>range(range: [number, number])</i>
+
+Even though `xScale` and `yScale` are coming with predefined ranges, such that they span the full width or height of a tile, you can override the _range_ with this method.
+
+<a name="linear_scale_call" href="#linear_scale_call">#</a> tilez.<b>LinearScale</b>.<i>(x: number)</i>
+
+The class itself is directly callable. It computes the function value for a given _x_-value.
+
+<a name="linear_scale_inv" href="#linear_scale_inv">#</a> tilez.<b>LinearScale</b>.<i>inv(y: number)</i>
+
+Method `inv` computes the _x_ value for a given _y_ value w.r.t. the inverse function. This can be useful for working with coords of mouse position.
 
 
 ## How does the layout algorithm work?

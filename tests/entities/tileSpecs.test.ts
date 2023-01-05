@@ -19,4 +19,25 @@ describe('TileSpecs', () => {
     expect(specs.hAlign).toEqual(copy.hAlign);
     expect(specs.vAlign).toEqual(copy.vAlign);
   });
+
+  it('has an aspect ratio', () => {
+    expect(specs.aspectRatio).toEqual(0.5);
+  });
+
+  it('returns an error obtaining aspect ratio when height is zero', () => {
+    const emptyTileSpecs = new TileSpecs(
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      'center',
+      'center',
+    );
+
+    expect(() => emptyTileSpecs.aspectRatio).toThrowError('Height is zero!');
+  });
 });

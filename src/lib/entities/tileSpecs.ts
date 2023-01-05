@@ -12,6 +12,12 @@ export class TileSpecs {
     public vAlign: 'top' | 'center' | 'bottom',
   ) {}
 
+  public get aspectRatio(): number {
+    if (this.height === 0) throw new Error('Height is zero!');
+
+    return this.width / this.height;
+  }
+
   public copy(): TileSpecs {
     const {
       width,
