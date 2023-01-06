@@ -5,9 +5,17 @@ const config = {
   plugins: [sveltekit()],
   test: {
     globals: true,
-    include: ['tests/**/*.{test,spec}.{js,ts}'],
+    include: ['tests/**/*.test.ts'],
     environment: 'jsdom',
     setupFiles: './tests/setup.ts',
+    coverage: {
+      include: ['src/lib/**/*.{ts,svelte}'],
+    },
+  },
+  resolve: {
+    alias: {
+      $fixtures: './src/fixtures',
+    },
   },
 };
 
