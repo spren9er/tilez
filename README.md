@@ -281,7 +281,7 @@ In each step above, zero-sized tiles are ignored.
 When this property is not given, all children tiles will have the same coordinate space like current tile and they are layered in the natural order given.
 Otherwise, children tiles will be distributed within current tile according to their props in _horizontal_ or _vertical_ direction.
 
-----
+---
 
 <a name="props_width" href="#props_width">#</a> tilez.<b>Tile</b>.<i>width</i>
 
@@ -290,13 +290,13 @@ The given width will result in different tile widths, depending on the layout [m
 Relative widths refer to the width you obtain when you subtract all absolute tile widths from full width.
 When there is no width given (default), remaining width in parent tile – after rendering tiles with absolute and relative width – will be distributed equally between current tile and other tiles having no width specification.
 
-----
+---
 
 <a name="props_height" href="#props_height">#</a> tilez.<b>Tile</b>.<i>height</i>
 
 Analog to [width](#props_width) above.
 
-----
+---
 
 <a name="props_inner_padding" href="#props_inner_padding">#</a> tilez.<b>Tile</b>.<i>innerPadding</i> · [default: 0] [inherits]
 
@@ -304,28 +304,28 @@ Defines the padding **between** children tiles of current tile. Format must be e
 For layout mode _'spacing'_ it adds half of the given inner padding to the left and right of the outer tiles (or tile if there is only one).
 This property will be inherited, thus all children tiles will have the same inner padding for their children unless not specified explicitly in children tile. In other words, if inner padding of children tile is given, this value will be considered instead of inner padding of parent tile.
 
-----
+---
 
 <a name="props_outer_padding" href="#props_outer_padding">#</a> tilez.<b>Tile</b>.<i>outerPadding</i> · [default: 0]
 
 Defines the padding **around** children tile(s) of current tile. It is similar to CSS padding of a HTML container.
 This property won't be inherited.
 
-----
+---
 
 <a name="props_h_align" href="#props_h_align">#</a> tilez.<b>Tile</b>.<i>hAlign</i> · (_'left'_ | _'center'_ | _'right'_) [default: _'left'_]
 
 Defines the horizontal alignment w.r.t. parent tile. Accepts _'left'_, _'center'_ and _'right'_.
 When several children tiles share the same alignment property, they will be positioned as a group according to their given order within parent tile. For _'center'_ applies: If centered group can't be positioned in the center because there will be an overlap with _'left'_ or _'right'_ groups, it will be shifted to the right or left, respectively.
 
-----
+---
 
 <a name="props_v_align" href="#props_v_align">#</a> tilez.<b>Tile</b>.<i>vAlign</i> · (_'top'_ |  _'center'_ | _'bottom'_) [default: _'top'_]
 
 Defines the vertical alignment w.r.t. parent tile. Accepts _'top'_, _'center'_ and _'bottom'_.
 It behaves like [hAlign](#props_h_align), but in vertical direction.
 
-----
+---
 
 <a name="props_type" href="#props_type">#</a> tilez.<b>Tile</b>.<i>type</i> · (_'plain'_ | _'svg'_ |  _'html'_ ) [default: _'plain'_] [inherits]
 
@@ -346,7 +346,7 @@ You could use **_tilez_** as _'html'_ layout engine (all `<div>` containers are 
 
 _**Note:** An _'html'_ tile can't be embedded into an _'svg'_ tile._
 
-----
+---
 
 <a name="props_mode" href="#props_mode">#</a> tilez.<b>Tile</b>.<i>mode</i> · (_'spacing'_ | _'sizing'_ ) [default: _'spacing'_] [inherits]
 
@@ -394,61 +394,61 @@ In the following, all classes are described in detail.
 
 Width of tile
 
-----
+---
 
 <a name="specs_height" href="#specs_height">#</a> tilez.<b>TileSpecs</b>.<i>height</i>
 
 Height of tile
 
-----
+---
 
 <a name="specs_abs_x" href="#specs_abs_x">#</a> tilez.<b>TileSpecs</b>.<i>absX</i>
 
 Absolute _x_-coordinate w.r.t. root tile
 
-----
+---
 
 <a name="specs_abs_y" href="#specs_abs_y">#</a> tilez.<b>TileSpecs</b>.<i>absY</i>
 
 Absolute _y_-coordinate w.r.t. root tile
 
-----
+---
 
 <a name="specs_rel_x" href="#specs_rel_x">#</a> tilez.<b>TileSpecs</b>.<i>relX</i>
 
 Relative _x_-coordinate w.r.t. parent tile
 
-----
+---
 
 <a name="specs_rel_y" href="#specs_rel_y">#</a> tilez.<b>TileSpecs</b>.<i>relY</i>
 
 Relative _y_-coordinate w.r.t. parent tile
 
-----
+---
 
 <a name="specs_inner_padding" href="#specs_inner_padding">#</a> tilez.<b>TileSpecs</b>.<i>innerPadding</i>
 
 Padding between children tiles
 
-----
+---
 
 <a name="specs_outer_padding" href="#specs_outer_padding">#</a> tilez.<b>TileSpecs</b>.<i>outerPadding</i>
 
 Padding around children tiles
 
-----
+---
 
 <a name="specs_h_align" href="#specs_h_align">#</a> tilez.<b>TileSpecs</b>.<i>hAlign</i> · (_'left'_ |  _'center'_ | _'right'_)
 
 Horizontal alignment w.r.t. parent tile
 
-----
+---
 
 <a name="specs_v_align" href="#specs_v_align">#</a> tilez.<b>TileSpecs</b>.<i>vAlign</i> · (_'top'_ |  _'center'_ | _'bottom'_)
 
 Vertical alignment w.r.t. parent tile
 
-----
+---
 
 <a name="specs_aspect_ratio" href="#specs_aspect_ratio">#</a> tilez.<b>TileSpecs</b>.<i>aspectRatio</i>
 
@@ -460,19 +460,19 @@ Aspect ratio (width / height) of tile
 
 You can set a _domain_ which will be mapped to the tile range. Domains are also supported, where upper bound is less than lower bound, e.g. using `[1, 0]` will map `0` to full size and `1` to `0`.
 
-----
+---
 
 <a name="linear_scale_range" href="#linear_scale_range">#</a> tilez.<b>LinearScale</b>.<i>range(range: [number, number])</i>
 
 Even though `$xScale` and `$yScale` from a tile's context are coming with predefined ranges, such that they span the full width or height of a tile, you can override the _range_ with this method.
 
-----
+---
 
 <a name="linear_scale_call" href="#linear_scale_call">#</a> tilez.<b>LinearScale</b>.<i>(x: number)</i>
 
 The class itself is directly callable. It computes the function value for a given _x_-value.
 
-----
+---
 
 <a name="linear_scale_inv" href="#linear_scale_inv">#</a> tilez.<b>LinearScale</b>.<i>inv(y: number)</i>
 
