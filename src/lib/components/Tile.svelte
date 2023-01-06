@@ -6,6 +6,7 @@
 		TypeTilePropsVAlign,
 		TypeTilePropsType,
 		TypeTilePropsMode,
+		TypeTilePropsElement,
 	} from '$lib/types/tileProps.type';
 	import type { TileNode } from '$lib/entities/tileNode';
 
@@ -25,6 +26,7 @@
 	export let vAlign: TypeTilePropsVAlign | undefined = undefined;
 	export let type: TypeTilePropsType | undefined = undefined;
 	export let mode: TypeTilePropsMode | undefined = undefined;
+	export let element: TypeTilePropsElement | undefined = undefined;
 
 	const node = setNodeContext({
 		stack,
@@ -49,20 +51,15 @@
 		return componentMapping[node.props.type || 'plain'];
 	};
 
-	const typeHasChanged = (node: TileNode) => {
-		const parentType = node.parent?.props.type;
-
-		return parentType === 'html' && parentType !== node.props.type;
-	};
-
 	$: if (root) $node.updateSpecs(width!, height!);
 </script>
 
 <TileWrapper {root}>
 	<svelte:component
 		this={componentFor($node)}
-		root={root || typeHasChanged($node)}
+		root={$node.isSubRoot}
+		bind:element
 	>
-		<slot />
+		<slot {element} />
 	</svelte:component>
 </TileWrapper>

@@ -5,6 +5,7 @@
 		TypeTilePropsVAlign,
 		TypeTilePropsType,
 		TypeTilePropsMode,
+		TypeTilePropsElement,
 	} from '$lib/types/tileProps.type';
 
 	import Tile from './Tile.svelte';
@@ -17,6 +18,7 @@
 	export let vAlign: TypeTilePropsVAlign | undefined = undefined;
 	export let type: TypeTilePropsType | undefined = undefined;
 	export let mode: TypeTilePropsMode | undefined = undefined;
+	export let element: TypeTilePropsElement | undefined = undefined;
 </script>
 
 <Tile
@@ -29,6 +31,7 @@
 	{vAlign}
 	{type}
 	{mode}
+	bind:element
 >
-	<slot />
+	<slot {element} />
 </Tile>

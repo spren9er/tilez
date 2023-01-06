@@ -84,6 +84,14 @@ export class TileNode {
     return !this.parent;
   }
 
+  public get isSubRoot() {
+    if (this.isRoot) return true;
+
+    const parentType = this.parent!.props.type;
+
+    return this.props.type !== parentType;
+  }
+
   public get width() {
     return this.specs?.width;
   }
@@ -112,7 +120,7 @@ export class TileNode {
     const parentType = parentNode.props.type;
     const type = this.props.type;
     if (type && type !== 'svg' && parentType === 'svg')
-      throw Error("SVG tile can't be embedded into a non-SVG tile!");
+      throw Error("Non-SVG tile can't be embedded into an SVG tile!");
     if (!type) this.props.type = parentType;
 
     if (!this.props.innerPadding && this.props.innerPadding !== 0)

@@ -5,6 +5,7 @@ export type TypeTilePropsHAlign = 'left' | 'center' | 'right';
 export type TypeTilePropsVAlign = 'top' | 'center' | 'bottom';
 export type TypeTilePropsAlign = TypeTilePropsHAlign | TypeTilePropsVAlign;
 export type TypeTilePropsMode = 'spacing' | 'sizing';
+export type TypeTilePropsElement = HTMLElement | SVGElement;
 
 export type TypeTileProps = {
   width?: TypeTilePropsDimension;

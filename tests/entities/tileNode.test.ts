@@ -31,9 +31,26 @@ describe('TileNode', () => {
 
     expect(node.isRoot).toEqual(true);
 
-    new TileNode(props, node);
+    const child = new TileNode(props, node);
 
-    expect(node.isRoot).toEqual(true);
+    expect(child.isRoot).toEqual(false);
+  });
+
+  it('is sub root (parent is of different type) or not', () => {
+    const width = 861;
+    const height = 687;
+
+    const node = new TileNodeFactory({ width, height }).build();
+
+    expect(node.isSubRoot).toEqual(true);
+
+    const subRoot = new TileNodeFactory({ type: 'svg' }, node).build();
+
+    expect(subRoot.isSubRoot).toEqual(true);
+
+    const child = new TileNodeFactory({ type: 'svg' }, subRoot).build();
+
+    expect(child.isSubRoot).toEqual(false);
   });
 
   it('can access specs width and height and updates children specs', () => {
@@ -54,18 +71,18 @@ describe('TileNode', () => {
     expect(child.height).toEqual(height);
   });
 
-  it('of type "html" can\'t  be embedded into "svg"', () => {
+  it('of non-"svg" type can\'t  be embedded into "svg"', () => {
     const props = new TilePropsFactory({ type: 'svg' }).build();
     const node = new TileNode(props);
 
     const htmlProps = new TilePropsFactory({ type: 'html' }).build();
     expect(() => new TileNode(htmlProps, node)).toThrowError(
-      "SVG tile can't be embedded into a non-SVG tile!",
+      "Non-SVG tile can't be embedded into an SVG tile!",
     );
 
     const plainProps = new TilePropsFactory({ type: 'plain' }).build();
     expect(() => new TileNode(plainProps, node)).toThrowError(
-      "SVG tile can't be embedded into a non-SVG tile!",
+      "Non-SVG tile can't be embedded into an SVG tile!",
     );
   });
 

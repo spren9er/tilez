@@ -1,9 +1,14 @@
 <script lang="ts">
+	import type { TypeTilePropsElement } from '$lib/types/tileProps.type';
+
 	import { getTileContext } from '$lib/entities/tileContext';
 
 	export let root: boolean;
+	export let element: TypeTilePropsElement | undefined = undefined;
 
-	const { specs } = getTileContext();
+	const { specs, element: elementStore } = getTileContext();
+
+	$: if (element) elementStore.set(element);
 </script>
 
 <div
@@ -14,8 +19,9 @@
       --left: {$specs.relX}px;
       --width: {$specs.width}px;
       --height: {$specs.height}px"
+	bind:this={element}
 >
-	<slot />
+	<slot {element} />
 </div>
 
 <style>

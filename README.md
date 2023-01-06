@@ -13,18 +13,18 @@ By default, all tiles – the building blocks of a layout – are renderless com
 
 _**tilez**_ is
 
-- easy-to-use — _declare your layout in a simple manner_
-- flexible — _can be used with SVG, HTML or renderless components_
-- reactive — _all tiles adapt to changes of root tile_
-- free of dependencies — _except for Svelte_
-- opinionated — _the way the layout algorithm works (see [here](#how-does-the-layout-algorithm-work))_
-- robust — _handles edge cases very well_
-- light-weight — _does not add more than a few bytes to your Svelte application_
+- easy-to-use – _declare your layout in a simple manner_
+- flexible – _can be used with SVG, HTML or renderless components_
+- reactive – _all tiles adapt to changes of root tile_
+- free of dependencies – _except for Svelte_
+- opinionated – _the way the layout algorithm works (see [here](#how-does-the-layout-algorithm-work))_
+- robust – _handles edge cases very well_
+- light-weight – _does not add more than a few bytes to your Svelte application_
 
 
 The main application of **_tilez_** is to use it as an abstraction layer for creating compositions and layers of arbitrary SVG charts in Svelte, where the final result is a single SVG chart.
 
-Here is an example of a composition of several different _Observable Plot_ charts, which makes up an [UpSet plot](https://upset.app). Individual charts are embedded in a simple **tilez** layout.
+Here is an example of a composition of several different [Observable Plot](https://github.com/observablehq/plot) charts, which makes up an [UpSet plot](https://upset.app). Individual charts are embedded in a simple **tilez** layout.
 
 <img src="https://github.com/spren9er/tilez/blob/main/static/tilez_upset.svg?raw=true" width="550px">
 
@@ -39,9 +39,25 @@ npm install tilez
 
 ## How to specify layouts?
 
+A **Tile** component is a building block of a layout.
+
+### Import Tile Component
+
+There are two ways to import a **Tile** component, either by
+
+```javascript
+import { Tile } from 'tilez';
+```
+
+or
+
+```javascript
+import Tile from 'tilez/components/Tile.svelte';
+```
+
 ### Tile Component
 
-A **Tile** component is a building block of a layout and has following available props
+A **Tile** component has following available props (see [API Tile Props](#tile-props) for details)
 
 ```html
 <Tile
@@ -69,31 +85,17 @@ All props are optional, i.e. you can have tiles with no props at all
 
 However, there is one exception: The root (most outer) tile must have an absolute width and height!
 
-### Import Tile Components
-
-There are two ways to import tile components, either by
-
-```javascript
-import { Tile } from 'tilez';
-```
-
-or
-
-```javascript
-import Tile from 'tilez/components/Tile.svelte';
-```
-
 ### Stacking Tiles
 
 The main concept of _**tilez**_ is that you can stack tiles in _horizontal_ or _vertical_ direction, recursively.
-Within a stack, a tile starts at the point where the last tile ends. For stacking you use the property [stack](#stack), which defines in which direction children tiles should be stacked.
+Within a stack, a tile starts at the point where the last tile ends. For stacking you use the property [stack](#props_stack), which defines in which direction children tiles should be stacked.
 
 For convenience there are shortcuts available
 
 - **HTile** for _horizontal_ stacking
 - **VTile** for _vertical_ stacking
 
-These components have the same props available as a basic **Tile** component (except for [stack](#stack) property).
+These components have the same props available as a basic **Tile** component (except for [stack](#props_stack) property).
 
 ### Tile Layouts
 
@@ -102,13 +104,13 @@ Layouts can be described in a declarative way, by defining props of nested tiles
 ```html
 <HTile width="400px" height="300px" innerPadding="10px" outerPadding="5px">
   <Tile width="180px">
-    <Component1 />
+    <MyComponent1 />
   </Tile>
   <Tile height="60%" vAlign="center">
-    <Component2 />
+    <MyComponent2 />
   </Tile>
   <Tile width="30%">
-    <Component3 />
+    <MyComponent3 />
   </Tile>
 </HTile>
 ```
@@ -117,151 +119,32 @@ Layouts can be described in a declarative way, by defining props of nested tiles
 
 Check it out in [Svelte REPL](https://svelte.dev/repl/1a8e45baea624a079255275a1473374b?version=3.55.0)!
 
-### API Tile Props
 
-A **Tile** has following props
+## How to access tile information?
 
-<a name="stack" href="#stack">#</a> tilez.<b>Tile</b>.<i>stack</i>
-
-When this property is not given, all children tiles will have the same coordinate space like current tile and they are layered in the natural order given.
-Otherwise, children tiles will be distributed within current tile according to their props in _horizontal_ or _vertical_ direction.
-
-<a name="width" href="#width">#</a> tilez.<b>Tile</b>.<i>width</i>
-
-Argument can be an absolute or relative number. Accepts strings like _"500px"_, _"500"_, _"50%"_, _"0.5"_ or numbers like _500_ or _0.5_. Numbers less than _1_ are interpreted as percentages, otherwise they represent absolute widths.
-The given width will result in different tile widths, depending on the layout [mode](#mode).
-Relative widths refer to the width you obtain when you subtract all absolute tile widths from full width.
-When there is no width given (default), remaining width in parent tile — after rendering tiles with absolute and relative width — will be distributed equally between current tile and other tiles having no width specification.
-
-<a name="height" href="#height">#</a> tilez.<b>Tile</b>.<i>height</i>
-
-Analog to [width](#width) above.
-
-<a name="inner_padding" href="#inner_padding">#</a> tilez.<b>Tile</b>.<i>innerPadding</i> · [default: 0 / inherits]
-
-Defines the padding **between** children tiles of current tile. Format must be either a string like _"10px"_, _"10"_ or a number like _10_. Relative values are not supported.
-For layout mode _'spacing'_ it adds half of the given inner padding to the left and right of the outer tiles (or tile if there is only one).
-This property will be inherited, thus all children tiles will have the same inner padding for their children unless not specified explicitly in children tile. In other words, if inner padding of children tile is given, this value will be considered instead of inner padding of parent tile.
-
-<a name="outer_padding" href="#outer_padding">#</a> tilez.<b>Tile</b>.<i>outerPadding</i> · [default: 0]
-
-Defines the padding **around** children tile(s) of current tile. It is similar to CSS padding of a HTML container.
-This property won't be inherited.
-
-<a name="h_align" href="#h_align">#</a> tilez.<b>Tile</b>.<i>hAlign</i> · (_'left'_ | _'center'_ | _'right'_) [default: _'left'_]
-
-Defines the horizontal alignment w.r.t. parent tile. Accepts _'left'_, _'center'_ and _'right'_.
-When several children tiles share the same alignment property, they will be positioned as a group according to their given order within parent tile. For _'center'_ applies: If centered group can't be positioned in the center because there will be an overlap with _'left'_ or _'right'_ groups, it will be shifted to the right or left, respectively.
-
-<a name="v_align" href="#v_align">#</a> tilez.<b>Tile</b>.<i>vAlign</i> · (_'top'_ |  _'center'_ | _'bottom'_) [default: _'top'_]
-
-Defines the vertical alignment w.r.t. parent tile. Accepts _'top'_, _'center'_ and _'bottom'_.
-It behaves like [hAlign](#h_align), but in vertical direction.
-
-<a name="type" href="#type">#</a> tilez.<b>Tile</b>.<i>type</i> · (_'plain'_ | _'svg'_ |  _'html'_ ) [default: _'plain'_] [inherits]
-
-By default, using **_tilez_** won't create any HTML containers, i.e. all components are renderless components (_type_ is _'plain'_).
-Available types are _'plain'_, _'svg'_ and _'html'_. Using an _'svg'_ layout, parent tile will be an SVG container and all children tiles will be rendered as SVG group. This property inherits from parent tile unless not specified explicitly.
-Otherwise, given type will be taken into consideration.
-You could use **_tilez_** as _'html'_ layout engine (all containers are implicitly absolute positioned), but in that case CSS flexbox and CSS grid are more powerful and flexible.
-Note, that an _'html'_ tile can't be embedded into an _'svg'_ tile.
-
-<a name="mode" href="#mode">#</a> tilez.<b>Tile</b>.<i>mode</i> · (_'spacing'_ | _'sizing'_ ) [default: _'spacing'_] [inherits]
-
-There are two layout modes available: one which is optimized for _'spacing'_ and one for _'sizing'_. They differ on how to interpret sizes when you specify a non-zero inner padding. When no inner padding is given, both modes produce the same layout.
-
-#### Tile Layout Mode _Spacing_
-
-In layout mode _'spacing'_ (default mode), inner padding is part of the size specification of a tile. For a given width of _100px_ and an inner padding of _20px_, the resulting width of the tile is _80px_. On each side of a tile, there is an empty space of _50% of inner padding_, in our example _10px_. The consequence is that in this layout spacings are aligned properly across stacks, e.g. the first gap of a tile with _50%_ width is aligned with the fifth gap of five stacked tiles with _10%_ width each.
-
-<img src="https://github.com/spren9er/tilez/blob/main/static/tilez_layout_spacing.png?raw=true" width="225px" height="170px" />
-
-Note, that there will be empty space of _50% inner padding_ on all sides of the most outer tile. If you want equidistant paddings throughout the whole tile hierarchy, you can add an outer padding in root tile of _inner padding / 2_.
-
-When you use absolute sizes together with relative sizes to define your layout, make sure to add outer padding to your size beforehand. As an example: You want to work with a width of _200px_ and outer padding is given as _10px_. Then a tile of width _100px_ corresponds to a tile of _50%_ only when the initial width is defined as _220px_, not _200px_.
-
-#### Tile Layout Mode _Sizing_
-
-When layout mode _'sizing'_ is used, all tiles have exactly the size which is specified in tile props, i.e. for a given width of _100px_, the tile has exactly a width of _100px_ (when there is enough space to render). Also, a tile of width _50%_ has _5_ times the width of a tile of width _10%_ (if they are in the same stack!), which generally does not apply to _'spacing'_ layout mode.
-
-<img src="https://github.com/spren9er/tilez/blob/main/static/tilez_layout_sizing.png?raw=true" width="225px" height="170px" />
-
-It depends on your use case, which mode you choose. You can also mix modes, start with one mode and change to the other mode in an inner tile.
-
-
-## How to access tile specs?
-
-Now, after defining a layout, arbitrary Svelte components can be embedded in your tiles. In your component you get access to tile specs and linear scales of local coordinate system by adding the following lines
+Now, after defining a layout, arbitrary Svelte components can be embedded in your tiles. In your component you get access to tile specs, linear scales of local coordinate system and a reference to HTML/SVG element by adding the following lines
 
 ```javascript
 import { getTileContext } from 'tilez';
 
-const {specs, xScale, yScale } = getTileContext();
+const {specs, xScale, yScale, element } = getTileContext();
 ```
 
-All three objects – which you obtain from a tile's context – are Svelte stores.
+All objects – which you obtain from a tile's context – are Svelte stores. See [API Tile Context](#tile-context) for details.
 
-Alternatively, you can use `getContext` from Svelte to get the same objects. The name of the context is _'tilez'_.
+Alternatively, you can use `getContext` from Svelte
 
-### API Tile Context
+```javascript
+import { getContext } from 'svelte';
 
-<a name="get_tile_context" href="#get_tile_context">#</a> tilez.<b>getTileContext()</b>
+const {specs, xScale, yScale, element } = getContext('tilez');
+```
 
-Returns an object containing three Svelte stores
+### Tile Specs from Tile Context
 
-- _specs_ of class **Writable\<TileSpecs\>**
-- _xScale_ of class **Writable\<LinearScale\>**
-- _yScale_ of class **Writable\<LinearScale\>**
+Tile specs give you information about [_width_](#specs_width) and [_height_](#specs_width) of tile, as well as absolute and relative positions w.r.t. root and parent tile.
 
-Classes **TileSpecs** and **LinearScale** are described below.
-
-### API Tile Specs
-
-The **TileSpecs** class has following properties
-
-<a name="specs_width" href="#specs_width">#</a> tilez.<b>TileSpecs</b>.<i>width</i>
-
-Width of tile
-
-<a name="specs_height" href="#specs_height">#</a> tilez.<b>TileSpecs</b>.<i>height</i>
-
-Height of tile
-
-<a name="specs_abs_x" href="#specs_abs_x">#</a> tilez.<b>TileSpecs</b>.<i>absX</i>
-
-Absolute _x_-coordinate w.r.t. root tile
-
-<a name="specs_abs_y" href="#specs_abs_y">#</a> tilez.<b>TileSpecs</b>.<i>absY</i>
-
-Absolute _y_-coordinate w.r.t. root tile
-
-<a name="specs_rel_x" href="#specs_rel_x">#</a> tilez.<b>TileSpecs</b>.<i>relX</i>
-
-Relative _x_-coordinate w.r.t. parent tile
-
-<a name="specs_rel_y" href="#specs_rel_y">#</a> tilez.<b>TileSpecs</b>.<i>relY</i>
-
-Relative _y_-coordinate w.r.t. parent tile
-
-<a name="specs_inner_padding" href="#specs_inner_padding">#</a> tilez.<b>TileSpecs</b>.<i>innerPadding</i>
-
-Padding between children tiles
-
-<a name="specs_outer_padding" href="#specs_outer_padding">#</a> tilez.<b>TileSpecs</b>.<i>outerPadding</i>
-
-Padding around children tiles
-
-<a name="specs_h_align" href="#specs_h_align">#</a> tilez.<b>TileSpecs</b>.<i>hAlign</i> · (_'left'_ |  _'center'_ | _'right'_)
-
-Horizontal alignment w.r.t. parent tile
-
-<a name="specs_v_align" href="#specs_v_align">#</a> tilez.<b>TileSpecs</b>.<i>vAlign</i> · (_'top'_ |  _'center'_ | _'bottom'_)
-
-Vertical alignment w.r.t. parent tile
-
-<a name="specs_aspect_ratio" href="#specs_aspect_ratio">#</a> tilez.<b>TileSpecs</b>.<i>aspectRatio</i>
-
-Aspect ratio (width / height) of tile
+For further specs information see [API Tile Specs](#tile-specs).
 
 ### Linear Scales from Tile Context
 
@@ -282,25 +165,59 @@ const sampleCoords = [x(0.5), y(150)];
 
 _**Note:** If you need non-linear scales, consider using _d3-scale_ with given tile specs._
 
-### API Linear Scale
+See also [API Linear Scale](#linear-scale).
 
-Class **Linear Scale** has following methods
+### Access HTML or SVG element
 
-<a name="linear_scale_domain" href="#linear_scale_domain">#</a> tilez.<b>LinearScale</b>.<i>domain(domain: [number, number])</i> · [default: `[0, 1]`]
+There are three ways to get a reference to the underlying HTML or SVG Element of a tile.
 
-You can set a _domain_ which will be mapped to the tile range. Domains are also supported, where upper bound is less than lower bound, e.g. using `[1, 0]` will map `0` to full size and `1` to `0`.
+#### Get Element from Tile Context
 
-<a name="linear_scale_range" href="#linear_scale_range">#</a> tilez.<b>LinearScale</b>.<i>range(range: [number, number])</i>
+Within your component – which is embedded in a **Tile** component – you can get access to an element store by using `getTileContext`.
 
-Even though `$xScale` and `$yScale` are coming with predefined ranges, such that they span the full width or height of a tile, you can override the _range_ with this method.
+```javascript
+import { getTileContext } from 'tilez';
 
-<a name="linear_scale_call" href="#linear_scale_call">#</a> tilez.<b>LinearScale</b>.<i>(x: number)</i>
+const { element } = getTileContext();
 
-The class itself is directly callable. It computes the function value for a given _x_-value.
+$: if ($element) doSomethingWith($element);
+```
 
-<a name="linear_scale_inv" href="#linear_scale_inv">#</a> tilez.<b>LinearScale</b>.<i>inv(y: number)</i>
+#### Use Element from Slot Props
 
-Method `inv` computes the _x_ value for a given _y_ value w.r.t. the inverse function. This can be useful for working with coords of mouse position.
+You can pass the available tile slot prop `element` to your component via
+
+```html
+<Tile type="svg" let:element>
+  <MyComponent {element}>
+<Tile>
+```
+
+In your component you write
+
+```javascript
+export let element: SVGElement;
+
+$: if (element) doSomethingWith(element);
+```
+
+#### Bind Element from Tile
+
+Elements are also accessible from outside of tile scope, like here
+
+```html
+<script lang="ts">
+import { Tile } from 'tilez';
+
+let element: SVGElement;
+
+$: if (element) doSomethingWith(element);
+</script>
+
+<Tile type="svg" bind:element>
+  ...
+<Tile>
+```
 
 
 ## How does the layout algorithm work?
@@ -311,7 +228,7 @@ But which tiles should be rendered and which should be ignored?
 
 In the following, we take a closer look at an opinionated rendering algorithm, which is implemented in _**tilez**_. We consider the algorithm for one tile with a non-trivial stack direction (_'horizontal'_ or _'vertical'_) and its direct children tiles. This algorithm then can be applied to each stack of the tiles hierarchy.
 
-### Tiles Priorization
+### Tiles Prioritization
 
 Before tiles are rendered within a stack, they are sorted according to following order
 
@@ -328,7 +245,7 @@ Thus, tile _B_ which comes **after** tile _A_ in natural order and belongs to sa
 ### Layout Algorithm
 
 1. We take one tile after the other of first sorted group above (tiles of absolute sizes) and for each tile we determine its size, as long as enough space is available. A tile which doesn't fit completely in available space is cut off. Then, rest of tiles will have zero size.
-2. For determining other tiles sizes, we have to look at each specific layout mode separately
+2. For determining other tiles sizes, we have to look at each specific layout mode separately (see [API Layout Mode](#tile-layout-mode-spacing))
    1. **Spacing Mode:** If sizes of all tiles of first group are determined and there is still space left, the available space will be distributed between all remaining tiles in the following way
       1. Filter out tiles of relative size which can't be rendered, because their calculated size is less than _1px_.
       2. For all remaining tiles of second group (tiles of relative sizes), we will process tiles like in first step: Resulting sizes will be determined one by one. If there is not enough space available, tile will be cut off and all remaining tiles will have zero size.
@@ -348,3 +265,215 @@ This will generate three groups. We process them in the following way
 3. Render all tiles of _'center'_ group according to their natural order in the middle of parent tile. If there is an  overlap with tiles from first or last group, we shift the center group to the right or left (this group then won't appear in the center).
 
 In each step above, zero-sized tiles are ignored.
+
+
+## API Reference
+
+- [Tile Props](#tile-props)
+- [Tile Context](#tile-context)
+- [Tile Specs](#tile-specs)
+- [Linear Scale](#linear-scale)
+
+### Tile Props
+
+<a name="props_stack" href="#props_stack">#</a> tilez.<b>Tile</b>.<i>stack</i>
+
+When this property is not given, all children tiles will have the same coordinate space like current tile and they are layered in the natural order given.
+Otherwise, children tiles will be distributed within current tile according to their props in _horizontal_ or _vertical_ direction.
+
+----
+
+<a name="props_width" href="#props_width">#</a> tilez.<b>Tile</b>.<i>width</i>
+
+Argument can be an absolute or relative number. Accepts strings like _"500px"_, _"500"_, _"50%"_, _"0.5"_ or numbers like _500_ or _0.5_. Numbers less than _1_ are interpreted as percentages, otherwise they represent absolute widths.
+The given width will result in different tile widths, depending on the layout [mode](#props_mode).
+Relative widths refer to the width you obtain when you subtract all absolute tile widths from full width.
+When there is no width given (default), remaining width in parent tile – after rendering tiles with absolute and relative width – will be distributed equally between current tile and other tiles having no width specification.
+
+----
+
+<a name="props_height" href="#props_height">#</a> tilez.<b>Tile</b>.<i>height</i>
+
+Analog to [width](#props_width) above.
+
+----
+
+<a name="props_inner_padding" href="#props_inner_padding">#</a> tilez.<b>Tile</b>.<i>innerPadding</i> · [default: 0] [inherits]
+
+Defines the padding **between** children tiles of current tile. Format must be either a string like _"10px"_, _"10"_ or a number like _10_. Relative values are not supported.
+For layout mode _'spacing'_ it adds half of the given inner padding to the left and right of the outer tiles (or tile if there is only one).
+This property will be inherited, thus all children tiles will have the same inner padding for their children unless not specified explicitly in children tile. In other words, if inner padding of children tile is given, this value will be considered instead of inner padding of parent tile.
+
+----
+
+<a name="props_outer_padding" href="#props_outer_padding">#</a> tilez.<b>Tile</b>.<i>outerPadding</i> · [default: 0]
+
+Defines the padding **around** children tile(s) of current tile. It is similar to CSS padding of a HTML container.
+This property won't be inherited.
+
+----
+
+<a name="props_h_align" href="#props_h_align">#</a> tilez.<b>Tile</b>.<i>hAlign</i> · (_'left'_ | _'center'_ | _'right'_) [default: _'left'_]
+
+Defines the horizontal alignment w.r.t. parent tile. Accepts _'left'_, _'center'_ and _'right'_.
+When several children tiles share the same alignment property, they will be positioned as a group according to their given order within parent tile. For _'center'_ applies: If centered group can't be positioned in the center because there will be an overlap with _'left'_ or _'right'_ groups, it will be shifted to the right or left, respectively.
+
+----
+
+<a name="props_v_align" href="#props_v_align">#</a> tilez.<b>Tile</b>.<i>vAlign</i> · (_'top'_ |  _'center'_ | _'bottom'_) [default: _'top'_]
+
+Defines the vertical alignment w.r.t. parent tile. Accepts _'top'_, _'center'_ and _'bottom'_.
+It behaves like [hAlign](#props_h_align), but in vertical direction.
+
+----
+
+<a name="props_type" href="#props_type">#</a> tilez.<b>Tile</b>.<i>type</i> · (_'plain'_ | _'svg'_ |  _'html'_ ) [default: _'plain'_] [inherits]
+
+This property sets the document type of current tile. Available types are _'plain'_, _'svg'_ and _'html'_.
+Type inherits from parent tile unless not specified explicitly. Otherwise, given type will be taken into consideration.
+
+#### Plain Tile (Renderless Component)
+
+By default, using **_tilez_** won't create any containers, i.e. all components are renderless components (_type_ is _'plain'_).
+
+#### SVG Tile
+
+Using an _'svg'_ layout, parent tile will be an SVG container `<svg>` and all children tiles will be rendered as SVG group `<g>`.
+
+#### HTML Tile
+
+You could use **_tilez_** as _'html'_ layout engine (all `<div>` containers are implicitly absolute positioned), but in that case CSS flexbox and CSS grid are more powerful and flexible.
+
+_**Note:** An _'html'_ tile can't be embedded into an _'svg'_ tile._
+
+----
+
+<a name="props_mode" href="#props_mode">#</a> tilez.<b>Tile</b>.<i>mode</i> · (_'spacing'_ | _'sizing'_ ) [default: _'spacing'_] [inherits]
+
+There are two layout modes available: one which is optimized for _'spacing'_ and one for _'sizing'_. They differ on how to interpret sizes when you specify a non-zero inner padding. When no inner padding is given, both modes produce the same layout.
+
+#### Tile Layout Mode _Spacing_
+
+In layout mode _'spacing'_ (default mode), inner padding is part of the size specification of a tile. For a given width of _100px_ and an inner padding of _20px_, the resulting width of the tile is _80px_. On each side of a tile, there is an empty space of _50% of inner padding_, in our example _10px_. The consequence is that in this layout spacings are aligned properly across stacks, e.g. the first gap of a tile with _50%_ width is aligned with the fifth gap of five stacked tiles with _10%_ width each.
+
+<img src="https://github.com/spren9er/tilez/blob/main/static/tilez_layout_spacing.png?raw=true" width="225px" height="170px" />
+
+_**Note:** There will be empty space of _50% inner padding_ on all sides of the most outer tile. If you want equidistant paddings throughout the whole tile hierarchy, you can add an outer padding in root tile of _inner padding / 2_._
+
+When you use absolute sizes together with relative sizes to define your layout, make sure to add outer padding to your size beforehand. As an example: You want to work with a width of _200px_ and outer padding is given as _10px_. Then a tile of width _100px_ corresponds to a tile of _50%_ only when the initial width is defined as _220px_, not _200px_.
+
+#### Tile Layout Mode _Sizing_
+
+When layout mode _'sizing'_ is used, all tiles have exactly the size which is specified in tile props, i.e. for a given width of _100px_, the tile has exactly a width of _100px_ (when there is enough space to render). Also, a tile of width _50%_ has _5_ times the width of a tile of width _10%_ (if they are in the same stack!), which generally does not apply to _'spacing'_ layout mode.
+
+<img src="https://github.com/spren9er/tilez/blob/main/static/tilez_layout_sizing.png?raw=true" width="225px" height="170px" />
+
+It depends on your use case, which mode you choose. You can also mix modes, start with one mode and change to the other mode in an inner tile.
+
+<a name="props_element" href="#props_element">#</a> tilez.<b>Tile</b>.<i>element</i>
+
+A reference to an HTML or SVG element (depending on the [type](#props_type)). For renderless components of _'plain'_ type, element is `null`. See also [this section](#access-html-or-svg-element).
+
+
+### Tile Context
+
+<a name="get_tile_context" href="#get_tile_context">#</a> tilez.<b>getTileContext()</b>
+
+Returns an object containing four Svelte stores
+
+- _specs_ of class **Writable\<TileSpecs\>**
+- _xScale_ of class **Writable\<LinearScale\>**
+- _yScale_ of class **Writable\<LinearScale\>**
+- _element_ of class **Writable\<HTMLElement | SVGElement | null\>**
+
+In the following, all classes are described in detail.
+
+### Tile Specs
+
+<a name="specs_width" href="#specs_width">#</a> tilez.<b>TileSpecs</b>.<i>width</i>
+
+Width of tile
+
+----
+
+<a name="specs_height" href="#specs_height">#</a> tilez.<b>TileSpecs</b>.<i>height</i>
+
+Height of tile
+
+----
+
+<a name="specs_abs_x" href="#specs_abs_x">#</a> tilez.<b>TileSpecs</b>.<i>absX</i>
+
+Absolute _x_-coordinate w.r.t. root tile
+
+----
+
+<a name="specs_abs_y" href="#specs_abs_y">#</a> tilez.<b>TileSpecs</b>.<i>absY</i>
+
+Absolute _y_-coordinate w.r.t. root tile
+
+----
+
+<a name="specs_rel_x" href="#specs_rel_x">#</a> tilez.<b>TileSpecs</b>.<i>relX</i>
+
+Relative _x_-coordinate w.r.t. parent tile
+
+----
+
+<a name="specs_rel_y" href="#specs_rel_y">#</a> tilez.<b>TileSpecs</b>.<i>relY</i>
+
+Relative _y_-coordinate w.r.t. parent tile
+
+----
+
+<a name="specs_inner_padding" href="#specs_inner_padding">#</a> tilez.<b>TileSpecs</b>.<i>innerPadding</i>
+
+Padding between children tiles
+
+----
+
+<a name="specs_outer_padding" href="#specs_outer_padding">#</a> tilez.<b>TileSpecs</b>.<i>outerPadding</i>
+
+Padding around children tiles
+
+----
+
+<a name="specs_h_align" href="#specs_h_align">#</a> tilez.<b>TileSpecs</b>.<i>hAlign</i> · (_'left'_ |  _'center'_ | _'right'_)
+
+Horizontal alignment w.r.t. parent tile
+
+----
+
+<a name="specs_v_align" href="#specs_v_align">#</a> tilez.<b>TileSpecs</b>.<i>vAlign</i> · (_'top'_ |  _'center'_ | _'bottom'_)
+
+Vertical alignment w.r.t. parent tile
+
+----
+
+<a name="specs_aspect_ratio" href="#specs_aspect_ratio">#</a> tilez.<b>TileSpecs</b>.<i>aspectRatio</i>
+
+Aspect ratio (width / height) of tile
+
+### Linear Scale
+
+<a name="linear_scale_domain" href="#linear_scale_domain">#</a> tilez.<b>LinearScale</b>.<i>domain(domain: [number, number])</i> · [default: `[0, 1]`]
+
+You can set a _domain_ which will be mapped to the tile range. Domains are also supported, where upper bound is less than lower bound, e.g. using `[1, 0]` will map `0` to full size and `1` to `0`.
+
+----
+
+<a name="linear_scale_range" href="#linear_scale_range">#</a> tilez.<b>LinearScale</b>.<i>range(range: [number, number])</i>
+
+Even though `$xScale` and `$yScale` from a tile's context are coming with predefined ranges, such that they span the full width or height of a tile, you can override the _range_ with this method.
+
+----
+
+<a name="linear_scale_call" href="#linear_scale_call">#</a> tilez.<b>LinearScale</b>.<i>(x: number)</i>
+
+The class itself is directly callable. It computes the function value for a given _x_-value.
+
+----
+
+<a name="linear_scale_inv" href="#linear_scale_inv">#</a> tilez.<b>LinearScale</b>.<i>inv(y: number)</i>
+
+Method `inv` computes the _x_ value for a given _y_ value w.r.t. the inverse function. This can be useful for working with coords of mouse position.
