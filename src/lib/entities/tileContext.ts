@@ -1,7 +1,10 @@
 import { getContext, setContext } from 'svelte';
 import { derived, writable, type Writable } from 'svelte/store';
 
-import type { TypeTileProps } from '$lib/types/tileProps.type';
+import type {
+  TypeTileProps,
+  TypeTilePropsElement,
+} from '$lib/types/tileProps.type';
 import type { TileNode } from '$lib/entities/tileNode';
 import type { TileSpecs } from '$lib/entities/tileSpecs';
 
@@ -15,7 +18,7 @@ type TypeTileContext = {
   specs: Writable<TileSpecs>;
   xScale: Writable<LinearScale>;
   yScale: Writable<LinearScale>;
-  element: Writable<HTMLElement | SVGElement | null>;
+  element: Writable<TypeTilePropsElement | null>;
 };
 
 export function getTileContext(): TypeTileContext {
