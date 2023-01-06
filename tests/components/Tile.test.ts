@@ -2,7 +2,6 @@ import { render } from '@testing-library/svelte';
 import { expect, describe, it } from 'vitest';
 
 import Tile from '$lib/components/Tile.svelte';
-
 import TileTwoLevelHierarchy from '$fixtures/TileTwoLevelHierarchy.svelte';
 
 function getElementFrom(container: HTMLElement, level = 0) {
@@ -16,6 +15,16 @@ function getElementFrom(container: HTMLElement, level = 0) {
   }
 
   return child;
+}
+
+function getHTMLSize(element: Element | null) {
+  if (!element) return '';
+
+  const style = getComputedStyle(element);
+  const width = style.getPropertyValue('--width');
+  const height = style.getPropertyValue('--height');
+
+  return `${width} x ${height}`;
 }
 
 describe('Tile', () => {
@@ -60,6 +69,7 @@ describe('Tile', () => {
     expect(element).toBeInstanceOf(HTMLElement);
     expect(element).toHaveClass('tile');
     expect(element?.tagName).toEqual('DIV');
+    expect(getHTMLSize(element)).toEqual('100px x 100px');
   });
 
   it('of "plain" type exposes trivial element via binding', () => {
@@ -100,11 +110,11 @@ describe('Tile', () => {
     const outerElement = component.getOuterElement();
 
     expect(outerElement).toBeInstanceOf(HTMLElement);
-    expect(outerElement?.tagName).toEqual('DIV');
+    expect(getHTMLSize(outerElement)).toEqual('100px x 100px');
 
     const innerElement = component.getInnerElement();
 
     expect(innerElement).toBeInstanceOf(HTMLElement);
-    expect(innerElement?.tagName).toEqual('DIV');
+    expect(getHTMLSize(innerElement)).toEqual('80px x 60px');
   });
 });

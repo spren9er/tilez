@@ -21,5 +21,5 @@
 </script>
 
 <Tile width="100px" height="100px" {type} bind:element={outerElement}>
-	<Tile width="60px" height="80px" {type} bind:element={innerElement} />
+	<Tile width="80px" height="60px" {type} bind:element={innerElement} />
 </Tile>
