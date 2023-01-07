@@ -458,7 +458,7 @@ Aspect ratio (width / height) of tile
 
 <a name="linear_scale_domain" href="#linear_scale_domain">#</a> tilez.<b>LinearScale</b>.<i>domain(domain: [number, number])</i> · [default: `[0, 1]`]
 
-You can set a _domain_ which will be mapped to the tile range. Domains are also supported, where upper bound is less than lower bound, e.g. using `[1, 0]` will map `0` to full size and `1` to `0`.
+You can set a _domain_ which will be mapped to the tile range. Domains are also supported, where upper bound is less than lower bound, e.g. for `$xScale` or `$yScale` using `[1, 0]` will map `0` to full width or height and `1` to `0`.
 
 ---
 
