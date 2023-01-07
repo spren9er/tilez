@@ -22,16 +22,18 @@ export class TileNodeFactory {
   }
 
   private rootSpecs() {
+    const units = ['width', 'height'].map(
+      (dim) => this.props.dim(dim as 'width' | 'height').unit,
+    );
+    if (units.includes('%'))
+      throw new Error("Root tile can't handle relative dimensions!");
+
     const { width, height, innerPadding, outerPadding, hAlign, vAlign } =
       this.props;
 
-    const errorMsg = 'Root tile requires absolute width and height!';
-
-    if (!width || !height) throw new Error(errorMsg);
-
     return new TileSpecs(
-      width,
-      height,
+      width ?? 0,
+      height ?? 0,
       0,
       0,
       0,

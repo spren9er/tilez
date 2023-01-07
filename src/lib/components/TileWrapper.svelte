@@ -2,6 +2,8 @@
 	import { onMount } from 'svelte';
 
 	export let root: boolean;
+	export let containerWidth: number | undefined = undefined;
+	export let containerHeight: number | undefined = undefined;
 
 	let visible = false;
 
@@ -11,7 +13,12 @@
 </script>
 
 {#if root}
-	<div id="tile-wrapper" class:visible>
+	<div
+		id="tile-wrapper"
+		class:visible
+		bind:clientWidth={containerWidth}
+		bind:clientHeight={containerHeight}
+	>
 		<slot />
 	</div>
 {:else}
@@ -23,6 +30,8 @@
 		visibility: hidden;
 		margin: 0;
 		padding: 0;
+		width: 100%;
+		height: 100%;
 	}
 
 	#tile-wrapper.visible {

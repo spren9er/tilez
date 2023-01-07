@@ -1,5 +1,6 @@
 ![Tests-Badge](https://github.com/spren9er/tilez/actions/workflows/test.yml/badge.svg)
 ![Coverage-Badge](https://img.shields.io/badge/Coverage-100%25-success?logo=vitest&logoColor=959da5&labelColor=2b3138&style=flat)
+![NPM-Badge](https://img.shields.io/npm/v/tilez?label=npm&logo=npm&logoColor=%23959da6&labelColor=2b3138&style=flat)
 
 # ![Tilez-Logo](https://github.com/spren9er/tilez/blob/main/docs/images/tilez_logo.svg?raw=true) tilez
 
@@ -82,8 +83,6 @@ All props are optional, i.e. you can have tiles with no props at all
   ...
 </Tile>
 ```
-
-However, there is one exception: The root (most outer) tile must have an absolute width and height!
 
 ### Stacking Tiles
 
@@ -245,7 +244,7 @@ Thus, tile _B_ which comes **after** tile _A_ in natural order and belongs to sa
 ### Layout Algorithm
 
 1. We take one tile after the other of first sorted group above (tiles of absolute sizes) and for each tile we determine its size, as long as enough space is available. A tile which doesn't fit completely in available space is cut off. Then, rest of tiles will have zero size.
-2. For determining other tiles sizes, we have to look at each specific layout mode separately (see [API Layout Mode](#tile-layout-mode-spacing))
+2. For determining other tiles sizes, we have to look at each specific layout mode separately (see [API Layout Mode](#props_mode))
    1. **Spacing Mode:** If sizes of all tiles of first group are determined and there is still space left, the available space will be distributed between all remaining tiles in the following way
       1. Filter out tiles of relative size which can't be rendered, because their calculated size is less than _1px_.
       2. For all remaining tiles of second group (tiles of relative sizes), we will process tiles like in first step: Resulting sizes will be determined one by one. If there is not enough space available, tile will be cut off and all remaining tiles will have zero size.
@@ -289,6 +288,7 @@ Argument can be an absolute or relative number. Accepts strings like _"500px"_, 
 The given width will result in different tile widths, depending on the layout [mode](#props_mode).
 Relative widths refer to the width you obtain when you subtract all absolute tile widths from full width.
 When there is no width given (default), remaining width in parent tile – after rendering tiles with absolute and relative width – will be distributed equally between current tile and other tiles having no width specification.
+For root tile relative widths are not allowed. When no width is given in root tile, parent container needs to have width information available, otherwise nothing is rendered.
 
 ---
 
@@ -470,7 +470,7 @@ Even though `$xScale` and `$yScale` from a tile's context are coming with predef
 
 <a name="linear_scale_call" href="#linear_scale_call">#</a> tilez.<b>LinearScale</b>.<i>(x: number)</i>
 
-The class itself is directly callable. It computes the function value for a given _x_-value.
+The class itself is directly callable. It computes the function value for a given _x_ value.
 
 ---
 

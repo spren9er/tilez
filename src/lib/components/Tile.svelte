@@ -28,6 +28,9 @@
 	export let mode: TypeTilePropsMode | undefined = undefined;
 	export let element: TypeTilePropsElement | undefined = undefined;
 
+	let containerWidth: number;
+	let containerHeight: number;
+
 	const node = setNodeContext({
 		stack,
 		width,
@@ -51,10 +54,15 @@
 		return componentMapping[node.props.type || 'plain'];
 	};
 
-	$: if (root) $node.updateSpecs(width!, height!);
+	$: if (root) {
+		const newWidth = width || containerWidth;
+		const newHeight = height || containerHeight;
+
+		if (newWidth && newHeight) $node.updateSpecs(newWidth, newHeight);
+	}
 </script>
 
-<TileWrapper {root}>
+<TileWrapper {root} bind:containerWidth bind:containerHeight>
 	<svelte:component
 		this={componentFor($node)}
 		root={$node.isSubRoot}

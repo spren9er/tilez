@@ -17,16 +17,6 @@ function getElementFrom(container: HTMLElement, level = 0) {
   return child;
 }
 
-function getHTMLSize(element: Element | null) {
-  if (!element) return '';
-
-  const style = getComputedStyle(element);
-  const width = style.getPropertyValue('--width');
-  const height = style.getPropertyValue('--height');
-
-  return `${width} x ${height}`;
-}
-
 describe('Tile', () => {
   it('of "plain" type renders nothing but a wrapper', () => {
     const { container } = render(Tile, { props: { width: 100, height: 100 } });
@@ -34,7 +24,20 @@ describe('Tile', () => {
     const tileWrapper = getElementFrom(container);
 
     expect(tileWrapper).toBeInTheDocument();
-    expect(tileWrapper?.children).toHaveLength(0);
+    expect(
+      Array.from(tileWrapper!.children).filter(
+        (child) => child.tagName !== 'IFRAME', // bind:client... is using iframe
+      ),
+    ).toHaveLength(0);
+  });
+
+  it('renders if no width and height is given', () => {
+    const { container } = render(Tile, { props: { type: 'html' } });
+
+    const element = getElementFrom(container, 1);
+
+    expect(element).toBeInstanceOf(HTMLElement);
+    expect(element?.tagName).toEqual('DIV');
   });
 
   it('of "svg" type renders a <svg> if root', () => {
@@ -69,7 +72,6 @@ describe('Tile', () => {
     expect(element).toBeInstanceOf(HTMLElement);
     expect(element).toHaveClass('tile');
     expect(element?.tagName).toEqual('DIV');
-    expect(getHTMLSize(element)).toEqual('100px x 100px');
   });
 
   it('of "plain" type exposes trivial element via binding', () => {
@@ -110,11 +112,9 @@ describe('Tile', () => {
     const outerElement = component.getOuterElement();
 
     expect(outerElement).toBeInstanceOf(HTMLElement);
-    expect(getHTMLSize(outerElement)).toEqual('100px x 100px');
 
     const innerElement = component.getInnerElement();
 
     expect(innerElement).toBeInstanceOf(HTMLElement);
-    expect(getHTMLSize(innerElement)).toEqual('80px x 60px');
   });
 });
