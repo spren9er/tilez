@@ -96,6 +96,10 @@ For convenience there are shortcuts available
 
 These components have the same props available as a basic **Tile** component (except for [stack](#props_stack) property).
 
+### Layering Tiles
+
+Assuming no stack is given for a tile, then all children tiles will be layered. They share the same coordinate space like their parent tile. Also, they are rendered in the specified order. Thus, first tile will be displayed in the back, last tile in the front.
+
 ### Tile Layouts
 
 Layouts can be described in a declarative way, by defining props of nested tiles. Here is an example of a simple layout
