@@ -288,7 +288,7 @@ Argument can be an absolute or relative number. Accepts strings like _"500px"_, 
 The given width will result in different tile widths, depending on the layout [mode](#props_mode).
 Relative widths refer to the width you obtain when you subtract all absolute tile widths from full width.
 When there is no width given (default), remaining width in parent tile – after rendering tiles with absolute and relative width – will be distributed equally between current tile and other tiles having no width specification.
-For root tile relative widths are not allowed. When no width is given in root tile, parent container needs to have width information available, otherwise nothing is rendered.
+For root tile relative widths are not allowed. When no width is given in root tile, parent container needs to have explicit width specified, otherwise nothing is rendered.
 
 ---
 
