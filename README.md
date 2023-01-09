@@ -153,7 +153,7 @@ const {specs, xScale, yScale, element } = getContext('tilez');
 
 ### Tile Specs from Tile Context
 
-Tile specs give you information about [_width_](#specs_width) and [_height_](#specs_width) of tile, as well as absolute and relative positions w.r.t. root and parent tile.
+Tile specs give you information about [_width_](#specs_width) and [_height_](#specs_height) of tile, as well as absolute and relative positions w.r.t. root and parent tile.
 
 For further specs information see [API Tile Specs](#tile-specs).
 
@@ -354,7 +354,7 @@ By default, using **_tilez_** won't create any containers, i.e. all components a
 
 #### SVG Tile
 
-Using an _'svg'_ layout, parent tile will be an SVG container `<svg>` and all children tiles will be rendered as SVG group `<g>`.
+Using an _'svg'_ layout, root tile will be an SVG container `<svg>` and all children tiles will be rendered as SVG group `<g>`.
 
 #### HTML Tile
 
