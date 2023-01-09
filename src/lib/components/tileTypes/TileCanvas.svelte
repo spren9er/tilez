@@ -23,8 +23,6 @@
 
 	onMount(() => elementStore.set(element!));
 
-	$: if (root) console.log($specs);
-
 	$: if ($specs && $elementStore && !root) {
 		createSubContextFrom($elementStore as HTMLCanvasElement);
 	}
