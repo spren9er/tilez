@@ -81,6 +81,16 @@ describe('TileNode', () => {
     );
   });
 
+  it('of "html" type can\'t  be embedded into "canvas"', () => {
+    const props = new TilePropsFactory({ type: 'canvas' }).build();
+    const node = new TileNode(props);
+
+    const htmlProps = new TilePropsFactory({ type: 'html' }).build();
+    expect(() => new TileNode(htmlProps, node)).toThrowError(
+      "HTML tile can't be embedded into an Canvas tile!",
+    );
+  });
+
   it('of "plain" type can be embedded into "svg"', () => {
     const props = new TilePropsFactory({ type: 'svg' }).build();
     const node = new TileNode(props);

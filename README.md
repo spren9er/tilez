@@ -230,6 +230,10 @@ $: if (element) doSomethingWith(element);
 <Tile>
 ```
 
+#### Get Canvas Context from Tile
+
+For Canvas elements you retrieve the context for drawing via `element.getContext('2d')`.
+
 
 ## How does the layout algorithm work?
 
