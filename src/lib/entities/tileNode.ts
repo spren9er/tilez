@@ -117,15 +117,18 @@ export class TileNode {
   private derivePropsFrom(parent: TileNode) {
     const parentNode = get(parent);
 
+    // type
     const parentType = parentNode.props.type;
     const type = this.props.type;
     if (type && type === 'html' && parentType === 'svg')
       throw Error("HTML tile can't be embedded into an SVG tile!");
     if (!type) this.props.type = parentType;
 
+    // inner padding
     if (!this.props.innerPadding && this.props.innerPadding !== 0)
       this.props.innerPadding = parentNode.props.innerPadding;
 
+    // mode
     if (!this.props.mode) this.props.mode = parentNode.props.mode;
   }
 }

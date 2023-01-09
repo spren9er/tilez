@@ -45,7 +45,7 @@ describe('TilePropsFactory', () => {
   });
 
   it('validates prop "type"', () => {
-    ['plain', 'html', 'svg'].forEach((type: string) => {
+    ['plain', 'html', 'svg', 'canvas'].forEach((type: string) => {
       const props = new TilePropsFactory({
         type: type as TypeTilePropsType,
       }).build();
@@ -59,7 +59,9 @@ describe('TilePropsFactory', () => {
 
     expect(() => {
       new TilePropsFactory({ type: 'webgl' as TypeTilePropsType }).build();
-    }).toThrowError('Tile prop "type" must be one of "plain", "html", "svg"!');
+    }).toThrowError(
+      'Tile prop "type" must be one of "plain", "html", "svg", "canvas"!',
+    );
   });
 
   it('parses prop "innerPadding" when given as string', () => {

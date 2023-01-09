@@ -14,8 +14,9 @@
 
 	import TileWrapper from '$lib/components/TileWrapper.svelte';
 	import TilePlain from '$lib/components/tileTypes/TilePlain.svelte';
-	import TileSVG from '$lib/components/tileTypes/TileSVG.svelte';
 	import TileHTML from '$lib/components/tileTypes/TileHTML.svelte';
+	import TileSVG from '$lib/components/tileTypes/TileSVG.svelte';
+	import TileCanvas from '$lib/components/tileTypes/TileCanvas.svelte';
 
 	export let stack: TypeTilePropsStack | undefined = undefined;
 	export let width: TypeTilePropsDimension | undefined = undefined;
@@ -47,16 +48,17 @@
 	const componentFor = (node: TileNode) => {
 		const componentMapping = {
 			plain: TilePlain,
-			svg: TileSVG,
 			html: TileHTML,
+			svg: TileSVG,
+			canvas: TileCanvas,
 		};
 
 		return componentMapping[node.props.type || 'plain'];
 	};
 
 	$: if (root) {
-		const newWidth = width || containerWidth;
-		const newHeight = height || containerHeight;
+		const newWidth = width ?? containerWidth;
+		const newHeight = height ?? containerHeight;
 
 		if (newWidth && newHeight) $node.updateSpecs(newWidth, newHeight);
 	}

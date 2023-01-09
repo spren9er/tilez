@@ -32,4 +32,21 @@ describe('TileContext', () => {
     expect(get(xScale)(1)).toEqual(width);
     expect(get(yScale)(1)).toEqual(height);
   });
+
+  it('derives element in case of type "canvas"', () => {
+    const width = 200;
+    const height = 100;
+    const type = 'canvas';
+    setNodeContext({ width, height, type });
+
+    const { element } = getTileContext();
+
+    const canvas = document.createElement('canvas');
+    element.set(canvas);
+
+    const { element: derivedElement } = getTileContext();
+
+    expect(derivedElement).toEqual(element);
+    expect(get(derivedElement)).toEqual(canvas);
+  });
 });

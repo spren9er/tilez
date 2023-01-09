@@ -2,7 +2,7 @@ import { render } from '@testing-library/svelte';
 import { expect, describe, it } from 'vitest';
 
 import Tile from '$lib/components/Tile.svelte';
-import TileTwoLevelHierarchy from '$fixtures/TileTwoLevelHierarchy.svelte';
+import EmptyTwoLevelHierarchy from '$fixtures/EmptyTwoLevelHierarchy.svelte';
 
 function getElementFrom(container: HTMLElement, level = 0) {
   const tileWrapper = container.querySelector('#tile-wrapper');
@@ -52,7 +52,7 @@ describe('Tile', () => {
   });
 
   it('of "svg" type renders a <g> unless root', () => {
-    const { container } = render(TileTwoLevelHierarchy, {
+    const { container } = render(EmptyTwoLevelHierarchy, {
       props: { type: 'svg' },
     });
 
@@ -75,7 +75,7 @@ describe('Tile', () => {
   });
 
   it('of "plain" type exposes trivial element via binding', () => {
-    const { component } = render(TileTwoLevelHierarchy, {
+    const { component } = render(EmptyTwoLevelHierarchy, {
       props: { type: 'plain' },
     });
 
@@ -89,7 +89,7 @@ describe('Tile', () => {
   });
 
   it('of "svg" type exposes element via binding', () => {
-    const { component } = render(TileTwoLevelHierarchy, {
+    const { component } = render(EmptyTwoLevelHierarchy, {
       props: { type: 'svg' },
     });
 
@@ -105,7 +105,7 @@ describe('Tile', () => {
   });
 
   it('of "html" type exposes element via binding', () => {
-    const { component } = render(TileTwoLevelHierarchy, {
+    const { component } = render(EmptyTwoLevelHierarchy, {
       props: { type: 'html' },
     });
 

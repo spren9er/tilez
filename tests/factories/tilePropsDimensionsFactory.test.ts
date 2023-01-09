@@ -16,8 +16,8 @@ describe('TilePropsDimensionsFactory', () => {
     const width = propsDimensions.dimensionFor('width');
     const height = propsDimensions.dimensionFor('height');
 
-    expect(width?.unit).toEqual('%');
-    expect(height?.unit).toEqual('%');
+    expect(width?.unit).toEqual('px');
+    expect(height?.unit).toEqual('px');
     expect(width?.value).toEqual(0);
     expect(height?.value).toEqual(0);
   });

@@ -17,7 +17,7 @@ describe('TilePropsDimensionFactory', () => {
     expect(jsonFrom(propsHeight)).toEqual({ value: 100, unit: 'px' });
   });
 
-  it('builds from numbers less than 1 (as %)', () => {
+  it('builds from numbers between 0 and 1 (as %)', () => {
     const propsWidth = new TilePropsDimensionFactory('width', 0.1).build();
     const propsHeight = new TilePropsDimensionFactory('height', 0.9).build();
 
@@ -49,12 +49,20 @@ describe('TilePropsDimensionFactory', () => {
     expect(jsonFrom(propsHeight)).toEqual({ value: 90, unit: 'px' });
   });
 
-  it('handles zero and interprets number as percentage', () => {
-    const propsWidth = new TilePropsDimensionFactory('width', 0).build();
-    const propsHeight = new TilePropsDimensionFactory('height', '0').build();
+  it('handles zero', () => {
+    const propsAbsWidths = [0, 0.0, '0.0', '0', '0px'].map((width) =>
+      new TilePropsDimensionFactory('width', width).build(),
+    );
+
+    const zeroAbsolute = { value: 0, unit: 'px' };
+
+    expect(propsAbsWidths.map((width) => jsonFrom(width))).toEqual(
+      new Array(5).fill(zeroAbsolute),
+    );
+
+    const propsRelWidth = new TilePropsDimensionFactory('width', '0%').build();
 
     const zeroPercentage = { value: 0, unit: '%' };
-    expect(jsonFrom(propsWidth)).toEqual(zeroPercentage);
-    expect(jsonFrom(propsHeight)).toEqual(zeroPercentage);
+    expect(jsonFrom(propsRelWidth)).toEqual(zeroPercentage);
   });
 });

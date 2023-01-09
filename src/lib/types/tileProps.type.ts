@@ -1,11 +1,11 @@
 export type TypeTilePropsDimension = number | string;
 export type TypeTilePropsStack = 'horizontal' | 'vertical';
-export type TypeTilePropsType = 'plain' | 'html' | 'svg';
+export type TypeTilePropsType = 'plain' | 'html' | 'svg' | 'canvas';
 export type TypeTilePropsHAlign = 'left' | 'center' | 'right';
 export type TypeTilePropsVAlign = 'top' | 'center' | 'bottom';
 export type TypeTilePropsAlign = TypeTilePropsHAlign | TypeTilePropsVAlign;
 export type TypeTilePropsMode = 'spacing' | 'sizing';
-export type TypeTilePropsElement = HTMLElement | SVGElement;
+export type TypeTilePropsElement = HTMLElement | SVGElement | HTMLCanvasElement;
 
 export type TypeTileProps = {
   width?: TypeTilePropsDimension;

@@ -10,6 +10,7 @@ export class TilePropsDimensionFactory {
 
   public build() {
     const { value, unit } = this.parseRawPropsDimension();
+
     return new TilePropsDimension(this.type, value, unit);
   }
 
@@ -25,17 +26,17 @@ export class TilePropsDimensionFactory {
         };
       } else if (this.rawPropsDimension.endsWith('px')) {
         return { value: sizeNumber, unit: 'px' };
-      } else if (this.rawPropsDimension.includes('.')) {
-        return { value: pSizeNumber, unit: '%' };
-      } else if (pSizeNumber >= 0 && pSizeNumber < 1) {
+      } else if (pSizeNumber === 0) {
+        return { value: 0, unit: 'px' };
+      } else if (pSizeNumber > 0 && pSizeNumber < 1) {
         return { value: pSizeNumber, unit: '%' };
       }
 
       return { value: sizeNumber, unit: 'px' };
     }
 
-    // all numbers less than 1 are interpreted as percentage
-    return this.rawPropsDimension < 1
+    // all numbers between 0 and 1 are interpreted as percentage
+    return this.rawPropsDimension > 0 && this.rawPropsDimension < 1
       ? { value: this.rawPropsDimension, unit: '%' }
       : { value: this.rawPropsDimension, unit: 'px' };
   }

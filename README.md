@@ -15,7 +15,7 @@ By default, all tiles – the building blocks of a layout – are renderless com
 _**tilez**_ is
 
 - easy-to-use – _declare your layout in a simple manner_
-- flexible – _can be used with SVG, HTML or renderless components_
+- flexible – _can be used with SVG, HTML, Canvas or renderless components_
 - reactive – _all tiles adapt to changes of root tile_
 - free of dependencies – _except for Svelte_
 - opinionated – _the way the layout algorithm works (see [here](#how-does-the-layout-algorithm-work))_
@@ -28,6 +28,14 @@ The main application of **_tilez_** is to use it as abstraction layer for creati
 Here is an example of a composition of several different [Observable Plot](https://github.com/observablehq/plot) charts, which makes up an [UpSet plot](https://upset.app). Individual charts are embedded in a simple **tilez** layout.
 
 <img src="https://github.com/spren9er/tilez/blob/main/docs/images/tilez_upset.svg?raw=true" width="550px">
+
+For detailed information about **_tilez_**
+
+- [Installation](#installation)
+- [How to specify layouts?](#how-to-specify-layouts)
+- [How to access tile information?](#how-to-access-tile-information)
+- [How does the layout algorithm work?](#how-does-the-layout-algorithm-work)
+- [API Reference](#api-reference)
 
 ## Installation
 
@@ -125,7 +133,7 @@ Check it out in [Svelte REPL](https://svelte.dev/repl/1a8e45baea624a079255275a14
 
 ## How to access tile information?
 
-Now, after defining a layout, arbitrary Svelte components can be embedded in your tiles. In your component you get access to tile specs, linear scales of local coordinate system and a reference to HTML/SVG element by adding the following lines
+Now, after defining a layout, arbitrary Svelte components can be embedded in your tiles. In your component you get access to tile specs, linear scales of local coordinate system and a reference to HTML/SVG/Canvas element by adding the following lines
 
 ```javascript
 import { getTileContext } from 'tilez';
@@ -170,9 +178,9 @@ _**Note:** If you need non-linear scales, consider using _d3-scale_ with given t
 
 See also [API Linear Scale](#linear-scale).
 
-### Access HTML or SVG element
+### Access HTML, SVG or Canvas element
 
-There are three ways to get a reference to the underlying HTML or SVG Element of a tile.
+There are three ways to get a reference to the underlying HTML, SVG or Canvas element of a tile.
 
 #### Get Element from Tile Context
 
@@ -288,7 +296,7 @@ Otherwise, children tiles will be distributed within current tile according to t
 
 <a name="props_width" href="#props_width">#</a> tilez.<b>Tile</b>.<i>width</i>
 
-Argument can be an absolute or relative number. Accepts strings like _"500px"_, _"500"_, _"50%"_, _"0.5"_ or numbers like _500_ or _0.5_. Numbers less than _1_ are interpreted as percentages, otherwise they represent absolute widths.
+Argument can be an absolute or relative number. Accepts strings like _"500px"_, _"500"_, _"50%"_, _"0.5"_ or numbers like _500_ or _0.5_. Numbers between _0_ and _1_ are interpreted as percentages, otherwise they represent absolute widths.
 The given width will result in different tile widths, depending on the layout [mode](#props_mode).
 Relative widths refer to the width you obtain when you subtract all absolute tile widths from full width.
 When there is no width given (default), remaining width in parent tile – after rendering tiles with absolute and relative width – will be distributed equally between current tile and other tiles having no width specification.
@@ -331,9 +339,9 @@ It behaves like [hAlign](#props_h_align), but in vertical direction.
 
 ---
 
-<a name="props_type" href="#props_type">#</a> tilez.<b>Tile</b>.<i>type</i> · (_'plain'_ | _'svg'_ |  _'html'_ ) [default: _'plain'_] [inherits]
+<a name="props_type" href="#props_type">#</a> tilez.<b>Tile</b>.<i>type</i> · (_'plain'_ | _'svg'_ |  _'html'_ | _'canvas'_) [default: _'plain'_] [inherits]
 
-This property sets the document type of current tile. Available types are _'plain'_, _'svg'_ and _'html'_.
+This property sets the document type of current tile. Available types are _'plain'_, _'svg'_, _'html'_ and _'canvas'_.
 Type inherits from parent tile unless not specified explicitly. Otherwise, given type will be taken into consideration.
 
 #### Plain Tile (Renderless Component)
@@ -349,6 +357,10 @@ Using an _'svg'_ layout, parent tile will be an SVG container `<svg>` and all ch
 You could use **_tilez_** as _'html'_ layout engine (all `<div>` containers are implicitly absolute positioned), but in that case CSS flexbox and CSS grid are more powerful and flexible.
 
 _**Note:** An _'html'_ tile can't be embedded into an _'svg'_ tile._
+
+#### Canvas Tile
+
+For _'canvas'_ tiles there is one single `<canvas>` container used. Within this container coordinate system is translated to each tile's origin.
 
 ---
 
@@ -376,7 +388,7 @@ It depends on your use case, which mode you choose. You can also mix modes, star
 
 <a name="props_element" href="#props_element">#</a> tilez.<b>Tile</b>.<i>element</i>
 
-A reference to an HTML or SVG element (depending on the [type](#props_type)). For renderless components (_'plain'_ type), element is `undefined`. See also [this section](#access-html-or-svg-element).
+A reference to an HTML, SVG or Canvas element (depending on the [type](#props_type)). For renderless components (_'plain'_ type), element is `undefined`. See also [this section](#access-html-svg-or-canvas-element).
 
 
 ### Tile Context
@@ -388,7 +400,7 @@ Returns an object containing four Svelte stores
 - _specs_ of class **Writable\<TileSpecs\>**
 - _xScale_ of class **Writable\<LinearScale\>**
 - _yScale_ of class **Writable\<LinearScale\>**
-- _element_ of class **Writable\<HTMLElement | SVGElement | null\>**
+- _element_ of class **Writable\<HTMLElement | SVGElement | HTMLCanvasElement | null\>**
 
 In the following, all classes are described in detail.
 

@@ -6,8 +6,7 @@
 	export let root: boolean;
 	export let element: TypeTilePropsElement | undefined = undefined;
 
-	const tileContext = getTileContext();
-	const { specs, element: elementStore } = tileContext;
+	const { specs, element: elementStore } = getTileContext();
 
 	$: if (element) elementStore.set(element);
 </script>

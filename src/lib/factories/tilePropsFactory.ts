@@ -53,8 +53,10 @@ export class TilePropsFactory {
   }
 
   private parseType(type?: TypeTilePropsType) {
-    if (type && !['plain', 'html', 'svg'].includes(type))
-      throw Error('Tile prop "type" must be one of "plain", "html", "svg"!');
+    if (type && !['plain', 'html', 'svg', 'canvas'].includes(type))
+      throw Error(
+        'Tile prop "type" must be one of "plain", "html", "svg", "canvas"!',
+      );
 
     return type;
   }

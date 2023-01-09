@@ -1,4 +1,4 @@
-import { getContext, setContext } from 'svelte';
+import { getContext, setContext, hasContext } from 'svelte';
 import { derived, writable, type Writable } from 'svelte/store';
 
 import type {
@@ -51,7 +51,21 @@ function setTileContext(name: string, node: TileNode) {
     return new LinearScale().range([0, height]);
   });
 
-  const element = writable(null);
+  const element = setupElement(node);
 
   setContext(name, { specs, xScale, yScale, element });
+}
+
+function hasTileContext(): boolean {
+  return hasContext(TILEZ_CONTEXT_NAME);
+}
+
+function setupElement(node: TileNode) {
+  if (node.props.type === 'canvas' && hasTileContext()) {
+    const { element } = getTileContext();
+
+    return element;
+  }
+
+  return writable(null);
 }
