@@ -25,7 +25,7 @@ _**tilez**_ is
 
 The main application of **_tilez_** is to use it as abstraction layer for creating compositions and layers of arbitrary SVG charts in Svelte, where the final result is a single SVG chart.
 
-Here is an example of a composition of several different [Observable Plot](https://github.com/observablehq/plot) charts, which makes up an [UpSet plot](https://upset.app). Individual charts are embedded in a simple **tilez** layout.
+Here is an example of a composition of several different [Observable Plot](https://github.com/observablehq/plot) charts, which makes up an [UpSet plot](https://upset.app). Individual charts are embedded in a simple **_tilez_** layout.
 
 <img src="https://github.com/spren9er/tilez/blob/main/docs/images/tilez_upset.svg?raw=true" width="550px">
 
