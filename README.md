@@ -366,7 +366,7 @@ If you use _'canvas'_ tiles, root tile creates a `<canvas>` container. Within th
 
 #### Mixing Tile Types
 
-You can mix tile types, e.g. start with an HTML tile and add varios subroot Canvas and/or SVG tiles. Plain tiles can be added everywhere in the tile hierarchy. However, there are following restrictions:
+You can mix tile types, e.g. start with an HTML tile and add various subroot Canvas and/or SVG tiles. Plain tiles can be added everywhere in the tile hierarchy. However, there are following restrictions:
 
 - An _'html'_ tile can't be embedded into an _'svg'_ or _'canvas'_ tile.
 - An _'svg'_ tile can't be embedded into a _'canvas'_ tile and vice versa.
