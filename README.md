@@ -360,11 +360,17 @@ Using an _'svg'_ layout, root tile will be an SVG container `<svg>` and all chil
 
 You could use **_tilez_** as _'html'_ layout engine (all `<div>` containers are implicitly absolute positioned), but in that case CSS flexbox and CSS grid are more powerful and flexible.
 
-_**Note:** An _'html'_ tile can't be embedded into an _'svg'_ tile._
-
 #### Canvas Tile
 
-For _'canvas'_ tiles there is one single `<canvas>` container used. Within this container coordinate system is translated to each tile's origin.
+If you use _'canvas'_ tiles, root tile creates a `<canvas>` container. Within this container coordinate system is translated to each tile's origin. All children tiles will share the same `<canvas>` element.
+
+#### Mixing Tiles
+
+You can mix tiles, e.g. start with an HTML tile and add subroot Canvas and/or SVG tiles. Plain tiles can be added everywhere in the hierarchy. However, there are following restrictions:
+
+- An _'html'_ tile can't be embedded into an _'svg'_ or _'canvas'_ tile.
+- An _'svg'_ tile can't be embedded into a _'canvas'_ tile.
+- A _'canvas'_ tile can't be embedded into an _'svg'_ tile.
 
 ---
 

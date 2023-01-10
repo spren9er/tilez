@@ -87,7 +87,7 @@ describe('TileNode', () => {
 
     const htmlProps = new TilePropsFactory({ type: 'html' }).build();
     expect(() => new TileNode(htmlProps, node)).toThrowError(
-      "HTML tile can't be embedded into an Canvas tile!",
+      "HTML tile can't be embedded into a Canvas tile!",
     );
   });
 
@@ -97,6 +97,26 @@ describe('TileNode', () => {
 
     const plainProps = new TilePropsFactory({ type: 'plain' }).build();
     expect(() => new TileNode(plainProps, node)).not.toThrow();
+  });
+
+  it('of "canvas" type can\'t be embedded into "svg"', () => {
+    const props = new TilePropsFactory({ type: 'svg' }).build();
+    const node = new TileNode(props);
+
+    const canvasProps = new TilePropsFactory({ type: 'canvas' }).build();
+    expect(() => new TileNode(canvasProps, node)).toThrowError(
+      "Canvas tile can't be embedded into an SVG tile!",
+    );
+  });
+
+  it('of "svg" type can\'t be embedded into "canvas"', () => {
+    const props = new TilePropsFactory({ type: 'canvas' }).build();
+    const node = new TileNode(props);
+
+    const svgProps = new TilePropsFactory({ type: 'svg' }).build();
+    expect(() => new TileNode(svgProps, node)).toThrowError(
+      "SVG tile can't be embedded into a Canvas tile!",
+    );
   });
 
   it('derives type from parent unless specified', () => {

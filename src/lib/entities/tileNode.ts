@@ -124,8 +124,12 @@ export class TileNode {
       if (parentType === 'svg')
         throw Error("HTML tile can't be embedded into an SVG tile!");
       if (parentType === 'canvas')
-        throw Error("HTML tile can't be embedded into an Canvas tile!");
+        throw Error("HTML tile can't be embedded into a Canvas tile!");
     }
+    if (type && type === 'svg' && parentType === 'canvas')
+      throw Error("SVG tile can't be embedded into a Canvas tile!");
+    if (type && type === 'canvas' && parentType === 'svg')
+      throw Error("Canvas tile can't be embedded into an SVG tile!");
     if (!type) this.props.type = parentType;
 
     // inner padding
