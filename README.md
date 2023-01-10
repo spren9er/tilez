@@ -364,13 +364,12 @@ You could use **_tilez_** as _'html'_ layout engine (all `<div>` containers are 
 
 If you use _'canvas'_ tiles, root tile creates a `<canvas>` container. Within this container coordinate system is translated to each tile's origin. All children tiles will share the same `<canvas>` element.
 
-#### Mixing Tiles
+#### Mixing Tile Types
 
-You can mix tiles, e.g. start with an HTML tile and add subroot Canvas and/or SVG tiles. Plain tiles can be added everywhere in the hierarchy. However, there are following restrictions:
+You can mix tile types, e.g. start with an HTML tile and add varios subroot Canvas and/or SVG tiles. Plain tiles can be added everywhere in the tile hierarchy. However, there are following restrictions:
 
 - An _'html'_ tile can't be embedded into an _'svg'_ or _'canvas'_ tile.
-- An _'svg'_ tile can't be embedded into a _'canvas'_ tile.
-- A _'canvas'_ tile can't be embedded into an _'svg'_ tile.
+- An _'svg'_ tile can't be embedded into a _'canvas'_ tile and vice versa.
 
 ---
 
