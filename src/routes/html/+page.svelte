@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Tile, HTile, VTile } from '$lib';
 
-	import TileHTML from './TileHTML.svelte';
+	import TileHTMLBox from '$fixtures/boxes/TileHTMLBox.svelte';
 
 	let width = 500;
 	let height = 500;
@@ -15,19 +15,19 @@
 <HTile {width} {height} {innerPadding} {outerPadding} type="html">
 	<VTile>
 		<Tile width="50%">
-			<TileHTML />
+			<TileHTMLBox />
 		</Tile>
 		<Tile>
-			<TileHTML />
+			<TileHTMLBox />
 		</Tile>
 		<Tile width="50px" height="50px">
-			<TileHTML />
+			<TileHTMLBox />
 		</Tile>
 	</VTile>
 	<Tile>
-		<TileHTML />
+		<TileHTMLBox />
 	</Tile>
 	<Tile>
-		<TileHTML />
+		<TileHTMLBox />
 	</Tile>
 </HTile>

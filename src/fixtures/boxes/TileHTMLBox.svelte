@@ -7,7 +7,8 @@
 {#if $specs}
 	<div
 		class="tile"
-		style="--width: {$specs.width}px; --height: {$specs.height}px"
+		style:width="{$specs.width}px"
+		style:height="{$specs.height}px"
 	/>
 {/if}
 
@@ -15,8 +16,6 @@
 	.tile {
 		position: absolute;
 		box-sizing: border-box;
-		width: var(--width);
-		height: var(--height);
 		background-color: #dedede;
 		border: 1px solid #cccccc;
 	}
