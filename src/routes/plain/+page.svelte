@@ -51,14 +51,14 @@
 	const heightGenerator = Simple1DNoise();
 
 	setInterval(() => {
-		widthCounter += 0.02;
-		heightCounter += 0.03;
+		widthCounter += 0.04;
+		heightCounter += 0.06;
 		width = widthGenerator.getVal(widthCounter) * 800;
 		height = heightGenerator.getVal(heightCounter) * 800;
 	}, 100);
 </script>
 
-<div id="wrapper" style="width: {width}px; height: {height}px;">
+<div id="wrapper" style:width="{width}px" style:height="{height}px">
 	<HTile {width} {height} {innerPadding} {outerPadding} vAlign="bottom">
 		<VTile>
 			<VTile height="30%" hAlign="center">

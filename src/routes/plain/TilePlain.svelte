@@ -10,8 +10,8 @@
 	<div
 		class="tile"
 		style="
-			top: {$specs.absY}px;
-			left: {$specs.absX}px;
+			top: {$specs.rootY}px;
+			left: {$specs.rootX}px;
 			width: {$specs.width}px;
 			height: {$specs.height}px;
 		"
@@ -20,9 +20,9 @@
 			<li><b>Width x Height</b></li>
 			<li class="specs">{format($specs.width)} x {format($specs.height)}</li>
 			<li><b>X / Y (rel.)</b></li>
-			<li class="specs">{format($specs.relX)} / {format($specs.relY)}</li>
+			<li class="specs">{format($specs.parentX)} / {format($specs.parentY)}</li>
 			<li><b>X / Y (abs.)</b></li>
-			<li class="specs">{format($specs.absX)} / {format($specs.absY)}</li>
+			<li class="specs">{format($specs.rootX)} / {format($specs.rootY)}</li>
 		</ul>
 	</div>
 {/if}
