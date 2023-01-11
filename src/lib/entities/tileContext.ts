@@ -56,12 +56,10 @@ function setTileContext(name: string, node: TileNode) {
   setContext(name, { specs, xScale, yScale, element });
 }
 
-function hasTileContext(): boolean {
-  return hasContext(TILEZ_CONTEXT_NAME);
-}
-
 function setupElement(node: TileNode) {
-  if (node.props.type === 'canvas' && hasTileContext()) {
+  const parentType = node?.parent?.props.type;
+
+  if (node.props.type === 'canvas' && parentType === 'canvas') {
     const { element } = getTileContext();
 
     return element;

@@ -1,6 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
+	import { getTileContext } from '$lib/entities/tileContext';
+
+	const { specs } = getTileContext();
+
 	export let root: boolean;
 	export let containerWidth: number | undefined = undefined;
 	export let containerHeight: number | undefined = undefined;
@@ -16,6 +20,8 @@
 	<div
 		id="tile-wrapper"
 		class:visible
+		style:width="{$specs.width}px"
+		style:height="{$specs.height}px"
 		bind:clientWidth={containerWidth}
 		bind:clientHeight={containerHeight}
 	>

@@ -153,7 +153,7 @@ const {specs, xScale, yScale, element } = getContext('tilez');
 
 ### Tile Specs from Tile Context
 
-Tile specs give you information about [_width_](#specs_width) and [_height_](#specs_height) of tile, as well as absolute and relative positions w.r.t. root and parent tile.
+Tile specs give you information about [_width_](#specs_width) and [_height_](#specs_height) of tile, as well as relative positions w.r.t. root, subroot and parent tile.
 
 For further specs information see [API Tile Specs](#tile-specs).
 
@@ -427,27 +427,39 @@ Height of tile
 
 ---
 
-<a name="specs_abs_x" href="#specs_abs_x">#</a> tilez.<b>TileSpecs</b>.<i>absX</i>
+<a name="specs_root_x" href="#specs_root_x">#</a> tilez.<b>TileSpecs</b>.<i>rootX</i>
 
-Absolute _x_-coordinate w.r.t. root tile
-
----
-
-<a name="specs_abs_y" href="#specs_abs_y">#</a> tilez.<b>TileSpecs</b>.<i>absY</i>
-
-Absolute _y_-coordinate w.r.t. root tile
+The _x_-coordinate w.r.t. root tile
 
 ---
 
-<a name="specs_rel_x" href="#specs_rel_x">#</a> tilez.<b>TileSpecs</b>.<i>relX</i>
+<a name="specs_root_y" href="#specs_root_y">#</a> tilez.<b>TileSpecs</b>.<i>rootY</i>
 
-Relative _x_-coordinate w.r.t. parent tile
+The _y_-coordinate w.r.t. root tile
 
 ---
 
-<a name="specs_rel_y" href="#specs_rel_y">#</a> tilez.<b>TileSpecs</b>.<i>relY</i>
+<a name="specs_subroot_x" href="#specs_subroot_x">#</a> tilez.<b>TileSpecs</b>.<i>subRootX</i>
 
-Relative _y_-coordinate w.r.t. parent tile
+The _x_-coordinate w.r.t. subroot tile. The subroot tile is the root tile of subtree w.r.t. given type. All tiles of the subtree have the same type. The parent of the subroot has a different type. If subroot and root are the same, subroot coordinates are the same like root coordinates.
+
+---
+
+<a name="specs_subroot_y" href="#specs_subroot_y">#</a> tilez.<b>TileSpecs</b>.<i>subRootY</i>
+
+The _y_-coordinate w.r.t. subroot tile. See [subRootX](#specs_subroot_x) for definition of a subroot.
+
+---
+
+<a name="specs_parent_x" href="#specs_parent_x">#</a> tilez.<b>TileSpecs</b>.<i>parentX</i>
+
+The _x_-coordinate w.r.t. parent tile
+
+---
+
+<a name="specs_parent_y" href="#specs_parent_y">#</a> tilez.<b>TileSpecs</b>.<i>parentY</i>
+
+The _y_-coordinate w.r.t. parent tile
 
 ---
 

@@ -53,7 +53,7 @@
 			canvas: TileCanvas,
 		};
 
-		return componentMapping[node.props.type || 'plain'];
+		return componentMapping[node.props.type!];
 	};
 
 	$: if (root) {
@@ -65,11 +65,7 @@
 </script>
 
 <TileWrapper {root} bind:containerWidth bind:containerHeight>
-	<svelte:component
-		this={componentFor($node)}
-		root={$node.isSubRoot}
-		bind:element
-	>
+	<svelte:component this={componentFor($node)} node={$node} bind:element>
 		<slot {element} />
 	</svelte:component>
 </TileWrapper>

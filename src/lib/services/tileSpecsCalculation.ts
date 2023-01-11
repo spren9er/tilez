@@ -1,6 +1,7 @@
 import type {
   TypeTilePropsStack,
   TypeTilePropsAlign,
+  TypeTilePropsType,
 } from '$lib/types/tileProps.type';
 import type { TypeTileSpecsDimension } from '$lib/types/tileSpecs.type';
 import type {
@@ -19,6 +20,7 @@ export abstract class TileSpecsCalculation {
   protected specs: TileSpecs;
   protected props: TypeIndexedProps[];
   protected root: boolean;
+  protected type: TypeTilePropsType;
   protected stack?: TypeTilePropsStack;
 
   protected stackFullSize: number;
@@ -29,11 +31,13 @@ export abstract class TileSpecsCalculation {
     specs: TileSpecs,
     props: TileProps[],
     root: boolean,
+    type: TypeTilePropsType,
     stack?: TypeTilePropsStack,
   ) {
     this.specs = specs;
     this.props = props.map((props, idx) => ({ idx, props }));
     this.root = root;
+    this.type = type;
     this.stack = stack;
 
     const { outerPadding } = this.specs;
@@ -59,15 +63,22 @@ export abstract class TileSpecsCalculation {
           specs: TileSpecs,
           props: TileProps[],
           root: boolean,
+          type: TypeTilePropsType,
           stack?: TypeTilePropsStack,
-        ) => typeof this)(this.specs, [props], this.root, 'horizontal').call();
+        ) => typeof this)(
+          this.specs,
+          [props],
+          this.root,
+          this.type,
+          'horizontal',
+        ).call();
 
         return specs;
       });
 
     if (this.stackFullSize <= 0)
       return Array(this.nProps).fill(
-        new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+        new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
       );
 
     const specsDimensions = this.calculateSizes();
@@ -185,6 +196,10 @@ export abstract class TileSpecsCalculation {
       fixedFullSize;
 
     return Math.min(fixedSize, fixedFullSize);
+  }
+
+  protected isSubRoot(props: TileProps) {
+    return props.type !== this.type;
   }
 
   protected get groupedProps() {

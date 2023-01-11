@@ -2,7 +2,20 @@ import { expect, describe, it } from 'vitest';
 
 import { TileSpecs } from '$lib/entities/tileSpecs';
 
-const specs = new TileSpecs(100, 200, 0, 0, 0, 0, 0, 0, 'center', 'center');
+const specs = new TileSpecs(
+  100,
+  200,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  'center',
+  'center',
+);
 
 describe('TileSpecs', () => {
   it('can be copied', () => {
@@ -10,10 +23,12 @@ describe('TileSpecs', () => {
 
     expect(specs.width).toEqual(copy.width);
     expect(specs.height).toEqual(copy.height);
-    expect(specs.absX).toEqual(copy.absX);
-    expect(specs.absY).toEqual(copy.absY);
-    expect(specs.relX).toEqual(copy.relX);
-    expect(specs.relY).toEqual(copy.relY);
+    expect(specs.rootX).toEqual(copy.rootX);
+    expect(specs.rootY).toEqual(copy.rootY);
+    expect(specs.subRootX).toEqual(copy.subRootX);
+    expect(specs.subRootY).toEqual(copy.subRootY);
+    expect(specs.parentX).toEqual(copy.parentX);
+    expect(specs.parentY).toEqual(copy.parentY);
     expect(specs.innerPadding).toEqual(copy.innerPadding);
     expect(specs.outerPadding).toEqual(copy.outerPadding);
     expect(specs.hAlign).toEqual(copy.hAlign);
@@ -26,6 +41,8 @@ describe('TileSpecs', () => {
 
   it('returns an error obtaining aspect ratio when height is zero', () => {
     const emptyTileSpecs = new TileSpecs(
+      0,
+      0,
       0,
       0,
       0,

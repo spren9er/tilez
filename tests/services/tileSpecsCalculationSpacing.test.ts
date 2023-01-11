@@ -20,6 +20,7 @@ const calc = (node: TileNode) => {
     node.specs!,
     node.children.map(({ props }) => props),
     node.isRoot,
+    node.props.type!,
     node.props.stack,
   ).call();
 };
@@ -45,8 +46,8 @@ describe('TileSpecsCalculationSpacing', () => {
     const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
-      new TileSpecs(938, 974, 13, 13, 13, 13, 6, 0, 'left', 'top'),
-      new TileSpecs(30, 974, 957, 13, 957, 13, 6, 0, 'left', 'top'),
+      new TileSpecs(938, 974, 13, 13, 13, 13, 13, 13, 6, 0, 'left', 'top'),
+      new TileSpecs(30, 974, 957, 13, 957, 13, 957, 13, 6, 0, 'left', 'top'),
     ]);
   });
 
@@ -61,8 +62,8 @@ describe('TileSpecsCalculationSpacing', () => {
     const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
-      new TileSpecs(500, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
-      new TileSpecs(500, 1000, 500, 0, 500, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(500, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(500, 1000, 500, 0, 500, 0, 500, 0, 0, 0, 'left', 'top'),
     ]);
   });
 
@@ -77,8 +78,8 @@ describe('TileSpecsCalculationSpacing', () => {
     const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
-      new TileSpecs(1000, 500, 0, 0, 0, 0, 0, 0, 'left', 'top'),
-      new TileSpecs(1000, 500, 0, 500, 0, 500, 0, 0, 'left', 'top'),
+      new TileSpecs(1000, 500, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(1000, 500, 0, 500, 0, 500, 0, 500, 0, 0, 'left', 'top'),
     ]);
   });
 
@@ -90,8 +91,8 @@ describe('TileSpecsCalculationSpacing', () => {
     const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
-      new TileSpecs(1000, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
-      new TileSpecs(1000, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(1000, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(1000, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
     ]);
   });
 
@@ -110,12 +111,12 @@ describe('TileSpecsCalculationSpacing', () => {
     const childChildrenSpecs = calc(child);
 
     expect(childrenSpecs).toEqual([
-      new TileSpecs(500, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
-      new TileSpecs(500, 1000, 500, 0, 500, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(500, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(500, 1000, 500, 0, 500, 0, 500, 0, 0, 0, 'left', 'top'),
     ]);
 
     expect(childChildrenSpecs).toEqual([
-      new TileSpecs(500, 1000, 500, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(500, 1000, 500, 0, 500, 0, 0, 0, 0, 0, 'left', 'top'),
     ]);
   });
 
@@ -131,9 +132,9 @@ describe('TileSpecsCalculationSpacing', () => {
     const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
-      new TileSpecs(500, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
-      new TileSpecs(200, 1000, 500, 0, 500, 0, 0, 0, 'left', 'top'),
-      new TileSpecs(300, 1000, 700, 0, 700, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(500, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(200, 1000, 500, 0, 500, 0, 500, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(300, 1000, 700, 0, 700, 0, 700, 0, 0, 0, 'left', 'top'),
     ]);
   });
 
@@ -149,9 +150,9 @@ describe('TileSpecsCalculationSpacing', () => {
     const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
-      new TileSpecs(600, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
-      new TileSpecs(200, 1000, 600, 0, 600, 0, 0, 0, 'left', 'top'),
-      new TileSpecs(200, 1000, 800, 0, 800, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(600, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(200, 1000, 600, 0, 600, 0, 600, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(200, 1000, 800, 0, 800, 0, 800, 0, 0, 0, 'left', 'top'),
     ]);
   });
 
@@ -166,8 +167,8 @@ describe('TileSpecsCalculationSpacing', () => {
     const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
-      new TileSpecs(600, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
-      new TileSpecs(400, 1000, 600, 0, 600, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(600, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(400, 1000, 600, 0, 600, 0, 600, 0, 0, 0, 'left', 'top'),
     ]);
   });
 
@@ -195,7 +196,7 @@ describe('TileSpecsCalculationSpacing', () => {
     const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
-      new TileSpecs(990, 990, 5, 5, 5, 5, 10, 0, 'left', 'top'),
+      new TileSpecs(990, 990, 5, 5, 5, 5, 5, 5, 10, 0, 'left', 'top'),
     ]);
   });
 
@@ -210,7 +211,7 @@ describe('TileSpecsCalculationSpacing', () => {
     const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
-      new TileSpecs(980, 980, 10, 10, 10, 10, 0, 0, 'left', 'top'),
+      new TileSpecs(980, 980, 10, 10, 10, 10, 10, 10, 0, 0, 'left', 'top'),
     ]);
   });
 
@@ -226,7 +227,7 @@ describe('TileSpecsCalculationSpacing', () => {
     const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
-      new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
     ]);
   });
 
@@ -241,8 +242,8 @@ describe('TileSpecsCalculationSpacing', () => {
     const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
-      new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
-      new TileSpecs(1000, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(1000, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
     ]);
   });
 
@@ -258,7 +259,20 @@ describe('TileSpecsCalculationSpacing', () => {
     const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
-      new TileSpecs(500, 500, 250, 250, 250, 250, 0, 0, 'center', 'center'),
+      new TileSpecs(
+        500,
+        500,
+        250,
+        250,
+        250,
+        250,
+        250,
+        250,
+        0,
+        0,
+        'center',
+        'center',
+      ),
     ]);
   });
 
@@ -281,18 +295,18 @@ describe('TileSpecsCalculationSpacing', () => {
     };
 
     expect(hAlignSpecsFor('left')).toEqual([
-      new TileSpecs(300, 600, 0, 0, 0, 0, 0, 0, 'left', 'top'),
-      new TileSpecs(400, 400, 300, 0, 300, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(300, 600, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(400, 400, 300, 0, 300, 0, 300, 0, 0, 0, 'left', 'top'),
     ]);
 
     expect(hAlignSpecsFor('center')).toEqual([
-      new TileSpecs(300, 600, 150, 0, 150, 0, 0, 0, 'center', 'top'),
-      new TileSpecs(400, 400, 450, 0, 450, 0, 0, 0, 'center', 'top'),
+      new TileSpecs(300, 600, 150, 0, 150, 0, 150, 0, 0, 0, 'center', 'top'),
+      new TileSpecs(400, 400, 450, 0, 450, 0, 450, 0, 0, 0, 'center', 'top'),
     ]);
 
     expect(hAlignSpecsFor('right')).toEqual([
-      new TileSpecs(300, 600, 300, 0, 300, 0, 0, 0, 'right', 'top'),
-      new TileSpecs(400, 400, 600, 0, 600, 0, 0, 0, 'right', 'top'),
+      new TileSpecs(300, 600, 300, 0, 300, 0, 300, 0, 0, 0, 'right', 'top'),
+      new TileSpecs(400, 400, 600, 0, 600, 0, 600, 0, 0, 0, 'right', 'top'),
     ]);
   });
 
@@ -315,18 +329,44 @@ describe('TileSpecsCalculationSpacing', () => {
     };
 
     expect(vAlignSpecsFor('top')).toEqual([
-      new TileSpecs(300, 600, 0, 0, 0, 0, 0, 0, 'left', 'top'),
-      new TileSpecs(400, 400, 300, 0, 300, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(300, 600, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(400, 400, 300, 0, 300, 0, 300, 0, 0, 0, 'left', 'top'),
     ]);
 
     expect(vAlignSpecsFor('center')).toEqual([
-      new TileSpecs(300, 600, 0, 200, 0, 200, 0, 0, 'left', 'center'),
-      new TileSpecs(400, 400, 300, 300, 300, 300, 0, 0, 'left', 'center'),
+      new TileSpecs(300, 600, 0, 200, 0, 200, 0, 200, 0, 0, 'left', 'center'),
+      new TileSpecs(
+        400,
+        400,
+        300,
+        300,
+        300,
+        300,
+        300,
+        300,
+        0,
+        0,
+        'left',
+        'center',
+      ),
     ]);
 
     expect(vAlignSpecsFor('bottom')).toEqual([
-      new TileSpecs(300, 600, 0, 400, 0, 400, 0, 0, 'left', 'bottom'),
-      new TileSpecs(400, 400, 300, 600, 300, 600, 0, 0, 'left', 'bottom'),
+      new TileSpecs(300, 600, 0, 400, 0, 400, 0, 400, 0, 0, 'left', 'bottom'),
+      new TileSpecs(
+        400,
+        400,
+        300,
+        600,
+        300,
+        600,
+        300,
+        600,
+        0,
+        0,
+        'left',
+        'bottom',
+      ),
     ]);
   });
 
@@ -349,18 +389,18 @@ describe('TileSpecsCalculationSpacing', () => {
     };
 
     expect(vAlignSpecsFor('top')).toEqual([
-      new TileSpecs(600, 300, 0, 0, 0, 0, 0, 0, 'left', 'top'),
-      new TileSpecs(400, 400, 0, 300, 0, 300, 0, 0, 'left', 'top'),
+      new TileSpecs(600, 300, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(400, 400, 0, 300, 0, 300, 0, 300, 0, 0, 'left', 'top'),
     ]);
 
     expect(vAlignSpecsFor('center')).toEqual([
-      new TileSpecs(600, 300, 0, 150, 0, 150, 0, 0, 'left', 'center'),
-      new TileSpecs(400, 400, 0, 450, 0, 450, 0, 0, 'left', 'center'),
+      new TileSpecs(600, 300, 0, 150, 0, 150, 0, 150, 0, 0, 'left', 'center'),
+      new TileSpecs(400, 400, 0, 450, 0, 450, 0, 450, 0, 0, 'left', 'center'),
     ]);
 
     expect(vAlignSpecsFor('bottom')).toEqual([
-      new TileSpecs(600, 300, 0, 300, 0, 300, 0, 0, 'left', 'bottom'),
-      new TileSpecs(400, 400, 0, 600, 0, 600, 0, 0, 'left', 'bottom'),
+      new TileSpecs(600, 300, 0, 300, 0, 300, 0, 300, 0, 0, 'left', 'bottom'),
+      new TileSpecs(400, 400, 0, 600, 0, 600, 0, 600, 0, 0, 'left', 'bottom'),
     ]);
   });
 
@@ -383,18 +423,44 @@ describe('TileSpecsCalculationSpacing', () => {
     };
 
     expect(hAlignSpecsFor('left')).toEqual([
-      new TileSpecs(300, 600, 0, 0, 0, 0, 0, 0, 'left', 'top'),
-      new TileSpecs(400, 400, 0, 600, 0, 600, 0, 0, 'left', 'top'),
+      new TileSpecs(300, 600, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(400, 400, 0, 600, 0, 600, 0, 600, 0, 0, 'left', 'top'),
     ]);
 
     expect(hAlignSpecsFor('center')).toEqual([
-      new TileSpecs(300, 600, 350, 0, 350, 0, 0, 0, 'center', 'top'),
-      new TileSpecs(400, 400, 300, 600, 300, 600, 0, 0, 'center', 'top'),
+      new TileSpecs(300, 600, 350, 0, 350, 0, 350, 0, 0, 0, 'center', 'top'),
+      new TileSpecs(
+        400,
+        400,
+        300,
+        600,
+        300,
+        600,
+        300,
+        600,
+        0,
+        0,
+        'center',
+        'top',
+      ),
     ]);
 
     expect(hAlignSpecsFor('right')).toEqual([
-      new TileSpecs(300, 600, 700, 0, 700, 0, 0, 0, 'right', 'top'),
-      new TileSpecs(400, 400, 600, 600, 600, 600, 0, 0, 'right', 'top'),
+      new TileSpecs(300, 600, 700, 0, 700, 0, 700, 0, 0, 0, 'right', 'top'),
+      new TileSpecs(
+        400,
+        400,
+        600,
+        600,
+        600,
+        600,
+        600,
+        600,
+        0,
+        0,
+        'right',
+        'top',
+      ),
     ]);
   });
 
@@ -410,8 +476,8 @@ describe('TileSpecsCalculationSpacing', () => {
     const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
-      new TileSpecs(540, 990, 5, 5, 5, 5, 10, 0, 'left', 'top'),
-      new TileSpecs(440, 990, 555, 5, 555, 5, 10, 0, 'right', 'top'),
+      new TileSpecs(540, 990, 5, 5, 5, 5, 5, 5, 10, 0, 'left', 'top'),
+      new TileSpecs(440, 990, 555, 5, 555, 5, 555, 5, 10, 0, 'right', 'top'),
     ]);
   });
 
@@ -427,9 +493,9 @@ describe('TileSpecsCalculationSpacing', () => {
     const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
-      new TileSpecs(400, 1000, 300, 0, 300, 0, 0, 0, 'center', 'top'),
-      new TileSpecs(200, 1000, 800, 0, 800, 0, 0, 0, 'right', 'top'),
-      new TileSpecs(300, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(400, 1000, 300, 0, 300, 0, 300, 0, 0, 0, 'center', 'top'),
+      new TileSpecs(200, 1000, 800, 0, 800, 0, 800, 0, 0, 0, 'right', 'top'),
+      new TileSpecs(300, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
     ]);
   });
 
@@ -446,9 +512,9 @@ describe('TileSpecsCalculationSpacing', () => {
     const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
-      new TileSpecs(450, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
-      new TileSpecs(150, 1000, 450, 0, 450, 0, 0, 0, 'left', 'top'),
-      new TileSpecs(400, 1000, 600, 0, 600, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(450, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(150, 1000, 450, 0, 450, 0, 450, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(400, 1000, 600, 0, 600, 0, 600, 0, 0, 0, 'left', 'top'),
     ]);
   });
 
@@ -463,8 +529,8 @@ describe('TileSpecsCalculationSpacing', () => {
     const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
-      new TileSpecs(1000, 1000, 0, 0, 0, 0, 0, 0, 'left', 'top'),
-      new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(1000, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
     ]);
   });
 
@@ -484,11 +550,11 @@ describe('TileSpecsCalculationSpacing', () => {
     const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
-      new TileSpecs(1, 1, 1, 1, 1, 1, 2, 0, 'left', 'top'),
-      new TileSpecs(1, 1, 4, 1, 4, 1, 2, 0, 'left', 'top'),
-      new TileSpecs(1, 1, 7, 1, 7, 1, 2, 0, 'left', 'top'),
-      new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
-      new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 'left', 'top'),
+      new TileSpecs(1, 1, 4, 1, 4, 1, 4, 1, 2, 0, 'left', 'top'),
+      new TileSpecs(1, 1, 7, 1, 7, 1, 7, 1, 2, 0, 'left', 'top'),
+      new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
     ]);
   });
 
@@ -508,10 +574,10 @@ describe('TileSpecsCalculationSpacing', () => {
     const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
-      new TileSpecs(1, 1, 12, 12, 12, 12, 8, 0, 'left', 'top'),
-      new TileSpecs(1, 1, 12, 21, 12, 21, 8, 0, 'left', 'top'),
-      new TileSpecs(1, 1, 12, 30, 12, 30, 8, 0, 'left', 'top'),
-      new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(1, 1, 12, 12, 12, 12, 12, 12, 8, 0, 'left', 'top'),
+      new TileSpecs(1, 1, 12, 21, 12, 21, 12, 21, 8, 0, 'left', 'top'),
+      new TileSpecs(1, 1, 12, 30, 12, 30, 12, 30, 8, 0, 'left', 'top'),
+      new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
     ]);
   });
 
@@ -530,9 +596,9 @@ describe('TileSpecsCalculationSpacing', () => {
     const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
-      new TileSpecs(92, 4, 4, 4, 4, 4, 4, 0, 'left', 'top'),
-      new TileSpecs(92, 84, 4, 12, 4, 12, 4, 0, 'left', 'top'),
-      new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(92, 4, 4, 4, 4, 4, 4, 4, 4, 0, 'left', 'top'),
+      new TileSpecs(92, 84, 4, 12, 4, 12, 4, 12, 4, 0, 'left', 'top'),
+      new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
     ]);
   });
 
@@ -552,10 +618,10 @@ describe('TileSpecsCalculationSpacing', () => {
     const childrenSpecs = calc(root);
 
     expect(childrenSpecs).toEqual([
-      new TileSpecs(92, 8, 4, 4, 4, 4, 4, 0, 'left', 'top'),
-      new TileSpecs(92, 8, 4, 16, 4, 16, 4, 0, 'left', 'top'),
-      new TileSpecs(92, 146, 4, 28, 4, 28, 4, 0, 'left', 'top'),
-      new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+      new TileSpecs(92, 8, 4, 4, 4, 4, 4, 4, 4, 0, 'left', 'top'),
+      new TileSpecs(92, 8, 4, 16, 4, 16, 4, 16, 4, 0, 'left', 'top'),
+      new TileSpecs(92, 146, 4, 28, 4, 28, 4, 28, 4, 0, 'left', 'top'),
+      new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
     ]);
   });
 });

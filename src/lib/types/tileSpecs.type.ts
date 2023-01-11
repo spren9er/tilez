@@ -4,10 +4,10 @@ export type TypeTileSpecsDimension = {
 };
 
 export type TypeTileSpecsCoords = {
-  absX: number;
-  absY: number;
-  relX: number;
-  relY: number;
+  rootX: number;
+  rootY: number;
+  parentX: number;
+  parentY: number;
 };
 
 export type TypeTileSpecsFormat = {

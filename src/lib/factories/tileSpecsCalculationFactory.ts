@@ -1,6 +1,7 @@
 import type {
   TypeTilePropsStack,
   TypeTilePropsMode,
+  TypeTilePropsType,
 } from '$lib/types/tileProps.type';
 import type { TileSpecs } from '$lib/entities/tileSpecs';
 import type { TileProps } from '$lib/valueObjects/tileProps';
@@ -14,6 +15,7 @@ export class TileSpecsCalculationFactory {
     private specs: TileSpecs,
     private props: TileProps[],
     private root: boolean,
+    private type: TypeTilePropsType,
     private stack?: TypeTilePropsStack,
   ) {}
 
@@ -23,6 +25,7 @@ export class TileSpecsCalculationFactory {
         this.specs,
         this.props,
         this.root,
+        this.type,
         this.stack,
       );
     } else {
@@ -30,6 +33,7 @@ export class TileSpecsCalculationFactory {
         this.specs,
         this.props,
         this.root,
+        this.type,
         this.stack,
       );
     }

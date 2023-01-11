@@ -28,9 +28,14 @@ export class TileNode {
     this.update = store.update;
     this.set = store.set;
 
-    this.subscribe((node: TileNode) => node.updateChildrenSpecs());
+    // node props have *always* non-trivial type
+    if (parent) {
+      parent.addChild(this);
+    } else {
+      this.props.type = this.props.type || 'plain';
+    }
 
-    if (parent) parent.addChild(this);
+    this.subscribe((node: TileNode) => node.updateChildrenSpecs());
   }
 
   public updateSpecs(
@@ -63,6 +68,7 @@ export class TileNode {
       this.specs,
       this.children.map(({ props }) => props),
       this.isRoot,
+      this.props.type!,
       this.props.stack,
     ).build();
     const specs = tileSpecsCalculation.call();
@@ -87,9 +93,7 @@ export class TileNode {
   public get isSubRoot() {
     if (this.isRoot) return true;
 
-    const parentType = this.parent!.props.type;
-
-    return this.props.type !== parentType;
+    return this.props.type !== this.parentType;
   }
 
   public get width() {
@@ -114,23 +118,17 @@ export class TileNode {
     });
   }
 
+  public get parentType() {
+    if (this.isRoot) return;
+
+    return this.parent!.props.type;
+  }
+
   private derivePropsFrom(parent: TileNode) {
     const parentNode = get(parent);
 
     // type
-    const parentType = parentNode.props.type;
-    const type = this.props.type;
-    if (type && type === 'html') {
-      if (parentType === 'svg')
-        throw Error("HTML tile can't be embedded into an SVG tile!");
-      if (parentType === 'canvas')
-        throw Error("HTML tile can't be embedded into a Canvas tile!");
-    }
-    if (type && type === 'svg' && parentType === 'canvas')
-      throw Error("SVG tile can't be embedded into a Canvas tile!");
-    if (type && type === 'canvas' && parentType === 'svg')
-      throw Error("Canvas tile can't be embedded into an SVG tile!");
-    if (!type) this.props.type = parentType;
+    this.props.type = this.deriveType();
 
     // inner padding
     if (!this.props.innerPadding && this.props.innerPadding !== 0)
@@ -138,5 +136,34 @@ export class TileNode {
 
     // mode
     if (!this.props.mode) this.props.mode = parentNode.props.mode;
+  }
+
+  private deriveType() {
+    const type = this.props.type;
+
+    if (!type) return this.parentType!;
+
+    const typeMapping = {
+      plain: 'Plain',
+      html: 'HTML',
+      svg: 'SVG',
+      canvas: 'Canvas',
+    };
+
+    if (this.parentType === 'svg') {
+      if (['html', 'canvas'].includes(type))
+        throw Error(
+          `${typeMapping[type]} tile can't be embedded into SVG tile!`,
+        );
+    }
+
+    if (this.parentType === 'canvas') {
+      if (['html', 'svg'].includes(type))
+        throw Error(
+          `${typeMapping[type]} tile can't be embedded into Canvas tile!`,
+        );
+    }
+
+    return type;
   }
 }

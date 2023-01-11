@@ -36,6 +36,17 @@ describe('TileNode', () => {
     expect(child.isRoot).toEqual(false);
   });
 
+  it('has parent type or not', () => {
+    const props = new TilePropsFactory({}).build();
+    const node = new TileNode(props);
+
+    expect(node.parentType).toBeUndefined();
+
+    const child = new TileNode(props, node);
+
+    expect(child.parentType).toEqual('plain');
+  });
+
   it('is sub root (parent is of different type) or not', () => {
     const width = 861;
     const height = 687;
@@ -77,7 +88,7 @@ describe('TileNode', () => {
 
     const htmlProps = new TilePropsFactory({ type: 'html' }).build();
     expect(() => new TileNode(htmlProps, node)).toThrowError(
-      "HTML tile can't be embedded into an SVG tile!",
+      "HTML tile can't be embedded into SVG tile!",
     );
   });
 
@@ -87,7 +98,7 @@ describe('TileNode', () => {
 
     const htmlProps = new TilePropsFactory({ type: 'html' }).build();
     expect(() => new TileNode(htmlProps, node)).toThrowError(
-      "HTML tile can't be embedded into a Canvas tile!",
+      "HTML tile can't be embedded into Canvas tile!",
     );
   });
 
@@ -105,7 +116,7 @@ describe('TileNode', () => {
 
     const canvasProps = new TilePropsFactory({ type: 'canvas' }).build();
     expect(() => new TileNode(canvasProps, node)).toThrowError(
-      "Canvas tile can't be embedded into an SVG tile!",
+      "Canvas tile can't be embedded into SVG tile!",
     );
   });
 
@@ -115,7 +126,7 @@ describe('TileNode', () => {
 
     const svgProps = new TilePropsFactory({ type: 'svg' }).build();
     expect(() => new TileNode(svgProps, node)).toThrowError(
-      "SVG tile can't be embedded into a Canvas tile!",
+      "SVG tile can't be embedded into Canvas tile!",
     );
   });
 
@@ -139,12 +150,12 @@ describe('TileNode', () => {
     expect(child.props.type).toEqual(childType);
   });
 
-  it('has no type when not specified in parent and itself', () => {
+  it('has default type when not specified in parent and itself', () => {
     const props = new TilePropsFactory({}).build();
     const node = new TileNode(props);
     const child = new TileNodeFactory({}, node).build();
 
-    expect(child.props.type).toBeUndefined();
+    expect(child.props.type).toEqual('plain');
   });
 
   it('derives inner padding from parent unless specified', () => {

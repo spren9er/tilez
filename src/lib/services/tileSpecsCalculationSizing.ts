@@ -1,6 +1,7 @@
 import type {
   TypeTilePropsStack,
   TypeTilePropsAlign,
+  TypeTilePropsType,
 } from '$lib/types/tileProps.type';
 import type { TypeTileSpecsDimension } from '$lib/types/tileSpecs.type';
 import type { TileProps } from '$lib/valueObjects/tileProps';
@@ -15,9 +16,10 @@ export class TileSpecsCalculationSizing extends TileSpecsCalculation {
     specs: TileSpecs,
     props: TileProps[],
     root: boolean,
+    type: TypeTilePropsType,
     stack?: TypeTilePropsStack,
   ) {
-    super(specs, props, root, stack);
+    super(specs, props, root, type, stack);
 
     this.firstTile = true;
   }
@@ -119,10 +121,11 @@ export class TileSpecsCalculationSizing extends TileSpecsCalculation {
     specsDimensions: TypeTileSpecsDimension[],
     anchor: number,
   ) {
-    const { absX, absY, innerPadding, outerPadding } = this.specs;
+    const { rootX, rootY, subRootX, subRootY, innerPadding, outerPadding } =
+      this.specs;
 
-    let relX = this.isHorizontal ? anchor : outerPadding;
-    let relY = this.isHorizontal ? outerPadding : anchor;
+    let parentX = this.isHorizontal ? anchor : outerPadding;
+    let parentY = this.isHorizontal ? outerPadding : anchor;
 
     return this.propsFor(align).map(({ idx, props }) => {
       const dimensions = specsDimensions[idx];
@@ -131,7 +134,7 @@ export class TileSpecsCalculationSizing extends TileSpecsCalculation {
       if (stackSize === 0)
         return {
           idx,
-          specs: new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+          specs: new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
         };
 
       // align orthogonal to stack direction
@@ -154,10 +157,12 @@ export class TileSpecsCalculationSizing extends TileSpecsCalculation {
       const specs = new TileSpecs(
         dimensions.width,
         dimensions.height,
-        absX + relX + offsetX,
-        absY + relY + offsetY,
-        relX + offsetX,
-        relY + offsetY,
+        rootX + parentX + offsetX,
+        rootY + parentY + offsetY,
+        this.isSubRoot(props) ? 0 : subRootX + parentX + offsetX,
+        this.isSubRoot(props) ? 0 : subRootY + parentY + offsetY,
+        parentX + offsetX,
+        parentY + offsetY,
         props.innerPadding ?? 0,
         props.outerPadding ?? 0,
         props.hAlign || 'left',
@@ -167,9 +172,9 @@ export class TileSpecsCalculationSizing extends TileSpecsCalculation {
       const step = innerPadding + stackSize;
 
       if (this.isHorizontal) {
-        relX += step;
+        parentX += step;
       } else {
-        relY += step;
+        parentY += step;
       }
 
       return { idx, specs };

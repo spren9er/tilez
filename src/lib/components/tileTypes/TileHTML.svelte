@@ -2,8 +2,9 @@
 	import type { TypeTilePropsElement } from '$lib/types/tileProps.type';
 
 	import { getTileContext } from '$lib/entities/tileContext';
+	import type { TileNode } from '$lib/entities/tileNode';
 
-	export let root: boolean;
+	export let node: TileNode;
 	export let element: TypeTilePropsElement | undefined = undefined;
 
 	const { specs, element: elementStore } = getTileContext();
@@ -11,17 +12,19 @@
 	$: if (element) elementStore.set(element);
 </script>
 
-<div
-	class:root
-	class="tile"
-	style:top={$specs.relY}
-	style:left={$specs.relX}
-	style:width={$specs.width}
-	style:height={$specs.height}
-	bind:this={element}
->
-	<slot {element} />
-</div>
+{#if $specs}
+	<div
+		class:root={node.isRoot}
+		class="tile"
+		style:left="{$specs.parentX}px"
+		style:top="{$specs.parentY}px"
+		style:width="{$specs.width}px"
+		style:height="{$specs.height}px"
+		bind:this={element}
+	>
+		<slot {element} />
+	</div>
+{/if}
 
 <style>
 	.tile {

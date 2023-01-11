@@ -99,14 +99,15 @@ export class TileSpecsCalculationSpacing extends TileSpecsCalculation {
     specsDimensions: TypeTileSpecsDimension[],
     anchor: number,
   ) {
-    const { absX, absY, innerPadding, outerPadding } = this.specs;
+    const { rootX, rootY, subRootX, subRootY, innerPadding, outerPadding } =
+      this.specs;
 
-    let relX = this.isHorizontal ? anchor : outerPadding;
-    let relY = this.isHorizontal ? outerPadding : anchor;
+    let parentX = this.isHorizontal ? anchor : outerPadding;
+    let parentY = this.isHorizontal ? outerPadding : anchor;
 
     if (!this.root) {
-      relX -= innerPadding / 2;
-      relY -= innerPadding / 2;
+      parentX -= innerPadding / 2;
+      parentY -= innerPadding / 2;
     }
 
     return this.propsFor(align).map(({ idx, props }) => {
@@ -116,7 +117,7 @@ export class TileSpecsCalculationSpacing extends TileSpecsCalculation {
       if (stackSize === 0)
         return {
           idx,
-          specs: new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+          specs: new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
         };
 
       // align orthogonal to stack direction
@@ -124,10 +125,10 @@ export class TileSpecsCalculationSpacing extends TileSpecsCalculation {
       let offsetX = 0;
 
       if (this.isHorizontal) {
-        relX += innerPadding / 2;
+        parentX += innerPadding / 2;
         offsetY = innerPadding / 2;
       } else {
-        relY += innerPadding / 2;
+        parentY += innerPadding / 2;
         offsetX = innerPadding / 2;
       }
 
@@ -147,10 +148,12 @@ export class TileSpecsCalculationSpacing extends TileSpecsCalculation {
       const specs = new TileSpecs(
         dimensions.width,
         dimensions.height,
-        absX + relX + offsetX,
-        absY + relY + offsetY,
-        relX + offsetX,
-        relY + offsetY,
+        rootX + parentX + offsetX,
+        rootY + parentY + offsetY,
+        this.isSubRoot(props) ? 0 : subRootX + parentX + offsetX,
+        this.isSubRoot(props) ? 0 : subRootY + parentY + offsetY,
+        parentX + offsetX,
+        parentY + offsetY,
         props.innerPadding ?? 0,
         props.outerPadding ?? 0,
         props.hAlign || 'left',
@@ -158,9 +161,9 @@ export class TileSpecsCalculationSpacing extends TileSpecsCalculation {
       );
 
       if (this.isHorizontal) {
-        relX += innerPadding / 2 + stackSize;
+        parentX += innerPadding / 2 + stackSize;
       } else {
-        relY += innerPadding / 2 + stackSize;
+        parentY += innerPadding / 2 + stackSize;
       }
 
       return { idx, specs };

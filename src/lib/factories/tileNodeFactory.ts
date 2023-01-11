@@ -38,6 +38,8 @@ export class TileNodeFactory {
       0,
       0,
       0,
+      0,
+      0,
       innerPadding ?? 0,
       outerPadding ?? 0,
       hAlign || 'left',
