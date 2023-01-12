@@ -5,8 +5,8 @@
 
 	let width = 500;
 	let height = 500;
-	let innerPadding = 2;
-	let outerPadding = 2;
+	let innerPadding = 4;
+	let outerPadding = 4;
 </script>
 
 <input type="range" min={0} max={1000} bind:value={width} />
@@ -14,7 +14,7 @@
 
 <HTile {width} {height} {innerPadding} {outerPadding} type="html">
 	<VTile>
-		<Tile width="50%">
+		<Tile width="60%">
 			<TileHTMLBox />
 		</Tile>
 		<Tile>

@@ -1,17 +1,20 @@
 <script lang="ts">
 	import { getTileContext } from '$lib';
 
-	const { specs, element } = getTileContext();
+	const { specs, context } = getTileContext();
 
-	$: if ($element) {
-		const context = ($element as HTMLCanvasElement).getContext('2d');
+	$: if ($context) {
+		const ctx = $context;
 
-		if (context) {
-			context.fillStyle = '#dedede';
-			context.strokeStyle = '#cccccc';
-			context.rect(0, 0, $specs.width, $specs.height);
-			context.fill();
-			context.stroke();
-		}
+		const dpr = window.devicePixelRatio || 1;
+
+		ctx.beginPath();
+		ctx.fillStyle = '#dedede';
+		ctx.strokeStyle = '#cccccc';
+		ctx.lineWidth = 1 * dpr;
+		ctx.rect(0, 0, $specs.width * dpr, $specs.height * dpr);
+		ctx.fill();
+		ctx.stroke();
+		ctx.closePath();
 	}
 </script>

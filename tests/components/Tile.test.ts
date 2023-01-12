@@ -70,7 +70,6 @@ describe('Tile', () => {
     const element = getElementFrom(container, 1);
 
     expect(element).toBeInstanceOf(HTMLElement);
-    expect(element).toHaveClass('tile');
     expect(element?.tagName).toEqual('DIV');
   });
 

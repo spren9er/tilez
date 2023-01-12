@@ -1,14 +1,14 @@
 <script lang="ts">
-	import type { TileNode } from '$lib/entities/tileNode';
+	import type { TypeTileNodeRootType } from '$lib/entities/tileNode';
 
 	import { getTileContext } from '$lib/entities/tileContext';
 
-	export let node: TileNode;
+	export let rootType: TypeTileNodeRootType | undefined = undefined;
 
 	const { specs } = getTileContext();
 </script>
 
-{#if !node.isRoot && node.isSubRoot}
+{#if rootType === 'subroot'}
 	<div
 		class="tile"
 		style:left="{$specs.parentX}px"

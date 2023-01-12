@@ -1,12 +1,12 @@
 <script lang="ts">
 	import type { TypeTilePropsElement } from '$lib/types/tileProps.type';
-	import type { TileNode } from '$lib/entities/tileNode';
+	import type { TypeTileNodeRootType } from '$lib/entities/tileNode';
 
 	import { getTileContext } from '$lib/entities/tileContext';
 
 	import TileEmbed from '$lib/components/TileEmbed.svelte';
 
-	export let node: TileNode;
+	export let rootType: TypeTileNodeRootType | undefined = undefined;
 	export let element: TypeTilePropsElement | undefined = undefined;
 
 	const { specs, element: elementStore } = getTileContext();
@@ -15,8 +15,8 @@
 </script>
 
 {#if $specs}
-	{#if node.isSubRoot}
-		<TileEmbed {node}>
+	{#if rootType}
+		<TileEmbed {rootType}>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width={$specs.width}

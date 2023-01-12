@@ -22,6 +22,7 @@ describe('TileContext', () => {
   it('creates node/specs contexts and retrieve specs and scales of context', () => {
     const width = 200;
     const height = 100;
+
     setNodeContext({ width, height });
 
     const { specs, xScale, yScale } = getTileContext();
@@ -36,13 +37,17 @@ describe('TileContext', () => {
   it('derives element in case of type "canvas"', () => {
     const width = 200;
     const height = 100;
-    const type = 'canvas';
-    setNodeContext({ width, height, type });
+
+    setNodeContext({ width, height, type: 'canvas' });
 
     const { element } = getTileContext();
 
+    expect(get(element)).toBeNull();
+
     const canvas = document.createElement('canvas');
     element.set(canvas);
+
+    setNodeContext({ width, height, type: 'canvas' });
 
     const { element: derivedElement } = getTileContext();
 

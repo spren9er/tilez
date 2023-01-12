@@ -1,20 +1,21 @@
 <script lang="ts">
 	import type { TypeTilePropsElement } from '$lib/types/tileProps.type';
+	import type { TypeTileNodeRootType } from '$lib/entities/tileNode';
 
 	import { getTileContext } from '$lib/entities/tileContext';
-	import type { TileNode } from '$lib/entities/tileNode';
 
-	export let node: TileNode;
+	export let rootType: TypeTileNodeRootType | undefined = undefined;
 	export let element: TypeTilePropsElement | undefined = undefined;
 
 	const { specs, element: elementStore } = getTileContext();
+
+	rootType; // not used
 
 	$: if (element) elementStore.set(element);
 </script>
 
 {#if $specs}
 	<div
-		class:root={node.isRoot}
 		class="tile"
 		style:left="{$specs.parentX}px"
 		style:top="{$specs.parentY}px"
@@ -31,9 +32,5 @@
 		position: absolute;
 		margin: 0;
 		padding: 0;
-	}
-
-	.root.tile {
-		position: relative;
 	}
 </style>

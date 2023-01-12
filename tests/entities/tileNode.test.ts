@@ -47,21 +47,24 @@ describe('TileNode', () => {
     expect(child.parentType).toEqual('plain');
   });
 
-  it('is sub root (parent is of different type) or not', () => {
+  it('is sub root (when parent is of different type) or not', () => {
     const width = 861;
     const height = 687;
 
-    const node = new TileNodeFactory({ width, height }).build();
+    const root = new TileNodeFactory({ width, height }).build();
 
-    expect(node.isSubRoot).toEqual(true);
+    expect(root.isSubRoot).toEqual(true);
+    expect(root.rootType).toEqual('root');
 
-    const subRoot = new TileNodeFactory({ type: 'svg' }, node).build();
+    const subRoot = new TileNodeFactory({ type: 'svg' }, root).build();
 
     expect(subRoot.isSubRoot).toEqual(true);
+    expect(subRoot.rootType).toEqual('subroot');
 
     const child = new TileNodeFactory({ type: 'svg' }, subRoot).build();
 
     expect(child.isSubRoot).toEqual(false);
+    expect(child.rootType).toBeUndefined();
   });
 
   it('can access specs width and height and updates children specs', () => {

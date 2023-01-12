@@ -7,6 +7,8 @@ import type { TileSpecs } from '$lib/entities/tileSpecs';
 import { TilePropsDimensionFactory } from '$lib/factories/tilePropsDimensionFactory';
 import { TileSpecsCalculationFactory } from '$lib/factories/tileSpecsCalculationFactory';
 
+export type TypeTileNodeRootType = 'root' | 'subroot';
+
 export class TileNode {
   public props: TileProps;
   public specs?: TileSpecs;
@@ -52,6 +54,11 @@ export class TileNode {
       ).build();
 
       if (propsWidth.unit !== 'px' && propsHeight.unit !== 'px') return node;
+      if (
+        propsWidth.value === node.specs.width &&
+        propsHeight.value === node.specs.height
+      )
+        return node;
 
       node.specs.width = propsWidth.value;
       node.specs.height = propsHeight.value;
@@ -116,6 +123,11 @@ export class TileNode {
 
       return node;
     });
+  }
+
+  public get rootType(): TypeTileNodeRootType | undefined {
+    if (this.isRoot) return 'root';
+    if (this.isSubRoot) return 'subroot';
   }
 
   public get parentType() {

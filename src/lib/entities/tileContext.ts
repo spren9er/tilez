@@ -1,4 +1,4 @@
-import { getContext, setContext, hasContext } from 'svelte';
+import { getContext, setContext } from 'svelte';
 import { derived, writable, type Writable } from 'svelte/store';
 
 import type {
@@ -19,6 +19,7 @@ type TypeTileContext = {
   xScale: Writable<LinearScale>;
   yScale: Writable<LinearScale>;
   element: Writable<TypeTilePropsElement | null>;
+  context: Writable<CanvasRenderingContext2D | null>;
 };
 
 export function getTileContext(): TypeTileContext {
@@ -52,8 +53,9 @@ function setTileContext(name: string, node: TileNode) {
   });
 
   const element = setupElement(node);
+  const context = setupCanvas(element);
 
-  setContext(name, { specs, xScale, yScale, element });
+  setContext(name, { specs, xScale, yScale, element, context });
 }
 
 function setupElement(node: TileNode) {
@@ -66,4 +68,14 @@ function setupElement(node: TileNode) {
   }
 
   return writable(null);
+}
+
+/* c8 ignore start */
+function setupCanvas(element: Writable<TypeTilePropsElement | null>) {
+  return derived(element, ($element) => {
+    if ($element && $element instanceof HTMLCanvasElement)
+      return $element.getContext('2d');
+
+    return null;
+  });
 }

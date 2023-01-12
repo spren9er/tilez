@@ -1,11 +1,11 @@
 <script lang="ts">
 	import type { TypeTilePropsElement } from '$lib/types/tileProps.type';
-	import type { TileNode } from '$lib/entities/tileNode';
+	import type { TypeTileNodeRootType } from '$lib/entities/tileNode';
 
-	export let node: TileNode;
+	export let rootType: TypeTileNodeRootType | undefined = undefined;
 	export const element: TypeTilePropsElement | undefined = undefined;
 
-	node;
+	rootType; // not used
 </script>
 
 <slot {element} />

@@ -44,6 +44,7 @@
 		mode,
 	});
 	const root = $node.isRoot;
+	const rootType = $node.rootType;
 
 	const componentFor = (node: TileNode) => {
 		const componentMapping = {
@@ -57,15 +58,16 @@
 	};
 
 	$: if (root) {
-		const newWidth = width ?? containerWidth;
-		const newHeight = height ?? containerHeight;
+		const updatedWidth = width ?? containerWidth;
+		const updatedHeight = height ?? containerHeight;
 
-		if (newWidth && newHeight) $node.updateSpecs(newWidth, newHeight);
+		if (updatedWidth && updatedHeight)
+			$node.updateSpecs(updatedWidth, updatedHeight);
 	}
 </script>
 
 <TileWrapper {root} bind:containerWidth bind:containerHeight>
-	<svelte:component this={componentFor($node)} node={$node} bind:element>
+	<svelte:component this={componentFor($node)} {rootType} bind:element>
 		<slot {element} />
 	</svelte:component>
 </TileWrapper>
