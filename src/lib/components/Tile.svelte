@@ -10,7 +10,7 @@
 	} from '$lib/types/tileProps.type';
 	import type { TileNode } from '$lib/entities/tileNode';
 
-	import { setNodeContext } from '$lib/entities/tileContext';
+	import { setNodeContext, getTileContext } from '$lib/entities/tileContext';
 
 	import TileWrapper from '$lib/components/TileWrapper.svelte';
 	import TilePlain from '$lib/components/tileTypes/TilePlain.svelte';
@@ -44,6 +44,8 @@
 		mode,
 	});
 
+	const { element: elementStore } = getTileContext();
+
 	const componentFor = (node: TileNode) => {
 		const componentMapping = {
 			plain: TilePlain,
@@ -54,6 +56,8 @@
 
 		return componentMapping[node.props.type!];
 	};
+
+	$: if (element) elementStore.set(element);
 
 	$: if (node.isRoot) {
 		const updatedWidth = width ?? containerWidth;

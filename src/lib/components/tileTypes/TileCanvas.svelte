@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-
 	import type { TypeTilePropsElement } from '$lib/types/tileProps.type';
 	import type { TileNode } from '$lib/entities/tileNode';
 
@@ -11,10 +9,18 @@
 	export let node: TileNode;
 	export let element: TypeTilePropsElement | undefined = undefined;
 
-	const { specs, element: elementStore, context } = getTileContext();
+	const { specs, context } = getTileContext();
+
+	const { rootType } = node;
+
+	// needed when root tile has no absolute size: specs are empty first!
+	// once there is a non-trivial size, component should not be hidden anymore
+	let initialized = false;
+
+	$: if (!$specs.hasEmptySize) initialized = true;
 
 	function createSubContext() {
-		if (!$context) return;
+		if (!$context || !$specs) return;
 
 		const dpr = window.devicePixelRatio || 1;
 
@@ -23,7 +29,7 @@
 	}
 
 	function resizeCanvasToDisplaySize() {
-		if (!$context) return;
+		if (!$context || !$specs) return;
 
 		const dpr = window.devicePixelRatio || 1;
 		const canvas = $context.canvas;
@@ -31,6 +37,7 @@
 		const canvasWidth = Math.round($specs.width * dpr);
 		const canvasHeight = Math.round($specs.height * dpr);
 
+		if (canvasWidth === 0 || canvasHeight === 0) return;
 		if (canvas.width === canvasWidth && canvas.height === canvasHeight) return;
 
 		canvas.width = canvasWidth;
@@ -42,20 +49,12 @@
 		$context.scale(dpr, dpr);
 	}
 
-	onMount(() => {
-		if (node.rootType) {
-			elementStore.set(element!);
-			resizeCanvasToDisplaySize();
-		}
-	});
-
-	$: if ($specs) {
-		node.rootType ? resizeCanvasToDisplaySize() : createSubContext();
-	}
+	$: if ($context || $specs)
+		rootType ? resizeCanvasToDisplaySize() : createSubContext();
 </script>
 
-{#if $specs}
-	{#if node.rootType}
+{#if !$specs.hasEmptySize || initialized}
+	{#if rootType}
 		<TileEmbed {node}>
 			<canvas bind:this={element} />
 			<slot {element} />

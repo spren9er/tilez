@@ -3,10 +3,10 @@
 
 	export let node: TileNode;
 
-	$: ({ specs, coords } = node);
+	$: ({ specs, coords, rootType } = node);
 </script>
 
-{#if node.rootType === 'subroot'}
+{#if rootType === 'subroot'}
 	<div
 		class="tile"
 		style:left="{coords.x}px"

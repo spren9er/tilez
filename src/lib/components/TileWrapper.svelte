@@ -7,7 +7,7 @@
 	export let containerWidth: number | undefined = undefined;
 	export let containerHeight: number | undefined = undefined;
 
-	const { specs } = node;
+	const { specs, isRoot } = node;
 	const width = specs?.width ? `${specs?.width}px` : null;
 	const height = specs?.height ? `${specs?.height}px` : null;
 
@@ -18,7 +18,7 @@
 	});
 </script>
 
-{#if node.isRoot}
+{#if isRoot}
 	<div
 		id="tile-wrapper"
 		class:visible

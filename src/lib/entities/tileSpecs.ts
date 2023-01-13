@@ -20,6 +20,10 @@ export class TileSpecs {
     return this.width / this.height;
   }
 
+  public get hasEmptySize(): boolean {
+    return this.width === 0 || this.height === 0;
+  }
+
   public copy(): TileSpecs {
     const {
       width,
