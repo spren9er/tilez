@@ -32,7 +32,7 @@
 	let containerWidth: number;
 	let containerHeight: number;
 
-	const node = setNodeContext({
+	const nodeStore = setNodeContext({
 		stack,
 		width,
 		height,
@@ -43,8 +43,8 @@
 		type,
 		mode,
 	});
-	const root = $node.isRoot;
-	const rootType = $node.rootType;
+	const node = $nodeStore;
+	const root = node.isRoot;
 
 	const componentFor = (node: TileNode) => {
 		const componentMapping = {
@@ -67,7 +67,7 @@
 </script>
 
 <TileWrapper {root} bind:containerWidth bind:containerHeight>
-	<svelte:component this={componentFor($node)} {rootType} bind:element>
+	<svelte:component this={componentFor($node)} {node} bind:element>
 		<slot {element} />
 	</svelte:component>
 </TileWrapper>

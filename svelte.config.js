@@ -10,7 +10,7 @@ const config = {
   kit: {
     adapter: adapter(),
     alias: {
-      $fixtures: './src/fixtures',
+      $examples: './src/examples',
     },
   },
 };

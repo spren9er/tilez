@@ -1,15 +1,15 @@
 <script lang="ts">
 	import type { TypeTilePropsElement } from '$lib/types/tileProps.type';
-	import type { TypeTileNodeRootType } from '$lib/entities/tileNode';
+	import type { TileNode } from '$lib/entities/tileNode';
 
 	import { getTileContext } from '$lib/entities/tileContext';
 
-	export let rootType: TypeTileNodeRootType | undefined = undefined;
+	export let node: TileNode;
 	export let element: TypeTilePropsElement | undefined = undefined;
 
 	const { specs, element: elementStore } = getTileContext();
 
-	rootType; // not used
+	node; // not used
 
 	$: if (element) elementStore.set(element);
 </script>

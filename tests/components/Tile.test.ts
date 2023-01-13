@@ -2,7 +2,7 @@ import { render } from '@testing-library/svelte';
 import { expect, describe, it } from 'vitest';
 
 import Tile from '$lib/components/Tile.svelte';
-import EmptyTwoLevelHierarchy from '$fixtures/EmptyTwoLevelHierarchy.svelte';
+import EmptyTwoLevelHierarchy from '$examples/EmptyTwoLevelHierarchy.svelte';
 
 function getElementFrom(container: HTMLElement, level = 0) {
   const tileWrapper = container.querySelector('#tile-wrapper');

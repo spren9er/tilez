@@ -14,7 +14,7 @@ const config = {
   },
   resolve: {
     alias: {
-      $fixtures: './src/fixtures',
+      $examples: './src/examples',
     },
   },
 };

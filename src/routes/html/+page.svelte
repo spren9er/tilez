@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Tile, HTile, VTile } from '$lib';
 
-	import TileHTMLBox from '$fixtures/boxes/TileHTMLBox.svelte';
+	import TileHTMLBox from '$examples/boxes/TileHTMLBox.svelte';
 
 	let width = 500;
 	let height = 500;

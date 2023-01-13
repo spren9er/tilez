@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Tile, HTile, VTile } from '$lib';
 
-	import TileCanvasBox from '$fixtures/boxes/TileCanvasBox.svelte';
+	import TileCanvasBox from '$examples/boxes/TileCanvasBox.svelte';
 
 	let width = 500;
 	let height = 500;
