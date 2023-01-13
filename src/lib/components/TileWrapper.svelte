@@ -1,16 +1,15 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	import { getTileContext } from '$lib/entities/tileContext';
+	import type { TileNode } from '$lib/entities/tileNode';
 
-	export let root: boolean;
+	export let node: TileNode;
 	export let containerWidth: number | undefined = undefined;
 	export let containerHeight: number | undefined = undefined;
 
-	const { specs } = getTileContext();
-
-	const width = $specs.width ? `${$specs.width}px` : null;
-	const height = $specs.height ? `${$specs.height}px` : null;
+	const { specs } = node;
+	const width = specs?.width ? `${specs?.width}px` : null;
+	const height = specs?.height ? `${specs?.height}px` : null;
 
 	let visible = false;
 
@@ -19,7 +18,7 @@
 	});
 </script>
 
-{#if root}
+{#if node.isRoot}
 	<div
 		id="tile-wrapper"
 		class:visible

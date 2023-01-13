@@ -9,32 +9,28 @@
 	export let node: TileNode;
 	export let element: TypeTilePropsElement | undefined = undefined;
 
-	const { specs, element: elementStore } = getTileContext();
+	const { element: elementStore } = getTileContext();
 
+	$: ({ specs, coords } = node);
 	$: if (element) elementStore.set(element);
 </script>
 
-{#if $specs}
-	{#if node.rootType}
-		<TileEmbed {node}>
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				width={$specs.width}
-				height={$specs.height}
-				viewBox="0 0 {$specs.width} {$specs.height}"
-				bind:this={element}
-			>
-				<slot {element} />
-			</svg>
-		</TileEmbed>
-	{:else}
-		<g
-			transform="translate({$specs.parentX}, {$specs.parentY})"
+{#if node.rootType}
+	<TileEmbed {node}>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width={specs?.width}
+			height={specs?.height}
+			viewBox="0 0 {specs?.width} {specs?.height}"
 			bind:this={element}
 		>
 			<slot {element} />
-		</g>
-	{/if}
+		</svg>
+	</TileEmbed>
+{:else}
+	<g transform="translate({coords.x}, {coords.y})" bind:this={element}>
+		<slot {element} />
+	</g>
 {/if}
 
 <style>

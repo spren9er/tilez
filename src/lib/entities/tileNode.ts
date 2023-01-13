@@ -115,16 +115,6 @@ export class TileNode {
     return this.children.map((child) => get(child).props);
   }
 
-  public addChild(child: TileNode) {
-    child.derivePropsFrom(this);
-
-    this.update((node: TileNode) => {
-      node.children = [...node.children, child];
-
-      return node;
-    });
-  }
-
   public get rootType(): TypeTileNodeRootType | undefined {
     if (this.isRoot) return 'root';
     if (this.isSubRoot) return 'subroot';
@@ -134,6 +124,51 @@ export class TileNode {
     if (this.isRoot) return;
 
     return this.parent!.props.type;
+  }
+
+  public get coords() {
+    let offsetX = 0;
+    let offsetY = 0;
+
+    if (this.parent) {
+      const needsOffset =
+        this.rootType === 'subroot' && this.parent.props.type === 'plain';
+
+      if (needsOffset) {
+        const { subRootX, subRootY } = this.parent.specs!;
+
+        // add coords of parent position within subtree (up to subroot)
+        offsetX += subRootX;
+        offsetY += subRootY;
+
+        // add relative offset of subroot
+        let parent = this.parent;
+        while (
+          parent.parent &&
+          parent.parent.props.type === parent.props.type
+        ) {
+          parent = parent.parent;
+        }
+
+        offsetX += parent?.specs?.parentX || 0;
+        offsetY += parent?.specs?.parentY || 0;
+      }
+    }
+
+    return {
+      x: (this.specs?.parentX || 0) + offsetX,
+      y: (this.specs?.parentY || 0) + offsetY,
+    };
+  }
+
+  public addChild(child: TileNode) {
+    child.derivePropsFrom(this);
+
+    this.update((node: TileNode) => {
+      node.children = [...node.children, child];
+
+      return node;
+    });
   }
 
   private derivePropsFrom(parent: TileNode) {

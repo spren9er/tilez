@@ -7,20 +7,19 @@
 	export let node: TileNode;
 	export let element: TypeTilePropsElement | undefined = undefined;
 
-	const { specs, element: elementStore } = getTileContext();
+	const { element: elementStore } = getTileContext();
 
-	node; // not used
-
+	$: ({ specs, coords } = node);
 	$: if (element) elementStore.set(element);
 </script>
 
-{#if $specs}
+{#if node.specs}
 	<div
 		class="tile"
-		style:left="{$specs.parentX}px"
-		style:top="{$specs.parentY}px"
-		style:width="{$specs.width}px"
-		style:height="{$specs.height}px"
+		style:left="{coords.x}px"
+		style:top="{coords.y}px"
+		style:width="{specs?.width}px"
+		style:height="{specs?.height}px"
 		bind:this={element}
 	>
 		<slot {element} />
