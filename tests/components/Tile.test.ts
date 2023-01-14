@@ -5,7 +5,8 @@ import Tile from '$lib/components/Tile.svelte';
 import EmptyTwoLevelHierarchy from '$examples/EmptyTwoLevelHierarchy.svelte';
 
 function getElementFrom(container: HTMLElement, level = 0) {
-  const tileWrapper = container.querySelector('#tile-wrapper');
+  const tileWrapper = container.querySelector('.tile-wrapper');
+
   let child = tileWrapper;
 
   while (level > 0) {
