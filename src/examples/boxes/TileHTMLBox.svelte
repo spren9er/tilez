@@ -16,7 +16,7 @@
 	.tile {
 		position: absolute;
 		box-sizing: border-box;
-		background-color: #dedede;
-		border: 1px solid #cccccc;
+		background-color: #eaeaea;
+		border: 1px solid #aaaaaa;
 	}
 </style>

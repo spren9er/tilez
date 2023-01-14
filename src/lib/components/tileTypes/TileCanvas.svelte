@@ -49,8 +49,10 @@
 		$context.scale(dpr, dpr);
 	}
 
-	$: if ($context || $specs)
-		rootType ? resizeCanvasToDisplaySize() : createSubContext();
+	$: if ($context || $specs) {
+		if (rootType) resizeCanvasToDisplaySize();
+		createSubContext();
+	}
 </script>
 
 {#if !$specs.hasEmptySize || initialized}
@@ -63,3 +65,11 @@
 		<slot {element} />
 	{/if}
 {/if}
+
+<style>
+	canvas {
+		display: block;
+		margin: 0;
+		padding: 0;
+	}
+</style>

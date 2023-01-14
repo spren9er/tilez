@@ -7,12 +7,18 @@
 		const ctx = $context;
 
 		const dpr = window.devicePixelRatio || 1;
+		const thickness = 1 * dpr;
 
 		ctx.beginPath();
-		ctx.fillStyle = '#dedede';
-		ctx.strokeStyle = '#cccccc';
-		ctx.lineWidth = 1 * dpr;
-		ctx.rect(0, 0, $specs.width * dpr, $specs.height * dpr);
+		ctx.fillStyle = '#eaeaea';
+		ctx.strokeStyle = '#aaaaaa';
+		ctx.lineWidth = thickness;
+		ctx.rect(
+			thickness / 2,
+			thickness / 2,
+			$specs.width * dpr - thickness,
+			$specs.height * dpr - thickness,
+		);
 		ctx.fill();
 		ctx.stroke();
 		ctx.closePath();

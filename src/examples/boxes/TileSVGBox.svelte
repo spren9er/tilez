@@ -9,6 +9,7 @@
 	y={0}
 	width={$specs.width}
 	height={$specs.height}
-	fill="#dedede"
-	stroke="#cccccc"
+	fill="#eaeaea"
+	stroke-width="1"
+	stroke="#aaaaaa"
 />
