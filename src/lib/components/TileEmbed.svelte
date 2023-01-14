@@ -21,8 +21,11 @@
 {/if}
 
 <style>
-	.tile {
+	.tile,
+	slot {
 		position: absolute;
+		top: 0;
+		left: 0;
 		margin: 0;
 		padding: 0;
 		overflow: visible;

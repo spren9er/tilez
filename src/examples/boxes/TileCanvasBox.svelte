@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getTileContext } from '$lib';
+	import { getTileContext } from '$lib/entities/tileContext';
 
 	const { specs, context } = getTileContext();
 

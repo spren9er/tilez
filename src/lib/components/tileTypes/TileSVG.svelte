@@ -31,5 +31,11 @@
 <style>
 	svg {
 		display: block;
+		position: absolute;
+		top: 0;
+		left: 0;
+		margin: 0;
+		padding: 0;
+		overflow: visible;
 	}
 </style>

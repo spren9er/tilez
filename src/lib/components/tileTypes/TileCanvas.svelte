@@ -13,7 +13,7 @@
 
 	const { rootType } = node;
 
-	// needed when root tile has no absolute size: specs are empty first!
+	// needed when root tile has no absolute size: then specs are empty first!
 	// once there is a non-trivial size, component should not be hidden anymore
 	let initialized = false;
 
@@ -37,7 +37,6 @@
 		const canvasWidth = Math.round($specs.width * dpr);
 		const canvasHeight = Math.round($specs.height * dpr);
 
-		if (canvasWidth === 0 || canvasHeight === 0) return;
 		if (canvas.width === canvasWidth && canvas.height === canvasHeight) return;
 
 		canvas.width = canvasWidth;
@@ -69,6 +68,9 @@
 <style>
 	canvas {
 		display: block;
+		position: absolute;
+		top: 0;
+		left: 0;
 		margin: 0;
 		padding: 0;
 	}

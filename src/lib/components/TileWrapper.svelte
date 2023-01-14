@@ -20,7 +20,7 @@
 
 {#if isRoot}
 	<div
-		id="tile-wrapper"
+		class="tile-wrapper"
 		class:visible
 		style:width
 		style:height
@@ -34,7 +34,7 @@
 {/if}
 
 <style>
-	#tile-wrapper {
+	.tile-wrapper {
 		position: relative;
 		visibility: hidden;
 		margin: 0;
@@ -45,7 +45,13 @@
 		height: 100%;
 	}
 
-	#tile-wrapper.visible {
+	slot {
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+
+	.tile-wrapper.visible {
 		visibility: visible;
 	}
 </style>
