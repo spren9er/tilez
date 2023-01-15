@@ -255,7 +255,7 @@ $: if ($context) {
   ctx.beginPath();
   ctx.strokeStyle = '#cccccc';
   ctx.lineWidth = thickness;
-  ctx.rect(0, 0, $specs.width * dpr, $specs.height * dpr);
+  ctx.rect(offset, offset, width, height);
   ctx.stroke();
   ctx.closePath();
 }
