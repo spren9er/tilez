@@ -238,7 +238,7 @@ describe('TileNode', () => {
     expect(node.width).toEqual(width);
     expect(node.height).toEqual(height);
 
-    node.updateSpecs(newWidth, newHeight);
+    node.updateNodes(newWidth, newHeight);
 
     expect(node.width).toEqual(newWidth);
     expect(node.height).toEqual(newHeight);
@@ -253,7 +253,7 @@ describe('TileNode', () => {
 
     expect(node.specs).toBeUndefined();
 
-    node.updateSpecs(newWidth, newHeight);
+    node.updateNodes(newWidth, newHeight);
 
     expect(node.specs).toBeUndefined();
   });
@@ -269,7 +269,7 @@ describe('TileNode', () => {
     expect(node.width).toEqual(width);
     expect(node.height).toEqual(height);
 
-    node.updateSpecs(newWidth, newHeight);
+    node.updateNodes(newWidth, newHeight);
 
     expect(node.width).toEqual(width);
     expect(node.height).toEqual(height);

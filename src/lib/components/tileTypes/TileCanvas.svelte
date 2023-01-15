@@ -14,11 +14,6 @@
 
 	const { rootType } = node;
 
-	// needed when root tile has no absolute size: then specs are empty first;
-	// once there is a non-trivial size, component should not be hidden anymore
-	let initialized = false;
-	$: if (!$specs.hasEmptySize) initialized = true;
-
 	// when inner padding, outer padding or mode changes, we need to redraw
 	let lastDerivedProps = node.derivedProps.copy();
 
@@ -72,15 +67,13 @@
 	}
 </script>
 
-{#if !$specs.hasEmptySize || initialized}
-	{#if rootType}
-		<TileEmbed {node}>
-			<canvas bind:this={element} />
-			<slot {element} />
-		</TileEmbed>
-	{:else}
+{#if rootType}
+	<TileEmbed {node}>
+		<canvas bind:this={element} />
 		<slot {element} />
-	{/if}
+	</TileEmbed>
+{:else}
+	<slot {element} />
 {/if}
 
 <style>

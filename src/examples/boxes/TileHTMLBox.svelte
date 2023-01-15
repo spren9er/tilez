@@ -3,17 +3,15 @@
 
 	const { specs } = getTileContext();
 
-	$: borderWidth = $specs.hasEmptySize ? '0px' : '1px';
+	$: borderWidth = $specs?.hasEmptySize ? '0px' : '1px';
 </script>
 
-{#if $specs}
-	<div
-		class="tile"
-		style:width="{$specs.width}px"
-		style:height="{$specs.height}px"
-		style:border-width={borderWidth}
-	/>
-{/if}
+<div
+	class="tile"
+	style:width="{$specs.width}px"
+	style:height="{$specs.height}px"
+	style:border-width={borderWidth}
+/>
 
 <style>
 	.tile {

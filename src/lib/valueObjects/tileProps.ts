@@ -7,6 +7,8 @@ import type {
 } from '$lib/types/tileProps.type';
 import type { TilePropsDimensions } from '$lib/valueObjects/tilePropsDimensions';
 
+import { TilePropsFactory } from '$lib/factories/tilePropsFactory';
+
 export class TilePropsDimensionsAccessor {
   constructor(
     private dimensions: TilePropsDimensions,
@@ -70,8 +72,9 @@ export class TileProps {
       mode,
     } = this;
 
-    return new TileProps(
-      dimensions,
+    return new TilePropsFactory({
+      width: dimensions.valueFor('width'),
+      height: dimensions.valueFor('height'),
       stack,
       type,
       innerPadding,
@@ -79,6 +82,6 @@ export class TileProps {
       hAlign,
       vAlign,
       mode,
-    );
+    }).build();
   }
 }

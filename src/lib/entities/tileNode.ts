@@ -9,6 +9,7 @@ import type { TileSpecs } from '$lib/entities/tileSpecs';
 
 import { TilePropsFactory } from '$lib/factories/tilePropsFactory';
 import { TileSpecsCalculationFactory } from '$lib/factories/tileSpecsCalculationFactory';
+import { TilePropsDimensionsFactory } from '$lib/factories/tilePropsDimensionsFactory';
 
 export type TypeTileNodeRootType = 'root' | 'subroot';
 
@@ -24,7 +25,7 @@ export class TileNode {
 
   constructor(props: TileProps, parent?: TileNode, specs?: TileSpecs) {
     this.props = props;
-    this.derivedProps = props.copy();
+    this.derivedProps = this.deriveProps(props, parent);
     this.parent = parent;
     this.specs = specs;
     this.children = [];
@@ -35,80 +36,57 @@ export class TileNode {
     this.update = store.update;
     this.set = store.set;
 
-    if (parent) {
-      parent.addChild(this);
-    } else {
-      this.derivedProps.type = this.props.type || 'plain';
-    }
-
-    this.subscribe((node: TileNode) => node.updateChildrenSpecs());
+    if (parent) parent.addChild(this);
   }
 
-  public updateSpecs(
+  public updateNodes(
     width: TypeTilePropsDimension,
     height: TypeTilePropsDimension,
     innerPadding?: TypeTilePropsDimension,
     outerPadding?: TypeTilePropsDimension,
     mode?: TypeTilePropsMode,
   ) {
-    this.update((node: TileNode) => {
-      if (!node.specs) return node;
+    if (!this.specs) return;
 
-      const props = new TilePropsFactory({
-        width,
-        height,
-        innerPadding,
-        outerPadding,
-        mode,
-      }).build();
+    const props = new TilePropsFactory({
+      width,
+      height,
+      innerPadding,
+      outerPadding,
+      mode,
+    }).build();
 
-      if (props.dim('width').unit !== 'px' && props.dim('height').unit !== 'px')
-        return node;
+    const derivedProps = this.deriveProps(props, this.parent);
 
-      // no change => update not necessary
+    if (this.isRoot) {
       if (
-        props.width === node.specs.width &&
-        props.height === node.specs.height &&
-        props.innerPadding === node.specs.innerPadding &&
-        props.outerPadding === node.specs.outerPadding &&
-        props.mode === node.derivedProps.mode
+        derivedProps.dim('width').unit !== 'px' &&
+        derivedProps.dim('height').unit !== 'px'
       )
-        return node;
+        return;
 
-      node.derivedProps.innerPadding = props.innerPadding ?? 0;
-      node.derivedProps.outerPadding = props.outerPadding ?? 0;
-      node.derivedProps.mode = props.mode || 'spacing';
-      this.updateDerivedProps();
-
-      node.specs.width = props.width!;
-      node.specs.height = props.height!;
-      node.specs.innerPadding = props.innerPadding ?? 0;
-      node.specs.outerPadding = props.outerPadding ?? 0;
-
-      return node;
-    });
-  }
-
-  public updateChildrenSpecs() {
-    if (!this.hasChildren || !this.specs) return;
-
-    const tileSpecsCalculation = new TileSpecsCalculationFactory(
-      this.derivedProps.mode || 'spacing',
-      this.specs,
-      this.children.map(({ derivedProps }) => derivedProps),
-      this.isRoot,
-      this.derivedProps.type!,
-      this.derivedProps.stack,
-    ).build();
-    const specs = tileSpecsCalculation.call();
-
-    this.children.forEach((child, idx) => {
-      child.update((node: TileNode) => {
-        node.specs = specs[idx];
+      this.update((node: TileNode) => {
+        if (node.specs) {
+          node.specs.width = derivedProps.width!;
+          node.specs.height = derivedProps.height!;
+          node.specs.innerPadding = derivedProps.innerPadding ?? 0;
+          node.specs.outerPadding = derivedProps.outerPadding ?? 0;
+        }
 
         return node;
       });
-    });
+    }
+
+    this.derivedProps.dimensions = new TilePropsDimensionsFactory(
+      derivedProps.width,
+      derivedProps.height,
+    ).build();
+    this.derivedProps.innerPadding = derivedProps.innerPadding;
+    this.derivedProps.outerPadding = derivedProps.outerPadding;
+    this.derivedProps.mode = derivedProps.mode;
+    this.updateSubDerivedProps();
+
+    (this.isRoot ? this : this.parent!).updateSubSpecs();
   }
 
   public get hasChildren() {
@@ -181,42 +159,84 @@ export class TileNode {
   }
 
   public addChild(child: TileNode) {
-    child.derivePropsFrom(this);
+    child.updateDerivedProps(this);
 
-    this.update((node: TileNode) => {
-      node.children = [...node.children, child];
+    this.children = [...this.children, child];
 
-      return node;
+    this.updateSubSpecs();
+  }
+
+  private updateSubSpecs() {
+    if (!this.hasChildren) return;
+
+    this.updateChildrenSpecs();
+
+    this.children.forEach((child) => {
+      child.updateSubSpecs();
     });
   }
 
-  private updateDerivedProps() {
+  private updateChildrenSpecs() {
+    if (!this.hasChildren || !this.specs) return;
+
+    const tileSpecsCalculation = new TileSpecsCalculationFactory(
+      this.derivedProps.mode || 'spacing',
+      this.specs,
+      this.children.map(({ derivedProps }) => derivedProps),
+      this.isRoot,
+      this.derivedProps.type!,
+      this.derivedProps.stack,
+    ).build();
+    const specs = tileSpecsCalculation.call();
+
+    this.children.forEach((child, idx) => {
+      child.update((node: TileNode) => {
+        node.specs = specs[idx];
+
+        return node;
+      });
+    });
+  }
+
+  private updateSubDerivedProps() {
     if (!this.hasChildren) return;
 
     this.children.forEach((child) => {
-      child.derivePropsFrom(this);
-      child.updateDerivedProps();
+      child.updateDerivedProps(this);
+      child.updateSubDerivedProps();
     });
   }
 
-  private derivePropsFrom(parent: TileNode) {
-    const parentNode = get(parent);
+  private updateDerivedProps(parent: TileNode) {
+    this.derivedProps = this.deriveProps(this.props, parent);
+  }
+
+  private deriveProps(props: TileProps, parent?: TileNode) {
+    const derivedProps = props.copy();
 
     // type
-    this.derivedProps.type = this.deriveType();
+    derivedProps.type = this.deriveType(props, parent);
+
+    if (!parent) return derivedProps;
 
     // inner padding
     if (!this.props.innerPadding && this.props.innerPadding !== 0)
-      this.derivedProps.innerPadding = parentNode.derivedProps.innerPadding;
+      derivedProps.innerPadding = parent.derivedProps.innerPadding;
 
     // mode
-    if (!this.props.mode) this.derivedProps.mode = parentNode.derivedProps.mode;
+    if (!this.props.mode) derivedProps.mode = parent.derivedProps.mode;
+
+    return derivedProps;
   }
 
-  private deriveType() {
+  private deriveType(props: TileProps, parent?: TileNode) {
     const type = this.props.type;
 
-    if (!type) return this.parentType!;
+    if (!parent) return props.type || 'plain';
+
+    const parentType = parent.derivedProps.type;
+
+    if (!type) return parentType!;
 
     const typeMapping = {
       plain: 'Plain',
@@ -225,14 +245,14 @@ export class TileNode {
       canvas: 'Canvas',
     };
 
-    if (this.parentType === 'svg') {
+    if (parentType === 'svg') {
       if (['html', 'canvas'].includes(type))
         throw Error(
           `${typeMapping[type]} tile can't be embedded into SVG tile!`,
         );
     }
 
-    if (this.parentType === 'canvas') {
+    if (parentType === 'canvas') {
       if (['html', 'svg'].includes(type))
         throw Error(
           `${typeMapping[type]} tile can't be embedded into Canvas tile!`,

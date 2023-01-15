@@ -32,13 +32,13 @@ describe('Tile', () => {
     ).toHaveLength(0);
   });
 
-  it('renders if no width and height is given', () => {
+  it('renders nothing but a wrapper if no width and height is given', () => {
     const { container } = render(Tile, { props: { type: 'html' } });
 
     const element = getElementFrom(container, 1);
 
     expect(element).toBeInstanceOf(HTMLElement);
-    expect(element?.tagName).toEqual('DIV');
+    expect(element?.tagName).toEqual('IFRAME');
   });
 
   it('of "svg" type renders a <svg> if root', () => {

@@ -19,7 +19,7 @@
 <form>
 	<div class="width">
 		<label for="width">width</label>
-		<input type="range" min={100} max={600} bind:value={width} />
+		<input type="range" min={100} max={800} bind:value={width} />
 		<div class="value">{width}px</div>
 	</div>
 	<div class="height">
@@ -52,36 +52,56 @@
 
 		<div class="root-tile" style:width="{width}px" style:height="{height}px">
 			<HTile {innerPadding} {outerPadding} {mode} type="html">
-				<VTile>
-					<Tile height="60%">
+				<VTile width="60%">
+					<Tile height="15%">
 						<TileHTMLBox />
 					</Tile>
-					<Tile width="50px" height="50px" hAlign="center">
-						<TileHTMLBox />
-					</Tile>
-					<Tile>
-						<TileHTMLBox />
-					</Tile>
-				</VTile>
-				<VTile width="50%">
-					<HTile height="50px">
-						<Tile width="70%">
+					<HTile>
+						<Tile width="70px">
 							<TileHTMLBox />
 						</Tile>
 						<Tile>
 							<TileHTMLBox />
 						</Tile>
 					</HTile>
-					<Tile width="70px" hAlign="right">
-						<TileHTMLBox />
-					</Tile>
-					<Tile height="120px" vAlign="bottom">
+					<HTile height="70px">
+						<Tile width="30%">
+							<TileHTMLBox />
+						</Tile>
+						<Tile width="60%" hAlign="right">
+							<TileHTMLBox />
+						</Tile>
+					</HTile>
+					<Tile height="20%">
 						<TileHTMLBox />
 					</Tile>
 				</VTile>
-				<Tile>
-					<TileHTMLBox />
-				</Tile>
+				<VTile>
+					<HTile height="40%" vAlign="top">
+						<VTile width="75%">
+							<Tile>
+								<TileHTMLBox />
+							</Tile>
+							<Tile height="30%">
+								<TileHTMLBox />
+							</Tile>
+						</VTile>
+						<Tile>
+							<TileHTMLBox />
+						</Tile>
+					</HTile>
+					<Tile width="80%" hAlign="right">
+						<TileHTMLBox />
+					</Tile>
+					<HTile height="30%" vAlign="bottom">
+						<Tile>
+							<TileHTMLBox />
+						</Tile>
+						<Tile width="50px">
+							<TileHTMLBox />
+						</Tile>
+					</HTile>
+				</VTile>
 			</HTile>
 		</div>
 	</div>
@@ -91,23 +111,56 @@
 
 		<div class="root-tile" style:width="{width}px" style:height="{height}px">
 			<HTile {innerPadding} {outerPadding} {mode} type="svg">
-				<VTile>
-					<Tile width="60%">
+				<VTile width="60%">
+					<Tile height="15%">
 						<TileSVGBox />
 					</Tile>
-					<Tile>
-						<TileSVGBox />
-					</Tile>
-					<Tile width="50px" height="50px">
+					<HTile>
+						<Tile width="70px">
+							<TileSVGBox />
+						</Tile>
+						<Tile>
+							<TileSVGBox />
+						</Tile>
+					</HTile>
+					<HTile height="70px">
+						<Tile width="30%">
+							<TileSVGBox />
+						</Tile>
+						<Tile width="60%" hAlign="right">
+							<TileSVGBox />
+						</Tile>
+					</HTile>
+					<Tile height="20%">
 						<TileSVGBox />
 					</Tile>
 				</VTile>
-				<Tile>
-					<TileSVGBox />
-				</Tile>
-				<Tile>
-					<TileSVGBox />
-				</Tile>
+				<VTile>
+					<HTile height="40%" vAlign="top">
+						<VTile width="75%">
+							<Tile>
+								<TileSVGBox />
+							</Tile>
+							<Tile height="30%">
+								<TileSVGBox />
+							</Tile>
+						</VTile>
+						<Tile>
+							<TileSVGBox />
+						</Tile>
+					</HTile>
+					<Tile width="80%" hAlign="right">
+						<TileSVGBox />
+					</Tile>
+					<HTile height="30%" vAlign="bottom">
+						<Tile>
+							<TileSVGBox />
+						</Tile>
+						<Tile width="50px">
+							<TileSVGBox />
+						</Tile>
+					</HTile>
+				</VTile>
 			</HTile>
 		</div>
 	</div>
@@ -117,23 +170,115 @@
 
 		<div class="root-tile" style:width="{width}px" style:height="{height}px">
 			<HTile {innerPadding} {outerPadding} {mode} type="canvas">
-				<VTile>
-					<Tile width="60%">
+				<VTile width="60%">
+					<Tile height="15%">
 						<TileCanvasBox />
 					</Tile>
-					<Tile>
-						<TileCanvasBox />
-					</Tile>
-					<Tile width="50px" height="50px">
+					<HTile>
+						<Tile width="70px">
+							<TileCanvasBox />
+						</Tile>
+						<Tile>
+							<TileCanvasBox />
+						</Tile>
+					</HTile>
+					<HTile height="70px">
+						<Tile width="30%">
+							<TileCanvasBox />
+						</Tile>
+						<Tile width="60%" hAlign="right">
+							<TileCanvasBox />
+						</Tile>
+					</HTile>
+					<Tile height="20%">
 						<TileCanvasBox />
 					</Tile>
 				</VTile>
-				<Tile>
-					<TileCanvasBox />
-				</Tile>
-				<Tile>
-					<TileCanvasBox />
-				</Tile>
+				<VTile>
+					<HTile height="40%" vAlign="top">
+						<VTile width="75%">
+							<Tile>
+								<TileCanvasBox />
+							</Tile>
+							<Tile height="30%">
+								<TileCanvasBox />
+							</Tile>
+						</VTile>
+						<Tile>
+							<TileCanvasBox />
+						</Tile>
+					</HTile>
+					<Tile width="80%" hAlign="right">
+						<TileCanvasBox />
+					</Tile>
+					<HTile height="30%" vAlign="bottom">
+						<Tile>
+							<TileCanvasBox />
+						</Tile>
+						<Tile width="50px">
+							<TileCanvasBox />
+						</Tile>
+					</HTile>
+				</VTile>
+			</HTile>
+		</div>
+	</div>
+
+	<div class="tile-type">
+		<h3>Mixed</h3>
+
+		<div class="root-tile" style:width="{width}px" style:height="{height}px">
+			<HTile {innerPadding} {outerPadding} {mode} type="plain">
+				<VTile width="60%">
+					<Tile height="15%" type="canvas">
+						<TileCanvasBox />
+					</Tile>
+					<HTile type="html">
+						<Tile width="70px">
+							<TileHTMLBox />
+						</Tile>
+						<Tile>
+							<TileHTMLBox />
+						</Tile>
+					</HTile>
+					<HTile height="70px">
+						<Tile width="30%" type="svg">
+							<TileSVGBox />
+						</Tile>
+						<Tile width="60%" hAlign="right" type="html">
+							<TileHTMLBox />
+						</Tile>
+					</HTile>
+					<Tile height="20%" type="svg">
+						<TileSVGBox />
+					</Tile>
+				</VTile>
+				<VTile>
+					<HTile height="40%" vAlign="top">
+						<VTile width="75%" type="html">
+							<Tile>
+								<TileHTMLBox />
+							</Tile>
+							<Tile height="30%">
+								<TileHTMLBox />
+							</Tile>
+						</VTile>
+						<Tile type="canvas">
+							<TileCanvasBox />
+						</Tile>
+					</HTile>
+					<Tile width="80%" hAlign="right" type="canvas">
+						<TileCanvasBox />
+					</Tile>
+					<HTile height="30%" vAlign="bottom" type="svg">
+						<Tile>
+							<TileSVGBox />
+						</Tile>
+						<Tile width="50px">
+							<TileSVGBox />
+						</Tile>
+					</HTile>
+				</VTile>
 			</HTile>
 		</div>
 	</div>
@@ -145,6 +290,7 @@
 		font-size: 12px;
 		color: #333333;
 		background-color: #efefef;
+		margin: 50px;
 	}
 
 	h1 {
@@ -172,6 +318,7 @@
 	.tile-types {
 		display: flex;
 		justify-content: flex-start;
+		flex-wrap: wrap;
 	}
 
 	.tile-type {

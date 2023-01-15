@@ -59,12 +59,17 @@
 
 	$: if (element) elementStore.set(element);
 
-	$: if (node.isRoot) {
-		const updatedWidth = width ?? containerWidth;
-		const updatedHeight = height ?? containerHeight;
+	$: {
+		let updatedWidth = width;
+		let updatedHeight = height;
+
+		if (node.isRoot) {
+			updatedWidth ??= containerWidth;
+			updatedHeight ??= containerHeight;
+		}
 
 		if (updatedWidth && updatedHeight)
-			$node.updateSpecs(
+			node.updateNodes(
 				updatedWidth,
 				updatedHeight,
 				innerPadding,
