@@ -320,9 +320,9 @@ In each step above, zero-sized tiles are ignored.
 
 ### Tile Props
 
-<a name="props_stack" href="#props_stack">#</a> tilez.<b>Tile</b>.<i>stack</i>
+<a name="props_stack" href="#props_stack">#</a> tilez.<b>Tile</b>.<i>stack</i> · (_'horizontal'_ | _'vertical'_) [default: undefined]
 
-When this property is not given, all children tiles will have the same coordinate space like current tile and they are layered in the natural order given. Otherwise, children tiles will be distributed within current tile according to their props in _horizontal_ or _vertical_ direction.
+When this property is not given, all children tiles will have the same coordinate space like current tile and they are layered in the natural order given. Otherwise, children tiles will be distributed within current tile according to their props in _'horizontal'_ or _'vertical'_ direction.
 
 ---
 
