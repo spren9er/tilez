@@ -9,18 +9,19 @@
 		const dpr = window.devicePixelRatio || 1;
 		const thickness = 1 * dpr;
 
-		ctx.beginPath();
-		ctx.fillStyle = '#eaeaea';
-		ctx.strokeStyle = '#aaaaaa';
-		ctx.lineWidth = thickness;
-		ctx.rect(
-			thickness / 2,
-			thickness / 2,
-			$specs.width * dpr - thickness,
-			$specs.height * dpr - thickness,
-		);
-		ctx.fill();
-		ctx.stroke();
-		ctx.closePath();
+		const offset = thickness / 2;
+		const width = $specs.width * dpr - thickness;
+		const height = $specs.height * dpr - thickness;
+
+		if (width > 0 && height > 0) {
+			ctx.beginPath();
+			ctx.fillStyle = '#eaeaea';
+			ctx.strokeStyle = '#aaaaaa';
+			ctx.lineWidth = thickness;
+			ctx.rect(offset, offset, width, height);
+			ctx.fill();
+			ctx.stroke();
+			ctx.closePath();
+		}
 	}
 </script>

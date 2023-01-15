@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { TypeTilePropsElement } from '$lib/types/tileProps.type';
 	import type { TileNode } from '$lib/entities/tileNode';
+	import type { TileProps } from '$lib/valueObjects/tileProps';
 
 	import { getTileContext } from '$lib/entities/tileContext';
 
@@ -13,11 +14,21 @@
 
 	const { rootType } = node;
 
-	// needed when root tile has no absolute size: then specs are empty first!
+	// needed when root tile has no absolute size: then specs are empty first;
 	// once there is a non-trivial size, component should not be hidden anymore
 	let initialized = false;
-
 	$: if (!$specs.hasEmptySize) initialized = true;
+
+	// when inner padding, outer padding or mode changes, we need to redraw
+	let lastDerivedProps = node.derivedProps.copy();
+
+	function propsChanged(props1: TileProps, props2: TileProps) {
+		return (
+			props1.innerPadding !== props2.innerPadding ||
+			props1.outerPadding !== props2.outerPadding ||
+			props1.mode !== props2.mode
+		);
+	}
 
 	function createSubContext() {
 		if (!$context || !$specs) return;
@@ -37,7 +48,14 @@
 		const canvasWidth = Math.round($specs.width * dpr);
 		const canvasHeight = Math.round($specs.height * dpr);
 
-		if (canvas.width === canvasWidth && canvas.height === canvasHeight) return;
+		if (
+			!propsChanged(lastDerivedProps, node.derivedProps) &&
+			canvas.width === canvasWidth &&
+			canvas.height === canvasHeight
+		)
+			return;
+
+		lastDerivedProps = node.derivedProps.copy();
 
 		canvas.width = canvasWidth;
 		canvas.height = canvasHeight;

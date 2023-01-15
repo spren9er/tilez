@@ -57,4 +57,28 @@ export class TileProps {
   public get height() {
     return this.dim('height').size;
   }
+
+  public copy(): TileProps {
+    const {
+      dimensions,
+      stack,
+      type,
+      innerPadding,
+      outerPadding,
+      hAlign,
+      vAlign,
+      mode,
+    } = this;
+
+    return new TileProps(
+      dimensions,
+      stack,
+      type,
+      innerPadding,
+      outerPadding,
+      hAlign,
+      vAlign,
+      mode,
+    );
+  }
 }

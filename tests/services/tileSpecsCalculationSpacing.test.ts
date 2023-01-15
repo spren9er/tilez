@@ -18,10 +18,10 @@ const propsDimensions = {
 const calc = (node: TileNode) => {
   return new TileSpecsCalculationSpacing(
     node.specs!,
-    node.children.map(({ props }) => props),
+    node.children.map(({ derivedProps }) => derivedProps),
     node.isRoot,
-    node.props.type!,
-    node.props.stack,
+    node.derivedProps.type!,
+    node.derivedProps.stack,
   ).call();
 };
 

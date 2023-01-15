@@ -43,6 +43,10 @@ export class TilePropsFactory {
     );
   }
 
+  public parsePadding(padding?: TypeTilePropsDimension) {
+    return typeof padding === 'string' ? parseInt(padding) : padding;
+  }
+
   private parseStack(stack?: TypeTilePropsStack) {
     if (stack && !['horizontal', 'vertical'].includes(stack))
       throw Error(
@@ -59,10 +63,6 @@ export class TilePropsFactory {
       );
 
     return type;
-  }
-
-  private parsePadding(padding?: TypeTilePropsDimension) {
-    return typeof padding === 'string' ? parseInt(padding) : padding;
   }
 
   private parseHAlign(hAlign?: TypeTilePropsHAlign) {

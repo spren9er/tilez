@@ -16,15 +16,6 @@ describe('TileNode', () => {
     expect(node.hasChildren).toEqual(true);
   });
 
-  it('can access children specs', () => {
-    const props = new TilePropsFactory({}).build();
-    const node = new TileNode(props);
-
-    new TileNodeFactory({}, node).build();
-
-    expect(node.childrenProps).toEqual([props]);
-  });
-
   it('is root or not', () => {
     const props = new TilePropsFactory({}).build();
     const node = new TileNode(props);
@@ -140,7 +131,7 @@ describe('TileNode', () => {
     const node = new TileNode(props);
     const child = new TileNodeFactory({}, node).build();
 
-    expect(child.props.type).toEqual(parentType);
+    expect(child.derivedProps.type).toEqual(parentType);
   });
 
   it('overrides type from parent', () => {
@@ -150,7 +141,7 @@ describe('TileNode', () => {
     const node = new TileNode(props);
     const child = new TileNodeFactory({ type: childType }, node).build();
 
-    expect(child.props.type).toEqual(childType);
+    expect(child.derivedProps.type).toEqual(childType);
   });
 
   it('has default type when not specified in parent and itself', () => {
@@ -158,7 +149,7 @@ describe('TileNode', () => {
     const node = new TileNode(props);
     const child = new TileNodeFactory({}, node).build();
 
-    expect(child.props.type).toEqual('plain');
+    expect(child.derivedProps.type).toEqual('plain');
   });
 
   it('derives inner padding from parent unless specified', () => {
@@ -170,7 +161,7 @@ describe('TileNode', () => {
     const node = new TileNode(props);
     const child = new TileNodeFactory({}, node).build();
 
-    expect(child.props.innerPadding).toEqual(parentInnerPadding);
+    expect(child.derivedProps.innerPadding).toEqual(parentInnerPadding);
   });
 
   it('overrides inner padding from parent when given explicitly', () => {
@@ -183,7 +174,7 @@ describe('TileNode', () => {
       node,
     ).build();
 
-    expect(child.props.innerPadding).toEqual(childInnerPadding);
+    expect(child.derivedProps.innerPadding).toEqual(childInnerPadding);
   });
 
   it('has no inner padding when not specified in parent and itself', () => {
@@ -191,7 +182,7 @@ describe('TileNode', () => {
     const node = new TileNode(props);
     const child = new TileNodeFactory({}, node).build();
 
-    expect(child.props.innerPadding).toBeUndefined();
+    expect(child.derivedProps.innerPadding).toBeUndefined();
   });
 
   it('does not derive "outerPadding" from parent', () => {
@@ -201,7 +192,7 @@ describe('TileNode', () => {
     const node = new TileNode(props);
     const child = new TileNodeFactory({}, node).build();
 
-    expect(child.props.outerPadding).toBeUndefined();
+    expect(child.derivedProps.outerPadding).toBeUndefined();
   });
 
   it('does not derive "stack" from parent', () => {
@@ -211,7 +202,7 @@ describe('TileNode', () => {
     const node = new TileNode(props);
     const child = new TileNodeFactory({}, node).build();
 
-    expect(child.props.stack).toBeUndefined();
+    expect(child.derivedProps.stack).toBeUndefined();
   });
 
   it('does not derive "hAlign" and "vAlign" from parent', () => {
@@ -222,8 +213,8 @@ describe('TileNode', () => {
     const node = new TileNode(props);
     const child = new TileNodeFactory({}, node).build();
 
-    expect(child.props.hAlign).toBeUndefined();
-    expect(child.props.vAlign).toBeUndefined();
+    expect(child.derivedProps.hAlign).toBeUndefined();
+    expect(child.derivedProps.vAlign).toBeUndefined();
   });
 
   it('derives "mode" from parent', () => {
@@ -233,7 +224,7 @@ describe('TileNode', () => {
     const node = new TileNode(props);
     const child = new TileNodeFactory({}, node).build();
 
-    expect(child.props.mode).toEqual('spacing');
+    expect(child.derivedProps.mode).toEqual('spacing');
   });
 
   it('updates specs when specs given', () => {

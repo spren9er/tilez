@@ -59,7 +59,7 @@ function setTileContext(name: string, node: TileNode) {
 }
 
 function setupElement(node: TileNode) {
-  if (node.props.type === 'canvas' && node.parentType === 'canvas') {
+  if (node.derivedProps.type === 'canvas' && node.parentType === 'canvas') {
     const { element } = getTileContext();
 
     return element;

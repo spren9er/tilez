@@ -462,7 +462,7 @@ The _y_-coordinate w.r.t. root tile
 
 <a name="specs_subroot_x" href="#specs_subroot_x">#</a> tilez.<b>TileSpecs</b>.<i>subRootX</i>
 
-The _x_-coordinate w.r.t. subroot tile. When type of tile changes when going from parent to child tile, there will be a new subtree. The root tile of this subtree is called the subroot tile. The _x_ value is the distance between the left position of subroot tile and the left position of given tile in horizontal direction.
+The _x_-coordinate w.r.t. subroot tile. When type of tile changes when going from parent to child tile, there will be a new subtree in tiles hierarchy. The root tile of this subtree is called a subroot tile. The _x_ value is the distance between the left position of subroot tile and the left position of given tile in horizontal direction.
 
 ---
 

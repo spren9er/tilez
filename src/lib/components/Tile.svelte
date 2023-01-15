@@ -54,7 +54,7 @@
 			canvas: TileCanvas,
 		};
 
-		return componentMapping[node.props.type!];
+		return componentMapping[node.derivedProps.type!];
 	};
 
 	$: if (element) elementStore.set(element);
@@ -64,11 +64,17 @@
 		const updatedHeight = height ?? containerHeight;
 
 		if (updatedWidth && updatedHeight)
-			$node.updateSpecs(updatedWidth, updatedHeight);
+			$node.updateSpecs(
+				updatedWidth,
+				updatedHeight,
+				innerPadding,
+				outerPadding,
+				mode,
+			);
 	}
 </script>
 
-<TileWrapper {node} bind:containerWidth bind:containerHeight>
+<TileWrapper node={$node} bind:containerWidth bind:containerHeight>
 	<svelte:component this={componentFor($node)} node={$node} bind:element>
 		<slot {element} />
 	</svelte:component>

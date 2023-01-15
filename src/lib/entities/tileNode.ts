@@ -1,16 +1,20 @@
 import { get, writable, type Writable } from 'svelte/store';
 
-import type { TypeTilePropsDimension } from '$lib/types/tileProps.type';
+import type {
+  TypeTilePropsDimension,
+  TypeTilePropsMode,
+} from '$lib/types/tileProps.type';
 import type { TileProps } from '$lib/valueObjects/tileProps';
 import type { TileSpecs } from '$lib/entities/tileSpecs';
 
-import { TilePropsDimensionFactory } from '$lib/factories/tilePropsDimensionFactory';
+import { TilePropsFactory } from '$lib/factories/tilePropsFactory';
 import { TileSpecsCalculationFactory } from '$lib/factories/tileSpecsCalculationFactory';
 
 export type TypeTileNodeRootType = 'root' | 'subroot';
 
 export class TileNode {
   public props: TileProps;
+  public derivedProps: TileProps;
   public specs?: TileSpecs;
   public parent?: TileNode;
   public children: TileNode[];
@@ -20,6 +24,7 @@ export class TileNode {
 
   constructor(props: TileProps, parent?: TileNode, specs?: TileSpecs) {
     this.props = props;
+    this.derivedProps = props.copy();
     this.parent = parent;
     this.specs = specs;
     this.children = [];
@@ -30,11 +35,10 @@ export class TileNode {
     this.update = store.update;
     this.set = store.set;
 
-    // node props have *always* non-trivial type
     if (parent) {
       parent.addChild(this);
     } else {
-      this.props.type = this.props.type || 'plain';
+      this.derivedProps.type = this.props.type || 'plain';
     }
 
     this.subscribe((node: TileNode) => node.updateChildrenSpecs());
@@ -43,25 +47,43 @@ export class TileNode {
   public updateSpecs(
     width: TypeTilePropsDimension,
     height: TypeTilePropsDimension,
+    innerPadding?: TypeTilePropsDimension,
+    outerPadding?: TypeTilePropsDimension,
+    mode?: TypeTilePropsMode,
   ) {
     this.update((node: TileNode) => {
       if (!node.specs) return node;
 
-      const propsWidth = new TilePropsDimensionFactory('width', width).build();
-      const propsHeight = new TilePropsDimensionFactory(
-        'height',
+      const props = new TilePropsFactory({
+        width,
         height,
-      ).build();
+        innerPadding,
+        outerPadding,
+        mode,
+      }).build();
 
-      if (propsWidth.unit !== 'px' && propsHeight.unit !== 'px') return node;
+      if (props.dim('width').unit !== 'px' && props.dim('height').unit !== 'px')
+        return node;
+
+      // no change => update not necessary
       if (
-        propsWidth.value === node.specs.width &&
-        propsHeight.value === node.specs.height
+        props.width === node.specs.width &&
+        props.height === node.specs.height &&
+        props.innerPadding === node.specs.innerPadding &&
+        props.outerPadding === node.specs.outerPadding &&
+        props.mode === node.derivedProps.mode
       )
         return node;
 
-      node.specs.width = propsWidth.value;
-      node.specs.height = propsHeight.value;
+      node.derivedProps.innerPadding = props.innerPadding ?? 0;
+      node.derivedProps.outerPadding = props.outerPadding ?? 0;
+      node.derivedProps.mode = props.mode || 'spacing';
+      this.updateDerivedProps();
+
+      node.specs.width = props.width!;
+      node.specs.height = props.height!;
+      node.specs.innerPadding = props.innerPadding ?? 0;
+      node.specs.outerPadding = props.outerPadding ?? 0;
 
       return node;
     });
@@ -71,12 +93,12 @@ export class TileNode {
     if (!this.hasChildren || !this.specs) return;
 
     const tileSpecsCalculation = new TileSpecsCalculationFactory(
-      this.props.mode || 'spacing',
+      this.derivedProps.mode || 'spacing',
       this.specs,
-      this.children.map(({ props }) => props),
+      this.children.map(({ derivedProps }) => derivedProps),
       this.isRoot,
-      this.props.type!,
-      this.props.stack,
+      this.derivedProps.type!,
+      this.derivedProps.stack,
     ).build();
     const specs = tileSpecsCalculation.call();
 
@@ -100,7 +122,7 @@ export class TileNode {
   public get isSubRoot() {
     if (this.isRoot) return true;
 
-    return this.props.type !== this.parentType;
+    return this.derivedProps.type !== this.parentType;
   }
 
   public get width() {
@@ -111,10 +133,6 @@ export class TileNode {
     return this.specs?.height;
   }
 
-  public get childrenProps() {
-    return this.children.map((child) => get(child).props);
-  }
-
   public get rootType(): TypeTileNodeRootType | undefined {
     if (this.isRoot) return 'root';
     if (this.isSubRoot) return 'subroot';
@@ -123,7 +141,7 @@ export class TileNode {
   public get parentType() {
     if (this.isRoot) return;
 
-    return this.parent!.props.type;
+    return this.parent!.derivedProps.type;
   }
 
   public get coords() {
@@ -132,7 +150,8 @@ export class TileNode {
 
     if (this.parent) {
       const needsOffset =
-        this.rootType === 'subroot' && this.parent.props.type === 'plain';
+        this.rootType === 'subroot' &&
+        this.parent.derivedProps.type === 'plain';
 
       if (needsOffset) {
         const { subRootX, subRootY } = this.parent.specs!;
@@ -145,7 +164,7 @@ export class TileNode {
         let parent = this.parent;
         while (
           parent.parent &&
-          parent.parent.props.type === parent.props.type
+          parent.parent.derivedProps.type === parent.derivedProps.type
         ) {
           parent = parent.parent;
         }
@@ -171,18 +190,27 @@ export class TileNode {
     });
   }
 
+  private updateDerivedProps() {
+    if (!this.hasChildren) return;
+
+    this.children.forEach((child) => {
+      child.derivePropsFrom(this);
+      child.updateDerivedProps();
+    });
+  }
+
   private derivePropsFrom(parent: TileNode) {
     const parentNode = get(parent);
 
     // type
-    this.props.type = this.deriveType();
+    this.derivedProps.type = this.deriveType();
 
     // inner padding
     if (!this.props.innerPadding && this.props.innerPadding !== 0)
-      this.props.innerPadding = parentNode.props.innerPadding;
+      this.derivedProps.innerPadding = parentNode.derivedProps.innerPadding;
 
     // mode
-    if (!this.props.mode) this.props.mode = parentNode.props.mode;
+    if (!this.props.mode) this.derivedProps.mode = parentNode.derivedProps.mode;
   }
 
   private deriveType() {

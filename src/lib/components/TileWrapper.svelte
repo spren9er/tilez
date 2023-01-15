@@ -7,9 +7,14 @@
 	export let containerWidth: number | undefined = undefined;
 	export let containerHeight: number | undefined = undefined;
 
-	const { specs, isRoot } = node;
-	const width = specs?.width ? `${specs?.width}px` : null;
-	const height = specs?.height ? `${specs?.height}px` : null;
+	// when no absolute size is given, size will be determined from parent;
+	// then we don't need to set width and height on the wrapper;
+	// otherwise wrapper size will be determined from specs (reactive)
+	const sizeFromParent = node.specs?.hasEmptySize;
+
+	$: ({ specs, isRoot } = node);
+	$: width = specs?.width && !sizeFromParent ? `${specs?.width}px` : null;
+	$: height = specs?.height && !sizeFromParent ? `${specs?.height}px` : null;
 
 	let visible = false;
 
