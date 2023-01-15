@@ -146,8 +146,8 @@ export class TileSpecsCalculationSpacing extends TileSpecsCalculation {
       }
 
       const specs = new TileSpecs(
-        dimensions.width > 0 ? dimensions.width : 0,
-        dimensions.height > 0 ? dimensions.height : 0,
+        Math.max(dimensions.width, 0),
+        Math.max(dimensions.height, 0),
         rootX + parentX + offsetX,
         rootY + parentY + offsetY,
         this.isSubRoot(props) ? 0 : subRootX + parentX + offsetX,
