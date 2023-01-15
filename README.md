@@ -65,7 +65,7 @@ or
 import Tile from 'tilez/components/Tile.svelte';
 ```
 
-### Tile Component
+### Tile Component Props
 
 A **Tile** component has following available props (see [API Tile Props](#tile-props) for details)
 
@@ -92,6 +92,8 @@ All props are optional, i.e. you can have tiles with no props at all
   ...
 </Tile>
 ```
+
+**Tile** props [width](#props_width), [height](#props_height), [innerPadding](#props_inner_padding), [outerPadding](#props_outer_padding) and [mode](#props_mode) are reactive, i.e. if you change these props for an arbitrary tile in tile hierarchy, whole subtree of tiles is rerendered according to updated props.
 
 ### Stacking Tiles
 
@@ -129,7 +131,7 @@ Layouts can be described in a declarative way, by defining props of nested tiles
 
 <img src="https://github.com/spren9er/tilez/blob/main/docs/images/tilez_layout_example.png?raw=true" width="225px" height="170px" />
 
-Check it out in [Svelte REPL](https://svelte.dev/repl/1a8e45baea624a079255275a1473374b?version=3.55.0)!
+Check out a similar example in [Svelte REPL](https://svelte.dev/repl/1a8e45baea624a079255275a1473374b?version=3.55.0)!
 
 
 ## How to access tile information?
@@ -244,10 +246,15 @@ const { specs, context } = getTileContext();
 $: if ($context) {
   const ctx = $context;
   const dpr = window.devicePixelRatio || 1;
+  const thickness = 1 * dpr;
+
+  const offset = thickness / 2;
+  const width = $specs.width * dpr - thickness;
+  const height = $specs.height * dpr - thickness;
 
   ctx.beginPath();
   ctx.strokeStyle = '#cccccc';
-  ctx.lineWidth = 1 * dpr;
+  ctx.lineWidth = thickness;
   ctx.rect(0, 0, $specs.width * dpr, $specs.height * dpr);
   ctx.stroke();
   ctx.closePath();
@@ -319,7 +326,7 @@ When this property is not given, all children tiles will have the same coordinat
 
 ---
 
-<a name="props_width" href="#props_width">#</a> tilez.<b>Tile</b>.<i>width</i>
+<a name="props_width" href="#props_width">#</a> tilez.<b>Tile</b>.<i>width</i> · [reactive]
 
 Argument can be an absolute or relative number. Accepts strings like _"500px"_, _"500"_, _"50%"_, _"0.5"_ or numbers like _500_ or _0.5_. Numbers between _0_ and _1_ are interpreted as percentages, otherwise they represent absolute widths.
 The given width will result in different tile widths, depending on the layout [mode](#props_mode).
@@ -329,13 +336,13 @@ For root tile relative widths are not allowed. When no width is given in root ti
 
 ---
 
-<a name="props_height" href="#props_height">#</a> tilez.<b>Tile</b>.<i>height</i>
+<a name="props_height" href="#props_height">#</a> tilez.<b>Tile</b>.<i>height</i> · [reactive]
 
 Analog to [width](#props_width) above.
 
 ---
 
-<a name="props_inner_padding" href="#props_inner_padding">#</a> tilez.<b>Tile</b>.<i>innerPadding</i> · [default: 0] [inherits]
+<a name="props_inner_padding" href="#props_inner_padding">#</a> tilez.<b>Tile</b>.<i>innerPadding</i> · [default: 0] [inherits] [reactive]
 
 Defines the padding **between** children tiles of current tile. Format must be either a string like _"10px"_, _"10"_ or a number like _10_. Relative values are not supported.
 For layout mode _'spacing'_ it adds half of the given inner padding to the left and right of the outer tiles (or tile if there is only one).
@@ -343,7 +350,7 @@ This property will be inherited, thus all children tiles will have the same inne
 
 ---
 
-<a name="props_outer_padding" href="#props_outer_padding">#</a> tilez.<b>Tile</b>.<i>outerPadding</i> · [default: 0]
+<a name="props_outer_padding" href="#props_outer_padding">#</a> tilez.<b>Tile</b>.<i>outerPadding</i> · [default: 0] [reactive]
 
 Defines the padding **around** children tile(s) of current tile. It is similar to CSS padding of a HTML container.
 This property won't be inherited.
@@ -394,7 +401,7 @@ You can mix tile types, e.g. start with an HTML tile and add various subroot Can
 
 ---
 
-<a name="props_mode" href="#props_mode">#</a> tilez.<b>Tile</b>.<i>mode</i> · (_'spacing'_ | _'sizing'_ ) [default: _'spacing'_] [inherits]
+<a name="props_mode" href="#props_mode">#</a> tilez.<b>Tile</b>.<i>mode</i> · (_'spacing'_ | _'sizing'_ ) [default: _'spacing'_] [inherits] [reactive]
 
 There are two layout modes available: one which is optimized for _'spacing'_ and one for _'sizing'_. They differ on how to interpret sizes when you specify a non-zero inner padding. When no inner padding is given, both modes produce the same layout.
 
@@ -425,12 +432,13 @@ A reference to an HTML, SVG or Canvas element (depending on the [type](#props_ty
 
 <a name="get_tile_context" href="#get_tile_context">#</a> tilez.<b>getTileContext()</b>
 
-Returns an object containing four Svelte stores
+Returns an object containing following Svelte stores
 
 - _specs_ of class **Writable\<TileSpecs\>**
 - _xScale_ of class **Writable\<LinearScale\>**
 - _yScale_ of class **Writable\<LinearScale\>**
 - _element_ of class **Writable\<HTMLElement | SVGElement | HTMLCanvasElement | null\>**
+- _context_ of class **Writable\<CanvasRenderingContext2D | null\>**
 
 In the following, all classes are described in detail.
 
