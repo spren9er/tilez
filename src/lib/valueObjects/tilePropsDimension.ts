@@ -13,4 +13,10 @@ export class TilePropsDimension {
 
     return this.unit > propsDimension.unit ? 1 : -1;
   }
+
+  public isEqualTo(propsDimension: TilePropsDimension) {
+    const { type, unit, value } = propsDimension;
+
+    return this.type === type && this.unit === unit && this.value === value;
+  }
 }

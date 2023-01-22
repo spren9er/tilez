@@ -7,8 +7,6 @@ import type {
 } from '$lib/types/tileProps.type';
 import type { TilePropsDimensions } from '$lib/valueObjects/tilePropsDimensions';
 
-import { TilePropsFactory } from '$lib/factories/tilePropsFactory';
-
 export class TilePropsDimensionsAccessor {
   constructor(
     private dimensions: TilePropsDimensions,
@@ -72,9 +70,8 @@ export class TileProps {
       mode,
     } = this;
 
-    return new TilePropsFactory({
-      width: dimensions.valueFor('width'),
-      height: dimensions.valueFor('height'),
+    return new TileProps(
+      dimensions,
       stack,
       type,
       innerPadding,
@@ -82,6 +79,27 @@ export class TileProps {
       hAlign,
       vAlign,
       mode,
-    }).build();
+    );
+  }
+
+  public call(key: string) {
+    if (key in this) return this[key as keyof TileProps];
+  }
+
+  public isEqualTo(props: TileProps, key: string) {
+    if (['width', 'height'].includes(key)) {
+      const dimensionA = this.dimensions.dimensionFor(
+        key as 'width' | 'height',
+      );
+      const dimensionB = props.dimensions.dimensionFor(
+        key as 'width' | 'height',
+      );
+
+      if (!dimensionA && !dimensionB) return true;
+
+      return dimensionA && dimensionB && dimensionA.isEqualTo(dimensionB);
+    }
+
+    return this.call(key) === props.call(key);
   }
 }

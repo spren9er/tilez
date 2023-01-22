@@ -17,7 +17,7 @@ _**tilez**_ is
 
 - easy-to-use – _declare your layout in a simple manner_
 - flexible – _can be used with SVG, HTML, Canvas or renderless components_
-- reactive – _all tiles adapt to changes of root tile_
+- reactive – _changing props of a tile will update all sub tiles_
 - free of dependencies – _except for Svelte_
 - opinionated – _the way the layout algorithm works (see [here](#how-does-the-layout-algorithm-work))_
 - robust – _handles edge cases very well_
@@ -93,7 +93,7 @@ All props are optional, i.e. you can have tiles with no props at all
 </Tile>
 ```
 
-**Tile** props [width](#props_width), [height](#props_height), [innerPadding](#props_inner_padding), [outerPadding](#props_outer_padding) and [mode](#props_mode) are reactive, i.e. if you change these props for an arbitrary tile in tile hierarchy, whole subtree of tiles is rerendered according to updated props.
+**Tile** props are reactive (except for [stack](#props_stack) and [type](#props_type)), i.e. if you change these props for an arbitrary tile in tile hierarchy, whole subtree of tiles is rerendered according to updated props.
 
 ### Stacking Tiles
 
@@ -326,7 +326,7 @@ When this property is not given, all children tiles will have the same coordinat
 
 ---
 
-<a name="props_width" href="#props_width">#</a> tilez.<b>Tile</b>.<i>width</i> · [reactive]
+<a name="props_width" href="#props_width">#</a> tilez.<b>Tile</b>.<i>width</i>
 
 Argument can be an absolute or relative number. Accepts strings like _"500px"_, _"500"_, _"50%"_, _"0.5"_ or numbers like _500_ or _0.5_. Numbers between _0_ and _1_ are interpreted as percentages, otherwise they represent absolute widths.
 The given width will result in different tile widths, depending on the layout [mode](#props_mode).
@@ -336,13 +336,13 @@ For root tile relative widths are not allowed. When no width is given in root ti
 
 ---
 
-<a name="props_height" href="#props_height">#</a> tilez.<b>Tile</b>.<i>height</i> · [reactive]
+<a name="props_height" href="#props_height">#</a> tilez.<b>Tile</b>.<i>height</i>
 
 Analog to [width](#props_width) above.
 
 ---
 
-<a name="props_inner_padding" href="#props_inner_padding">#</a> tilez.<b>Tile</b>.<i>innerPadding</i> · [default: 0] [inherits] [reactive]
+<a name="props_inner_padding" href="#props_inner_padding">#</a> tilez.<b>Tile</b>.<i>innerPadding</i> · [default: 0] [inherits]
 
 Defines the padding **between** children tiles of current tile. Format must be either a string like _"10px"_, _"10"_ or a number like _10_. Relative values are not supported.
 For layout mode _'spacing'_ it adds half of the given inner padding to the left and right of the outer tiles (or tile if there is only one).
@@ -350,7 +350,7 @@ This property will be inherited, thus all children tiles will have the same inne
 
 ---
 
-<a name="props_outer_padding" href="#props_outer_padding">#</a> tilez.<b>Tile</b>.<i>outerPadding</i> · [default: 0] [reactive]
+<a name="props_outer_padding" href="#props_outer_padding">#</a> tilez.<b>Tile</b>.<i>outerPadding</i> · [default: 0]
 
 Defines the padding **around** children tile(s) of current tile. It is similar to CSS padding of a HTML container.
 This property won't be inherited.
@@ -401,7 +401,7 @@ You can mix tile types, e.g. start with an HTML tile and add various subroot Can
 
 ---
 
-<a name="props_mode" href="#props_mode">#</a> tilez.<b>Tile</b>.<i>mode</i> · (_'spacing'_ | _'sizing'_ ) [default: _'spacing'_] [inherits] [reactive]
+<a name="props_mode" href="#props_mode">#</a> tilez.<b>Tile</b>.<i>mode</i> · (_'spacing'_ | _'sizing'_ ) [default: _'spacing'_] [inherits]
 
 There are two layout modes available: one which is optimized for _'spacing'_ and one for _'sizing'_. They differ on how to interpret sizes when you specify a non-zero inner padding. When no inner padding is given, both modes produce the same layout.
 

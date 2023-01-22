@@ -5,7 +5,7 @@ import { TileNodeFactory } from '$lib/factories/tileNodeFactory';
 describe('TileNodeFactory', () => {
   it('throws an error if there is a relative dimension and no parent node', () => {
     expect(() => new TileNodeFactory({ width: '10%' }).build()).toThrowError(
-      "Root tile can't handle relative dimensions!",
+      'Relative dimensions are not allowed in root tile!',
     );
   });
 
@@ -27,19 +27,19 @@ describe('TileNodeFactory', () => {
     }).build();
     const specs = node.specs;
 
-    expect(specs?.width).toEqual(width);
-    expect(specs?.height).toEqual(height);
-    expect(specs?.innerPadding).toEqual(innerPadding);
-    expect(specs?.outerPadding).toEqual(outerPadding);
-    expect(specs?.hAlign).toEqual(hAlign);
-    expect(specs?.vAlign).toEqual(vAlign);
+    expect(specs.width).toEqual(width);
+    expect(specs.height).toEqual(height);
+    expect(specs.innerPadding).toEqual(innerPadding);
+    expect(specs.outerPadding).toEqual(outerPadding);
+    expect(specs.hAlign).toEqual(hAlign);
+    expect(specs.vAlign).toEqual(vAlign);
   });
 
   it('sets specs dimensions to zero if there is no width and height and no parent node', () => {
     const node = new TileNodeFactory({}).build();
     const specs = node.specs;
 
-    expect(specs?.width).toEqual(0);
-    expect(specs?.height).toEqual(0);
+    expect(specs.width).toEqual(0);
+    expect(specs.height).toEqual(0);
   });
 });

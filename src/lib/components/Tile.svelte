@@ -32,8 +32,7 @@
 	let containerWidth: number;
 	let containerHeight: number;
 
-	const node = setNodeContext({
-		stack,
+	const rawProps = {
 		width,
 		height,
 		innerPadding,
@@ -42,7 +41,9 @@
 		vAlign,
 		type,
 		mode,
-	});
+		stack,
+	};
+	const node = setNodeContext(rawProps);
 
 	const { element: elementStore } = getTileContext();
 
@@ -54,28 +55,28 @@
 			canvas: TileCanvas,
 		};
 
-		return componentMapping[node.derivedProps.type!];
+		return componentMapping[node.specs.type];
 	};
 
 	$: if (element) elementStore.set(element);
 
 	$: {
-		let updatedWidth = width;
-		let updatedHeight = height;
+		const rawProps = {
+			width,
+			height,
+			innerPadding,
+			outerPadding,
+			hAlign,
+			vAlign,
+			type,
+			mode,
+			stack,
+		};
 
-		if (node.isRoot) {
-			updatedWidth ??= containerWidth;
-			updatedHeight ??= containerHeight;
-		}
+		rawProps.width ||= containerWidth;
+		rawProps.height ||= containerHeight;
 
-		if (updatedWidth && updatedHeight)
-			node.updateNodes(
-				updatedWidth,
-				updatedHeight,
-				innerPadding,
-				outerPadding,
-				mode,
-			);
+		node.updateNodes(rawProps);
 	}
 </script>
 

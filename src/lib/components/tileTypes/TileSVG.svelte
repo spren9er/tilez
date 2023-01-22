@@ -14,9 +14,9 @@
 	<TileEmbed {node}>
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
-			width={specs?.width}
-			height={specs?.height}
-			viewBox="0 0 {specs?.width} {specs?.height}"
+			width={specs.width}
+			height={specs.height}
+			viewBox="0 0 {specs.width} {specs.height}"
 			bind:this={element}
 		>
 			<slot {element} />

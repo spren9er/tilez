@@ -1,5 +1,8 @@
 <script lang="ts">
-	import type { TypeTilePropsMode } from '$lib/types/tileProps.type';
+	import type {
+		TypeTilePropsVAlign,
+		TypeTilePropsMode,
+	} from '$lib/types/tileProps.type';
 
 	import { Tile, HTile, VTile } from '$lib';
 
@@ -12,39 +15,137 @@
 	let innerPadding = 4;
 	let outerPadding = 4;
 	let mode: TypeTilePropsMode = 'spacing';
+
+	let subWidthActivated = false;
+	let subHeightActivated = false;
+	let subInnerPaddingActivated = false;
+	let subModeActivated = false;
+
+	let subWidth = 50;
+	let subHeight = 100;
+	let subInnerPadding = 4;
+	let subOuterPadding = 0;
+	let subVAlign: TypeTilePropsVAlign = 'top';
+
+	$: subWidthResult = subWidthActivated ? `${subWidth}%` : undefined;
+	$: subHeightResult = subHeightActivated ? `${subHeight}%` : undefined;
+	$: subInnerPaddingResult = subInnerPaddingActivated
+		? subInnerPadding
+		: undefined;
+	$: subModeResult = subModeActivated
+		? mode === 'sizing'
+			? 'spacing'
+			: 'sizing'
+		: mode;
 </script>
 
 <h1>tilez</h1>
 
-<form>
-	<div class="width">
-		<label for="width">width</label>
-		<input type="range" min={100} max={800} bind:value={width} />
-		<div class="value">{width}px</div>
+<div class="forms">
+	<div class="form">
+		<h3>Root Tile</h3>
+
+		<form>
+			<div>
+				<label for="width">width</label>
+				<input type="range" min={100} max={800} bind:value={width} />
+				<div class="value">{width}px</div>
+			</div>
+			<div>
+				<label for="height">height</label>
+				<input type="range" min={20} max={600} bind:value={height} />
+				<div class="value">{height}px</div>
+			</div>
+			<div>
+				<label for="innerPadding">inner padding</label>
+				<input type="range" min={0} max={20} bind:value={innerPadding} />
+				<div class="value">{innerPadding}px</div>
+			</div>
+			<div>
+				<label for="outerPadding">outer padding</label>
+				<input type="range" min={0} max={20} bind:value={outerPadding} />
+				<div class="value">{outerPadding}px</div>
+			</div>
+			<div>
+				<label for="mode">mode</label>
+				<select name="mode" bind:value={mode}>
+					<option value="spacing">spacing</option>
+					<option value="sizing">sizing</option>
+				</select>
+			</div>
+		</form>
 	</div>
-	<div class="height">
-		<label for="height">height</label>
-		<input type="range" min={20} max={600} bind:value={height} />
-		<div class="value">{height}px</div>
+
+	<div class="form">
+		<h3>Sample Sub Root Tile</h3>
+
+		<form>
+			<div>
+				<label for="width">width</label>
+				<input type="checkbox" bind:checked={subWidthActivated} />
+				<input
+					type="range"
+					min={0}
+					max={100}
+					bind:value={subWidth}
+					disabled={!subWidthActivated}
+				/>
+				<div class="value">{subWidth}%</div>
+			</div>
+			<div>
+				<label for="height">height</label>
+				<input type="checkbox" bind:checked={subHeightActivated} />
+				<input
+					type="range"
+					min={0}
+					max={100}
+					bind:value={subHeight}
+					disabled={!subHeightActivated}
+				/>
+				<div class="value">{subHeight}%</div>
+			</div>
+			<div>
+				<label for="innerPadding">inner padding</label>
+				<input type="checkbox" bind:checked={subInnerPaddingActivated} />
+				<input
+					type="range"
+					min={0}
+					max={20}
+					bind:value={subInnerPadding}
+					disabled={!subInnerPaddingActivated}
+				/>
+				<div class="value">{subInnerPadding}px</div>
+			</div>
+			<div>
+				<label for="outerPadding">outer padding</label>
+				<input type="checkbox" style:visibility="hidden" />
+				<input type="range" min={0} max={20} bind:value={subOuterPadding} />
+				<div class="value">{subOuterPadding}px</div>
+			</div>
+			<div>
+				<label for="mode">change mode</label>
+				<input type="checkbox" bind:checked={subModeActivated} />
+				<select name="mode" bind:value={subModeResult} disabled={true}>
+					<option value="spacing">spacing</option>
+					<option value="sizing">sizing</option>
+				</select>
+			</div>
+			<div>
+				<label for="vAlign">vAlign</label>
+				<select
+					name="vAlign"
+					bind:value={subVAlign}
+					disabled={!subHeightActivated ||
+						(subHeightActivated && subHeight === 100)}
+				>
+					<option value="top">top</option>
+					<option value="center">center</option>
+					<option value="bottom">bottom</option>
+				</select>
+			</div>
+		</form>
 	</div>
-	<div class="innerPadding">
-		<label for="innerPadding">inner padding</label>
-		<input type="range" min={0} max={20} bind:value={innerPadding} />
-		<div class="value">{innerPadding}px</div>
-	</div>
-	<div class="outerPadding">
-		<label for="outerPadding">outer padding</label>
-		<input type="range" min={0} max={20} bind:value={outerPadding} />
-		<div class="value">{outerPadding}px</div>
-	</div>
-	<div class="mode">
-		<label for="mode">mode</label>
-		<select name="mode" bind:value={mode}>
-			<option value="spacing">spacing</option>
-			<option value="sizing">sizing</option>
-		</select>
-	</div>
-</form>
+</div>
 
 <div class="tile-types">
 	<div class="tile-type">
@@ -52,7 +153,14 @@
 
 		<div class="root-tile" style:width="{width}px" style:height="{height}px">
 			<HTile {innerPadding} {outerPadding} {mode} type="html">
-				<VTile width="60%">
+				<VTile
+					width={subWidthResult}
+					height={subHeightResult}
+					innerPadding={subInnerPaddingResult}
+					outerPadding={subOuterPadding}
+					mode={subModeResult}
+					vAlign={subVAlign}
+				>
 					<Tile height="15%">
 						<TileHTMLBox />
 					</Tile>
@@ -111,7 +219,14 @@
 
 		<div class="root-tile" style:width="{width}px" style:height="{height}px">
 			<HTile {innerPadding} {outerPadding} {mode} type="svg">
-				<VTile width="60%">
+				<VTile
+					width={subWidthResult}
+					height={subHeightResult}
+					innerPadding={subInnerPaddingResult}
+					outerPadding={subOuterPadding}
+					mode={subModeResult}
+					vAlign={subVAlign}
+				>
 					<Tile height="15%">
 						<TileSVGBox />
 					</Tile>
@@ -170,7 +285,14 @@
 
 		<div class="root-tile" style:width="{width}px" style:height="{height}px">
 			<HTile {innerPadding} {outerPadding} {mode} type="canvas">
-				<VTile width="60%">
+				<VTile
+					width={subWidthResult}
+					height={subHeightResult}
+					innerPadding={subInnerPaddingResult}
+					outerPadding={subOuterPadding}
+					mode={subModeResult}
+					vAlign={subVAlign}
+				>
 					<Tile height="15%">
 						<TileCanvasBox />
 					</Tile>
@@ -229,7 +351,14 @@
 
 		<div class="root-tile" style:width="{width}px" style:height="{height}px">
 			<HTile {innerPadding} {outerPadding} {mode} type="plain">
-				<VTile width="60%">
+				<VTile
+					width={subWidthResult}
+					height={subHeightResult}
+					innerPadding={subInnerPaddingResult}
+					outerPadding={subOuterPadding}
+					mode={subModeResult}
+					vAlign={subVAlign}
+				>
 					<Tile height="15%" type="canvas">
 						<TileCanvasBox />
 					</Tile>
@@ -294,7 +423,22 @@
 	}
 
 	h1 {
+		text-align: center;
 		margin: 20px 10px;
+	}
+
+	.forms {
+		display: flex;
+		justify-content: center;
+		margin: 20px 0px;
+	}
+
+	.form {
+		margin: 0px 20px;
+	}
+
+	.form h3 {
+		text-align: center;
 	}
 
 	form div {
@@ -317,7 +461,7 @@
 
 	.tile-types {
 		display: flex;
-		justify-content: flex-start;
+		justify-content: center;
 		flex-wrap: wrap;
 	}
 

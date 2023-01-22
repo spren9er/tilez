@@ -2,8 +2,38 @@ import { expect, describe, it } from 'vitest';
 
 import { TileSpecs } from '$lib/entities/tileSpecs';
 
-const specs = new TileSpecs(10, 20, 0, 0, 0, 0, 0, 0, 0, 0, 'center', 'center');
-const emptySpecs = new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top');
+const specs = new TileSpecs(
+  10,
+  20,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  'center',
+  'center',
+  'plain',
+  'spacing',
+);
+const emptySpecs = new TileSpecs(
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  'left',
+  'top',
+  'plain',
+  'spacing',
+);
 
 describe('TileSpecs', () => {
   it('can be copied', () => {
@@ -21,6 +51,8 @@ describe('TileSpecs', () => {
     expect(specs.outerPadding).toEqual(copy.outerPadding);
     expect(specs.hAlign).toEqual(copy.hAlign);
     expect(specs.vAlign).toEqual(copy.vAlign);
+    expect(specs.type).toEqual(copy.type);
+    expect(specs.mode).toEqual(copy.mode);
   });
 
   it('has an aspect ratio', () => {

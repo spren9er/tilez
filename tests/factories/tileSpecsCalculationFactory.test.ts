@@ -8,16 +8,25 @@ import { TileSpecsCalculationSpacing } from '$lib/services/tileSpecsCalculationS
 import { TileSpecsCalculationFactory } from '$lib/factories/tileSpecsCalculationFactory';
 
 const calculationForMode = (mode: TypeTilePropsMode) => {
-  const specs = new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top');
-
-  return new TileSpecsCalculationFactory(
-    mode,
-    specs,
-    [],
-    true,
+  const specs = new TileSpecs(
+    100,
+    100,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    'left',
+    'top',
     'plain',
+    mode,
     'horizontal',
-  ).build();
+  );
+
+  return new TileSpecsCalculationFactory(specs, [], true).build();
 };
 
 describe('TileSpecsCalculationFactory', () => {

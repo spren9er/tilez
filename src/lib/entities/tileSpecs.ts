@@ -12,6 +12,9 @@ export class TileSpecs {
     public outerPadding: number,
     public hAlign: 'left' | 'center' | 'right',
     public vAlign: 'top' | 'center' | 'bottom',
+    public type: 'plain' | 'html' | 'svg' | 'canvas',
+    public mode: 'spacing' | 'sizing',
+    public stack?: 'horizontal' | 'vertical',
   ) {}
 
   public get aspectRatio(): number {
@@ -22,6 +25,46 @@ export class TileSpecs {
 
   public get hasEmptySize(): boolean {
     return this.width === 0 || this.height === 0;
+  }
+
+  public updateCoordsAndDimensions(
+    width: number,
+    height: number,
+    rootX: number,
+    rootY: number,
+    subRootX: number,
+    subRootY: number,
+    parentX: number,
+    parentY: number,
+  ) {
+    this.width = width;
+    this.height = height;
+    this.rootX = rootX;
+    this.rootY = rootY;
+    this.subRootX = subRootX;
+    this.subRootY = subRootY;
+    this.parentX = parentX;
+    this.parentY = parentY;
+  }
+
+  public merge(other: TileSpecs): TileSpecs {
+    return new TileSpecs(
+      other.width || this.width,
+      other.height || this.height,
+      other.rootX || this.rootX,
+      other.rootY || this.rootY,
+      other.subRootX || this.subRootX,
+      other.subRootY || this.subRootY,
+      other.parentX || this.parentX,
+      other.parentY || this.parentY,
+      other.innerPadding,
+      other.outerPadding,
+      other.hAlign,
+      other.vAlign,
+      other.type,
+      other.mode,
+      other.stack,
+    );
   }
 
   public copy(): TileSpecs {
@@ -38,6 +81,9 @@ export class TileSpecs {
       outerPadding,
       hAlign,
       vAlign,
+      type,
+      mode,
+      stack,
     } = this;
 
     return new TileSpecs(
@@ -53,6 +99,9 @@ export class TileSpecs {
       outerPadding,
       hAlign,
       vAlign,
+      type,
+      mode,
+      stack,
     );
   }
 }

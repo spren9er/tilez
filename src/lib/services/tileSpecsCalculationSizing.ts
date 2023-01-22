@@ -1,13 +1,10 @@
-import type {
-  TypeTilePropsStack,
-  TypeTilePropsAlign,
-  TypeTilePropsType,
-} from '$lib/types/tileProps.type';
+import type { TypeTilePropsAlign } from '$lib/types/tileProps.type';
 import type { TypeTileSpecsDimension } from '$lib/types/tileSpecs.type';
 import type { TileProps } from '$lib/valueObjects/tileProps';
+import type { TileSpecs } from '$lib/entities/tileSpecs';
 
-import { TileSpecs } from '$lib/entities/tileSpecs';
 import { TileSpecsCalculation } from './tileSpecsCalculation';
+import { TileSpecsFactory } from '$lib/factories/tileSpecsFactory';
 
 export class TileSpecsCalculationSizing extends TileSpecsCalculation {
   private firstTile: boolean;
@@ -16,10 +13,9 @@ export class TileSpecsCalculationSizing extends TileSpecsCalculation {
     specs: TileSpecs,
     props: TileProps[],
     root: boolean,
-    type: TypeTilePropsType,
-    stack?: TypeTilePropsStack,
+    forceStack = false,
   ) {
-    super(specs, props, root, type, stack);
+    super(specs, props, root, forceStack);
 
     this.firstTile = true;
   }
@@ -134,7 +130,7 @@ export class TileSpecsCalculationSizing extends TileSpecsCalculation {
       if (stackSize === 0)
         return {
           idx,
-          specs: new TileSpecs(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'left', 'top'),
+          specs: new TileSpecsFactory(props, this.specs).build(),
         };
 
       // align orthogonal to stack direction
@@ -154,19 +150,16 @@ export class TileSpecsCalculationSizing extends TileSpecsCalculation {
         }
       }
 
-      const specs = new TileSpecs(
+      const specs = new TileSpecsFactory(props, this.specs).build();
+      specs.updateCoordsAndDimensions(
         Math.max(dimensions.width, 0),
         Math.max(dimensions.height, 0),
         rootX + parentX + offsetX,
         rootY + parentY + offsetY,
-        this.isSubRoot(props) ? 0 : subRootX + parentX + offsetX,
-        this.isSubRoot(props) ? 0 : subRootY + parentY + offsetY,
+        this.isSubRoot(specs) ? 0 : subRootX + parentX + offsetX,
+        this.isSubRoot(specs) ? 0 : subRootY + parentY + offsetY,
         parentX + offsetX,
         parentY + offsetY,
-        props.innerPadding ?? 0,
-        props.outerPadding ?? 0,
-        props.hAlign || 'left',
-        props.vAlign || 'top',
       );
 
       const step = innerPadding + stackSize;

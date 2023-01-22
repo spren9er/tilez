@@ -1,8 +1,3 @@
-import type {
-  TypeTilePropsStack,
-  TypeTilePropsMode,
-  TypeTilePropsType,
-} from '$lib/types/tileProps.type';
 import type { TileSpecs } from '$lib/entities/tileSpecs';
 import type { TileProps } from '$lib/valueObjects/tileProps';
 
@@ -11,31 +6,16 @@ import { TileSpecsCalculationSpacing } from '$lib/services/tileSpecsCalculationS
 
 export class TileSpecsCalculationFactory {
   constructor(
-    private mode: TypeTilePropsMode,
     private specs: TileSpecs,
     private props: TileProps[],
     private root: boolean,
-    private type: TypeTilePropsType,
-    private stack?: TypeTilePropsStack,
   ) {}
 
   public build() {
-    if (this.mode === 'spacing') {
-      return new TileSpecsCalculationSpacing(
-        this.specs,
-        this.props,
-        this.root,
-        this.type,
-        this.stack,
-      );
+    if (this.specs.mode === 'spacing') {
+      return new TileSpecsCalculationSpacing(this.specs, this.props, this.root);
     } else {
-      return new TileSpecsCalculationSizing(
-        this.specs,
-        this.props,
-        this.root,
-        this.type,
-        this.stack,
-      );
+      return new TileSpecsCalculationSizing(this.specs, this.props, this.root);
     }
   }
 }

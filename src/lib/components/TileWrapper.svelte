@@ -7,10 +7,9 @@
 	export let containerWidth: number | undefined = undefined;
 	export let containerHeight: number | undefined = undefined;
 
-	$: ({ specs, isRoot } = node);
-
-	const width = specs?.width ? `${specs?.width}px` : null;
-	const height = specs?.height ? `${specs?.height}px` : null;
+	const { specs, isRoot } = node;
+	const width = specs.width ? `${specs.width}px` : null;
+	const height = specs.height ? `${specs.height}px` : null;
 
 	let visible = false;
 
@@ -28,7 +27,7 @@
 		bind:clientWidth={containerWidth}
 		bind:clientHeight={containerHeight}
 	>
-		{#if !specs?.hasEmptySize}
+		{#if !node.specs.hasEmptySize}
 			<slot />
 		{/if}
 	</div>

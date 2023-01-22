@@ -65,4 +65,12 @@ describe('TilePropsDimensionFactory', () => {
     const zeroPercentage = { value: 0, unit: '%' };
     expect(jsonFrom(propsRelWidth)).toEqual(zeroPercentage);
   });
+
+  it('handles 100%', () => {
+    const propsWidth = new TilePropsDimensionFactory('width', '100%').build();
+    const propsHeight = new TilePropsDimensionFactory('height', '100%').build();
+
+    expect(jsonFrom(propsWidth)).toEqual({ value: 1, unit: '%' });
+    expect(jsonFrom(propsHeight)).toEqual({ value: 1, unit: '%' });
+  });
 });

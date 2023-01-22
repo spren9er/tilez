@@ -12,8 +12,8 @@
 	class="tile"
 	style:left="{coords.x}px"
 	style:top="{coords.y}px"
-	style:width="{specs?.width}px"
-	style:height="{specs?.height}px"
+	style:width="{specs.width}px"
+	style:height="{specs.height}px"
 	bind:this={element}
 >
 	<slot {element} />

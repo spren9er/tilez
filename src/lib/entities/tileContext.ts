@@ -38,7 +38,7 @@ export function setNodeContext(props: TypeTileProps) {
 }
 
 function setTileContext(name: string, node: TileNode) {
-  const specs = derived(node, ($node) => $node.specs!);
+  const specs = derived(node, ($node) => $node.specs);
 
   const xScale = derived(specs, ($specs) => {
     const width = $specs.width;
@@ -59,7 +59,7 @@ function setTileContext(name: string, node: TileNode) {
 }
 
 function setupElement(node: TileNode) {
-  if (node.derivedProps.type === 'canvas' && node.parentType === 'canvas') {
+  if (node.specs.type === 'canvas' && node.parentType === 'canvas') {
     const { element } = getTileContext();
 
     return element;
