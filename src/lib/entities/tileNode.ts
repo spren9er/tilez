@@ -54,8 +54,6 @@ export class TileNode {
       });
     }
 
-    console.log(startNode);
-
     startNode.updateSubSpecs();
   }
 
