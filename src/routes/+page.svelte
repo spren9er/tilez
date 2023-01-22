@@ -11,6 +11,12 @@
 	import TileSVGBox from '$examples/boxes/TileSVGBox.svelte';
 	import TileCanvasBox from '$examples/boxes/TileCanvasBox.svelte';
 
+	const typeBoxMapping = {
+		html: TileHTMLBox,
+		svg: TileSVGBox,
+		canvas: TileCanvasBox,
+	};
+
 	let width = 200;
 	let height = 200;
 	let innerPadding = 4;
@@ -280,230 +286,82 @@
 </div>
 
 <div class="tile-types">
-	<div class="tile-type">
-		<h3>HTML</h3>
+	{#each Object.keys(typeBoxMapping) as type}
+		<div class="tile-type">
+			<h3>{type}</h3>
 
-		<div class="root-tile" style:width="{width}px" style:height="{height}px">
-			<HTile {innerPadding} {outerPadding} {mode} type="html">
-				<VTile
-					width={leftWidthResult}
-					height={leftHeightResult}
-					innerPadding={leftInnerPaddingResult}
-					outerPadding={leftOuterPadding}
-					mode={leftModeResult}
-					hAlign={leftHAlign}
-					vAlign={leftVAlign}
-				>
-					<Tile height="15%">
-						<TileHTMLBox />
-					</Tile>
-					<HTile>
-						<Tile width="70px">
-							<TileHTMLBox />
+			<div class="root-tile" style:width="{width}px" style:height="{height}px">
+				<HTile {innerPadding} {outerPadding} {mode} {type}>
+					<VTile
+						width={leftWidthResult}
+						height={leftHeightResult}
+						innerPadding={leftInnerPaddingResult}
+						outerPadding={leftOuterPadding}
+						mode={leftModeResult}
+						hAlign={leftHAlign}
+						vAlign={leftVAlign}
+					>
+						<Tile height="15%">
+							<svelte:component this={typeBoxMapping[type]} />
 						</Tile>
-						<Tile>
-							<TileHTMLBox />
-						</Tile>
-					</HTile>
-					<HTile height="70px">
-						<Tile width="30%">
-							<TileHTMLBox />
-						</Tile>
-						<Tile width="60%" hAlign="right">
-							<TileHTMLBox />
-						</Tile>
-					</HTile>
-					<Tile height="20%">
-						<TileHTMLBox />
-					</Tile>
-				</VTile>
-				<VTile
-					width={rightWidthResult}
-					height={rightHeightResult}
-					innerPadding={rightInnerPaddingResult}
-					outerPadding={rightOuterPadding}
-					mode={rightModeResult}
-					hAlign={rightHAlign}
-					vAlign={rightVAlign}
-				>
-					<HTile height="40%" vAlign="top">
-						<VTile width="75%">
+						<HTile>
+							<Tile width="70px">
+								<svelte:component this={typeBoxMapping[type]} />
+							</Tile>
 							<Tile>
-								<TileHTMLBox />
+								<svelte:component this={typeBoxMapping[type]} />
 							</Tile>
-							<Tile height="30%">
-								<TileHTMLBox />
+						</HTile>
+						<HTile height="70px">
+							<Tile width="30%">
+								<svelte:component this={typeBoxMapping[type]} />
 							</Tile>
-						</VTile>
-						<Tile>
-							<TileHTMLBox />
+							<Tile width="60%" hAlign="right">
+								<svelte:component this={typeBoxMapping[type]} />
+							</Tile>
+						</HTile>
+						<Tile height="20%">
+							<svelte:component this={typeBoxMapping[type]} />
 						</Tile>
-					</HTile>
-					<Tile width="80%" hAlign="right">
-						<TileHTMLBox />
-					</Tile>
-					<HTile height="30%" vAlign="bottom">
-						<Tile>
-							<TileHTMLBox />
-						</Tile>
-						<Tile width="50px">
-							<TileHTMLBox />
-						</Tile>
-					</HTile>
-				</VTile>
-			</HTile>
-		</div>
-	</div>
-
-	<div class="tile-type">
-		<h3>SVG</h3>
-
-		<div class="root-tile" style:width="{width}px" style:height="{height}px">
-			<HTile {innerPadding} {outerPadding} {mode} type="svg">
-				<VTile
-					width={leftWidthResult}
-					height={leftHeightResult}
-					innerPadding={leftInnerPaddingResult}
-					outerPadding={leftOuterPadding}
-					mode={leftModeResult}
-					hAlign={leftHAlign}
-					vAlign={leftVAlign}
-				>
-					<Tile height="15%">
-						<TileSVGBox />
-					</Tile>
-					<HTile>
-						<Tile width="70px">
-							<TileSVGBox />
-						</Tile>
-						<Tile>
-							<TileSVGBox />
-						</Tile>
-					</HTile>
-					<HTile height="70px">
-						<Tile width="30%">
-							<TileSVGBox />
-						</Tile>
-						<Tile width="60%" hAlign="right">
-							<TileSVGBox />
-						</Tile>
-					</HTile>
-					<Tile height="20%">
-						<TileSVGBox />
-					</Tile>
-				</VTile>
-				<VTile
-					width={rightWidthResult}
-					height={rightHeightResult}
-					innerPadding={rightInnerPaddingResult}
-					outerPadding={rightOuterPadding}
-					mode={rightModeResult}
-					hAlign={rightHAlign}
-					vAlign={rightVAlign}
-				>
-					<HTile height="40%" vAlign="top">
-						<VTile width="75%">
+					</VTile>
+					<VTile
+						width={rightWidthResult}
+						height={rightHeightResult}
+						innerPadding={rightInnerPaddingResult}
+						outerPadding={rightOuterPadding}
+						mode={rightModeResult}
+						hAlign={rightHAlign}
+						vAlign={rightVAlign}
+					>
+						<HTile height="40%" vAlign="top">
+							<VTile width="75%">
+								<Tile>
+									<svelte:component this={typeBoxMapping[type]} />
+								</Tile>
+								<Tile height="30%">
+									<svelte:component this={typeBoxMapping[type]} />
+								</Tile>
+							</VTile>
 							<Tile>
-								<TileSVGBox />
+								<svelte:component this={typeBoxMapping[type]} />
 							</Tile>
-							<Tile height="30%">
-								<TileSVGBox />
-							</Tile>
-						</VTile>
-						<Tile>
-							<TileSVGBox />
+						</HTile>
+						<Tile width="80%" hAlign="right">
+							<svelte:component this={typeBoxMapping[type]} />
 						</Tile>
-					</HTile>
-					<Tile width="80%" hAlign="right">
-						<TileSVGBox />
-					</Tile>
-					<HTile height="30%" vAlign="bottom">
-						<Tile>
-							<TileSVGBox />
-						</Tile>
-						<Tile width="50px">
-							<TileSVGBox />
-						</Tile>
-					</HTile>
-				</VTile>
-			</HTile>
-		</div>
-	</div>
-
-	<div class="tile-type">
-		<h3>Canvas</h3>
-
-		<div class="root-tile" style:width="{width}px" style:height="{height}px">
-			<HTile {innerPadding} {outerPadding} {mode} type="canvas">
-				<VTile
-					width={leftWidthResult}
-					height={leftHeightResult}
-					innerPadding={leftInnerPaddingResult}
-					outerPadding={leftOuterPadding}
-					mode={leftModeResult}
-					hAlign={leftHAlign}
-					vAlign={leftVAlign}
-				>
-					<Tile height="15%">
-						<TileCanvasBox />
-					</Tile>
-					<HTile>
-						<Tile width="70px">
-							<TileCanvasBox />
-						</Tile>
-						<Tile>
-							<TileCanvasBox />
-						</Tile>
-					</HTile>
-					<HTile height="70px">
-						<Tile width="30%">
-							<TileCanvasBox />
-						</Tile>
-						<Tile width="60%" hAlign="right">
-							<TileCanvasBox />
-						</Tile>
-					</HTile>
-					<Tile height="20%">
-						<TileCanvasBox />
-					</Tile>
-				</VTile>
-				<VTile
-					width={rightWidthResult}
-					height={rightHeightResult}
-					innerPadding={rightInnerPaddingResult}
-					outerPadding={rightOuterPadding}
-					mode={rightModeResult}
-					hAlign={rightHAlign}
-					vAlign={rightVAlign}
-				>
-					<HTile height="40%" vAlign="top">
-						<VTile width="75%">
+						<HTile height="30%" vAlign="bottom">
 							<Tile>
-								<TileCanvasBox />
+								<svelte:component this={typeBoxMapping[type]} />
 							</Tile>
-							<Tile height="30%">
-								<TileCanvasBox />
+							<Tile width="50px">
+								<svelte:component this={typeBoxMapping[type]} />
 							</Tile>
-						</VTile>
-						<Tile>
-							<TileCanvasBox />
-						</Tile>
-					</HTile>
-					<Tile width="80%" hAlign="right">
-						<TileCanvasBox />
-					</Tile>
-					<HTile height="30%" vAlign="bottom">
-						<Tile>
-							<TileCanvasBox />
-						</Tile>
-						<Tile width="50px">
-							<TileCanvasBox />
-						</Tile>
-					</HTile>
-				</VTile>
-			</HTile>
+						</HTile>
+					</VTile>
+				</HTile>
+			</div>
 		</div>
-	</div>
+	{/each}
 
 	<div class="tile-type">
 		<h3>Mixed</h3>
@@ -602,7 +460,7 @@
 	}
 
 	.intro {
-		line-height: 140%;
+		line-height: 120%;
 		position: relative;
 		left: 50%;
 		margin-left: -300px;
@@ -639,8 +497,9 @@
 	}
 
 	div.value {
+		justify-content: end;
 		padding-left: 6px;
-		width: 50px;
+		width: 30px;
 	}
 
 	.tile-types {
@@ -657,6 +516,7 @@
 
 	.tile-type h3 {
 		margin: 0px 0px 2px 0px;
+		text-transform: uppercase;
 	}
 
 	.root-tile {
