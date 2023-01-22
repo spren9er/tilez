@@ -3,6 +3,7 @@
 		TypeTilePropsHAlign,
 		TypeTilePropsVAlign,
 		TypeTilePropsMode,
+		TypeTilePropsType,
 	} from '$lib/types/tileProps.type';
 
 	import { Tile, HTile, VTile } from '$lib';
@@ -11,10 +12,17 @@
 	import TileSVGBox from '$examples/boxes/TileSVGBox.svelte';
 	import TileCanvasBox from '$examples/boxes/TileCanvasBox.svelte';
 
-	const typeBoxMapping = {
-		html: TileHTMLBox,
-		svg: TileSVGBox,
-		canvas: TileCanvasBox,
+	const types: TypeTilePropsType[] = ['html', 'svg', 'canvas'];
+
+	const boxFor = (type: TypeTilePropsType) => {
+		switch (type) {
+			case 'html':
+				return TileHTMLBox;
+			case 'svg':
+				return TileSVGBox;
+			case 'canvas':
+				return TileCanvasBox;
+		}
 	};
 
 	let width = 200;
@@ -286,7 +294,7 @@
 </div>
 
 <div class="tile-types">
-	{#each Object.keys(typeBoxMapping) as type}
+	{#each types as type}
 		<div class="tile-type">
 			<h3>{type}</h3>
 
@@ -302,26 +310,26 @@
 						vAlign={leftVAlign}
 					>
 						<Tile height="15%">
-							<svelte:component this={typeBoxMapping[type]} />
+							<svelte:component this={boxFor(type)} />
 						</Tile>
 						<HTile>
 							<Tile width="70px">
-								<svelte:component this={typeBoxMapping[type]} />
+								<svelte:component this={boxFor(type)} />
 							</Tile>
 							<Tile>
-								<svelte:component this={typeBoxMapping[type]} />
+								<svelte:component this={boxFor(type)} />
 							</Tile>
 						</HTile>
 						<HTile height="70px">
 							<Tile width="30%">
-								<svelte:component this={typeBoxMapping[type]} />
+								<svelte:component this={boxFor(type)} />
 							</Tile>
 							<Tile width="60%" hAlign="right">
-								<svelte:component this={typeBoxMapping[type]} />
+								<svelte:component this={boxFor(type)} />
 							</Tile>
 						</HTile>
 						<Tile height="20%">
-							<svelte:component this={typeBoxMapping[type]} />
+							<svelte:component this={boxFor(type)} />
 						</Tile>
 					</VTile>
 					<VTile
@@ -336,25 +344,25 @@
 						<HTile height="40%" vAlign="top">
 							<VTile width="75%">
 								<Tile>
-									<svelte:component this={typeBoxMapping[type]} />
+									<svelte:component this={boxFor(type)} />
 								</Tile>
 								<Tile height="30%">
-									<svelte:component this={typeBoxMapping[type]} />
+									<svelte:component this={boxFor(type)} />
 								</Tile>
 							</VTile>
 							<Tile>
-								<svelte:component this={typeBoxMapping[type]} />
+								<svelte:component this={boxFor(type)} />
 							</Tile>
 						</HTile>
 						<Tile width="80%" hAlign="right">
-							<svelte:component this={typeBoxMapping[type]} />
+							<svelte:component this={boxFor(type)} />
 						</Tile>
 						<HTile height="30%" vAlign="bottom">
 							<Tile>
-								<svelte:component this={typeBoxMapping[type]} />
+								<svelte:component this={boxFor(type)} />
 							</Tile>
 							<Tile width="50px">
-								<svelte:component this={typeBoxMapping[type]} />
+								<svelte:component this={boxFor(type)} />
 							</Tile>
 						</HTile>
 					</VTile>
