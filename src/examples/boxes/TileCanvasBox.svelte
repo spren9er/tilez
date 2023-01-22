@@ -15,8 +15,8 @@
 
 		if (width > 0 && height > 0) {
 			ctx.beginPath();
-			ctx.fillStyle = '#eaeaea';
-			ctx.strokeStyle = '#aaaaaa';
+			ctx.fillStyle = '#b5bfaf';
+			ctx.strokeStyle = '#586254';
 			ctx.lineWidth = thickness;
 			ctx.rect(offset, offset, width, height);
 			ctx.fill();

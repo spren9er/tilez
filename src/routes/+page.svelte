@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type {
+		TypeTilePropsHAlign,
 		TypeTilePropsVAlign,
 		TypeTilePropsMode,
 	} from '$lib/types/tileProps.type';
@@ -16,23 +17,47 @@
 	let outerPadding = 4;
 	let mode: TypeTilePropsMode = 'spacing';
 
-	let subWidthActivated = false;
-	let subHeightActivated = false;
-	let subInnerPaddingActivated = false;
-	let subModeActivated = false;
+	let leftWidthActivated = false;
+	let leftHeightActivated = false;
+	let leftInnerPaddingActivated = false;
+	let leftModeActivated = false;
 
-	let subWidth = 50;
-	let subHeight = 100;
-	let subInnerPadding = 4;
-	let subOuterPadding = 0;
-	let subVAlign: TypeTilePropsVAlign = 'top';
+	let leftWidth = 50;
+	let leftHeight = 100;
+	let leftInnerPadding = 4;
+	let leftOuterPadding = 0;
+	let leftHAlign: TypeTilePropsHAlign = 'left';
+	let leftVAlign: TypeTilePropsVAlign = 'top';
 
-	$: subWidthResult = subWidthActivated ? `${subWidth}%` : undefined;
-	$: subHeightResult = subHeightActivated ? `${subHeight}%` : undefined;
-	$: subInnerPaddingResult = subInnerPaddingActivated
-		? subInnerPadding
+	let rightWidthActivated = false;
+	let rightHeightActivated = false;
+	let rightInnerPaddingActivated = false;
+	let rightModeActivated = false;
+
+	let rightWidth = 50;
+	let rightHeight = 100;
+	let rightInnerPadding = 4;
+	let rightOuterPadding = 0;
+	let rightHAlign: TypeTilePropsHAlign = 'left';
+	let rightVAlign: TypeTilePropsVAlign = 'top';
+
+	$: leftWidthResult = leftWidthActivated ? `${leftWidth}%` : undefined;
+	$: leftHeightResult = leftHeightActivated ? `${leftHeight}%` : undefined;
+	$: leftInnerPaddingResult = leftInnerPaddingActivated
+		? leftInnerPadding
 		: undefined;
-	$: subModeResult = subModeActivated
+	$: leftModeResult = leftModeActivated
+		? mode === 'sizing'
+			? 'spacing'
+			: 'sizing'
+		: mode;
+
+	$: rightWidthResult = rightWidthActivated ? `${rightWidth}%` : undefined;
+	$: rightHeightResult = rightHeightActivated ? `${rightHeight}%` : undefined;
+	$: rightInnerPaddingResult = rightInnerPaddingActivated
+		? rightInnerPadding
+		: undefined;
+	$: rightModeResult = rightModeActivated
 		? mode === 'sizing'
 			? 'spacing'
 			: 'sizing'
@@ -40,6 +65,19 @@
 </script>
 
 <h1>tilez</h1>
+
+<div class="intro">
+	<p>
+		<b>tilez</b> is a generic layout engine for Svelte components.
+	</p>
+
+	<p>
+		See
+		<a href="https://github.com/spren9er/tilez#README">GitHub</a> for documentation.
+	</p>
+
+	<p>Play around with example below.</p>
+</div>
 
 <div class="forms">
 	<div class="form">
@@ -57,12 +95,12 @@
 				<div class="value">{height}px</div>
 			</div>
 			<div>
-				<label for="innerPadding">inner padding</label>
+				<label for="innerPadding">innerPadding</label>
 				<input type="range" min={0} max={20} bind:value={innerPadding} />
 				<div class="value">{innerPadding}px</div>
 			</div>
 			<div>
-				<label for="outerPadding">outer padding</label>
+				<label for="outerPadding">outerPadding</label>
 				<input type="range" min={0} max={20} bind:value={outerPadding} />
 				<div class="value">{outerPadding}px</div>
 			</div>
@@ -77,66 +115,160 @@
 	</div>
 
 	<div class="form">
-		<h3>Sample Sub Root Tile</h3>
+		<h3>Left Inner Tile</h3>
 
 		<form>
 			<div>
 				<label for="width">width</label>
-				<input type="checkbox" bind:checked={subWidthActivated} />
+				<input type="checkbox" bind:checked={leftWidthActivated} />
 				<input
 					type="range"
 					min={0}
 					max={100}
-					bind:value={subWidth}
-					disabled={!subWidthActivated}
+					bind:value={leftWidth}
+					disabled={!leftWidthActivated}
 				/>
-				<div class="value">{subWidth}%</div>
+				<div class="value">{leftWidth}%</div>
 			</div>
 			<div>
 				<label for="height">height</label>
-				<input type="checkbox" bind:checked={subHeightActivated} />
+				<input type="checkbox" bind:checked={leftHeightActivated} />
 				<input
 					type="range"
 					min={0}
 					max={100}
-					bind:value={subHeight}
-					disabled={!subHeightActivated}
+					bind:value={leftHeight}
+					disabled={!leftHeightActivated}
 				/>
-				<div class="value">{subHeight}%</div>
+				<div class="value">{leftHeight}%</div>
 			</div>
 			<div>
-				<label for="innerPadding">inner padding</label>
-				<input type="checkbox" bind:checked={subInnerPaddingActivated} />
+				<label for="innerPadding">innerPadding</label>
+				<input type="checkbox" bind:checked={leftInnerPaddingActivated} />
 				<input
 					type="range"
 					min={0}
 					max={20}
-					bind:value={subInnerPadding}
-					disabled={!subInnerPaddingActivated}
+					bind:value={leftInnerPadding}
+					disabled={!leftInnerPaddingActivated}
 				/>
-				<div class="value">{subInnerPadding}px</div>
+				<div class="value">{leftInnerPadding}px</div>
 			</div>
 			<div>
-				<label for="outerPadding">outer padding</label>
+				<label for="outerPadding">outerPadding</label>
 				<input type="checkbox" style:visibility="hidden" />
-				<input type="range" min={0} max={20} bind:value={subOuterPadding} />
-				<div class="value">{subOuterPadding}px</div>
+				<input type="range" min={0} max={20} bind:value={leftOuterPadding} />
+				<div class="value">{leftOuterPadding}px</div>
 			</div>
 			<div>
-				<label for="mode">change mode</label>
-				<input type="checkbox" bind:checked={subModeActivated} />
-				<select name="mode" bind:value={subModeResult} disabled={true}>
+				<label for="mode">mode</label>
+				<input type="checkbox" bind:checked={leftModeActivated} />
+				<select name="mode" bind:value={leftModeResult} disabled={true}>
 					<option value="spacing">spacing</option>
 					<option value="sizing">sizing</option>
+				</select>
+			</div>
+			<div>
+				<label for="hAlign">hAlign</label>
+				<select
+					name="hAlign"
+					bind:value={leftHAlign}
+					disabled={leftWidth + rightWidth >= 100}
+				>
+					<option value="left">left</option>
+					<option value="center">center</option>
+					<option value="right">right</option>
 				</select>
 			</div>
 			<div>
 				<label for="vAlign">vAlign</label>
 				<select
 					name="vAlign"
-					bind:value={subVAlign}
-					disabled={!subHeightActivated ||
-						(subHeightActivated && subHeight === 100)}
+					bind:value={leftVAlign}
+					disabled={!leftHeightActivated ||
+						(leftHeightActivated && leftHeight === 100)}
+				>
+					<option value="top">top</option>
+					<option value="center">center</option>
+					<option value="bottom">bottom</option>
+				</select>
+			</div>
+		</form>
+	</div>
+
+	<div class="form">
+		<h3>Right Inner Tile</h3>
+
+		<form>
+			<div>
+				<label for="width">width</label>
+				<input type="checkbox" bind:checked={rightWidthActivated} />
+				<input
+					type="range"
+					min={0}
+					max={100}
+					bind:value={rightWidth}
+					disabled={!rightWidthActivated}
+				/>
+				<div class="value">{rightWidth}%</div>
+			</div>
+			<div>
+				<label for="height">height</label>
+				<input type="checkbox" bind:checked={rightHeightActivated} />
+				<input
+					type="range"
+					min={0}
+					max={100}
+					bind:value={rightHeight}
+					disabled={!rightHeightActivated}
+				/>
+				<div class="value">{rightHeight}%</div>
+			</div>
+			<div>
+				<label for="innerPadding">innerPadding</label>
+				<input type="checkbox" bind:checked={rightInnerPaddingActivated} />
+				<input
+					type="range"
+					min={0}
+					max={20}
+					bind:value={rightInnerPadding}
+					disabled={!rightInnerPaddingActivated}
+				/>
+				<div class="value">{rightInnerPadding}px</div>
+			</div>
+			<div>
+				<label for="outerPadding">outerPadding</label>
+				<input type="checkbox" style:visibility="hidden" />
+				<input type="range" min={0} max={20} bind:value={rightOuterPadding} />
+				<div class="value">{rightOuterPadding}px</div>
+			</div>
+			<div>
+				<label for="mode">mode</label>
+				<input type="checkbox" bind:checked={rightModeActivated} />
+				<select name="mode" bind:value={rightModeResult} disabled={true}>
+					<option value="spacing">spacing</option>
+					<option value="sizing">sizing</option>
+				</select>
+			</div>
+			<div>
+				<label for="hAlign">hAlign</label>
+				<select
+					name="hAlign"
+					bind:value={rightHAlign}
+					disabled={leftWidth + rightWidth >= 100}
+				>
+					<option value="left">left</option>
+					<option value="center">center</option>
+					<option value="right">right</option>
+				</select>
+			</div>
+			<div>
+				<label for="vAlign">vAlign</label>
+				<select
+					name="vAlign"
+					bind:value={rightVAlign}
+					disabled={!rightHeightActivated ||
+						(rightHeightActivated && rightHeight === 100)}
 				>
 					<option value="top">top</option>
 					<option value="center">center</option>
@@ -154,12 +286,13 @@
 		<div class="root-tile" style:width="{width}px" style:height="{height}px">
 			<HTile {innerPadding} {outerPadding} {mode} type="html">
 				<VTile
-					width={subWidthResult}
-					height={subHeightResult}
-					innerPadding={subInnerPaddingResult}
-					outerPadding={subOuterPadding}
-					mode={subModeResult}
-					vAlign={subVAlign}
+					width={leftWidthResult}
+					height={leftHeightResult}
+					innerPadding={leftInnerPaddingResult}
+					outerPadding={leftOuterPadding}
+					mode={leftModeResult}
+					hAlign={leftHAlign}
+					vAlign={leftVAlign}
 				>
 					<Tile height="15%">
 						<TileHTMLBox />
@@ -184,7 +317,15 @@
 						<TileHTMLBox />
 					</Tile>
 				</VTile>
-				<VTile>
+				<VTile
+					width={rightWidthResult}
+					height={rightHeightResult}
+					innerPadding={rightInnerPaddingResult}
+					outerPadding={rightOuterPadding}
+					mode={rightModeResult}
+					hAlign={rightHAlign}
+					vAlign={rightVAlign}
+				>
 					<HTile height="40%" vAlign="top">
 						<VTile width="75%">
 							<Tile>
@@ -220,12 +361,13 @@
 		<div class="root-tile" style:width="{width}px" style:height="{height}px">
 			<HTile {innerPadding} {outerPadding} {mode} type="svg">
 				<VTile
-					width={subWidthResult}
-					height={subHeightResult}
-					innerPadding={subInnerPaddingResult}
-					outerPadding={subOuterPadding}
-					mode={subModeResult}
-					vAlign={subVAlign}
+					width={leftWidthResult}
+					height={leftHeightResult}
+					innerPadding={leftInnerPaddingResult}
+					outerPadding={leftOuterPadding}
+					mode={leftModeResult}
+					hAlign={leftHAlign}
+					vAlign={leftVAlign}
 				>
 					<Tile height="15%">
 						<TileSVGBox />
@@ -250,7 +392,15 @@
 						<TileSVGBox />
 					</Tile>
 				</VTile>
-				<VTile>
+				<VTile
+					width={rightWidthResult}
+					height={rightHeightResult}
+					innerPadding={rightInnerPaddingResult}
+					outerPadding={rightOuterPadding}
+					mode={rightModeResult}
+					hAlign={rightHAlign}
+					vAlign={rightVAlign}
+				>
 					<HTile height="40%" vAlign="top">
 						<VTile width="75%">
 							<Tile>
@@ -286,12 +436,13 @@
 		<div class="root-tile" style:width="{width}px" style:height="{height}px">
 			<HTile {innerPadding} {outerPadding} {mode} type="canvas">
 				<VTile
-					width={subWidthResult}
-					height={subHeightResult}
-					innerPadding={subInnerPaddingResult}
-					outerPadding={subOuterPadding}
-					mode={subModeResult}
-					vAlign={subVAlign}
+					width={leftWidthResult}
+					height={leftHeightResult}
+					innerPadding={leftInnerPaddingResult}
+					outerPadding={leftOuterPadding}
+					mode={leftModeResult}
+					hAlign={leftHAlign}
+					vAlign={leftVAlign}
 				>
 					<Tile height="15%">
 						<TileCanvasBox />
@@ -316,7 +467,15 @@
 						<TileCanvasBox />
 					</Tile>
 				</VTile>
-				<VTile>
+				<VTile
+					width={rightWidthResult}
+					height={rightHeightResult}
+					innerPadding={rightInnerPaddingResult}
+					outerPadding={rightOuterPadding}
+					mode={rightModeResult}
+					hAlign={rightHAlign}
+					vAlign={rightVAlign}
+				>
 					<HTile height="40%" vAlign="top">
 						<VTile width="75%">
 							<Tile>
@@ -352,12 +511,13 @@
 		<div class="root-tile" style:width="{width}px" style:height="{height}px">
 			<HTile {innerPadding} {outerPadding} {mode} type="plain">
 				<VTile
-					width={subWidthResult}
-					height={subHeightResult}
-					innerPadding={subInnerPaddingResult}
-					outerPadding={subOuterPadding}
-					mode={subModeResult}
-					vAlign={subVAlign}
+					width={leftWidthResult}
+					height={leftHeightResult}
+					innerPadding={leftInnerPaddingResult}
+					outerPadding={leftOuterPadding}
+					mode={leftModeResult}
+					hAlign={leftHAlign}
+					vAlign={leftVAlign}
 				>
 					<Tile height="15%" type="canvas">
 						<TileCanvasBox />
@@ -374,36 +534,44 @@
 						<Tile width="30%" type="svg">
 							<TileSVGBox />
 						</Tile>
-						<Tile width="60%" hAlign="right" type="html">
-							<TileHTMLBox />
+						<Tile width="60%" hAlign="right" type="canvas">
+							<TileCanvasBox />
 						</Tile>
 					</HTile>
 					<Tile height="20%" type="svg">
 						<TileSVGBox />
 					</Tile>
 				</VTile>
-				<VTile>
+				<VTile
+					width={rightWidthResult}
+					height={rightHeightResult}
+					innerPadding={rightInnerPaddingResult}
+					outerPadding={rightOuterPadding}
+					mode={rightModeResult}
+					hAlign={rightHAlign}
+					vAlign={rightVAlign}
+				>
 					<HTile height="40%" vAlign="top">
-						<VTile width="75%" type="html">
+						<VTile width="75%" type="svg">
 							<Tile>
-								<TileHTMLBox />
+								<TileSVGBox />
 							</Tile>
 							<Tile height="30%">
-								<TileHTMLBox />
+								<TileSVGBox />
 							</Tile>
 						</VTile>
-						<Tile type="canvas">
-							<TileCanvasBox />
+						<Tile type="html">
+							<TileHTMLBox />
 						</Tile>
 					</HTile>
 					<Tile width="80%" hAlign="right" type="canvas">
 						<TileCanvasBox />
 					</Tile>
-					<HTile height="30%" vAlign="bottom" type="svg">
+					<HTile height="30%" vAlign="bottom" type="html">
 						<Tile>
-							<TileSVGBox />
+							<TileHTMLBox />
 						</Tile>
-						<Tile width="50px">
+						<Tile width="50px" type="svg">
 							<TileSVGBox />
 						</Tile>
 					</HTile>
@@ -418,13 +586,29 @@
 		font-family: 'Courier New', Courier, monospace;
 		font-size: 12px;
 		color: #333333;
-		background-color: #efefef;
+		background-color: #ffffff;
 		margin: 50px;
 	}
 
 	h1 {
 		text-align: center;
-		margin: 20px 10px;
+		margin: 70px 10px 20px 10px;
+	}
+
+	a,
+	a:visited {
+		color: #333333;
+		font-weight: bold;
+	}
+
+	.intro {
+		line-height: 140%;
+		position: relative;
+		left: 50%;
+		margin-left: -300px;
+		width: 600px;
+		text-align: center;
+		margin-bottom: 50px;
 	}
 
 	.forms {
@@ -468,7 +652,6 @@
 	.tile-type {
 		margin: 10px;
 		padding: 10px;
-		border: 1px solid #333333;
 		background-color: #ffffff;
 	}
 
@@ -477,6 +660,6 @@
 	}
 
 	.root-tile {
-		border: 1px solid #aaaaaa;
+		border: 1px solid #333333;
 	}
 </style>

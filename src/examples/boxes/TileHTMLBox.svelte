@@ -21,8 +21,9 @@
 		margin: 0;
 		padding: 0;
 		box-sizing: border-box;
-		background-color: #eaeaea;
+		background-color: #8f9fa9;
+
 		border-style: solid;
-		border-color: #aaaaaa;
+		border-color: #37464e;
 	}
 </style>
