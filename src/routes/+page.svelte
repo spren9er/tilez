@@ -466,6 +466,7 @@
 		color: #333333;
 		background-color: #ffffff;
 		margin: 50px;
+		text-size-adjust: none;
 	}
 
 	img.logo {
