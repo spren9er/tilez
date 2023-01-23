@@ -11,7 +11,7 @@
 	y={0}
 	width={$xScale(1)}
 	height={$yScale(1)}
-	fill={fill ? '#adbac7' : 'transparent'}
+	fill={fill ? '#adbac7' : 'none'}
 	stroke="#242931"
 	stroke-width="2"
 />

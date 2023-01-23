@@ -93,11 +93,13 @@ All props are optional, i.e. you can have tiles with no props at all
 </Tile>
 ```
 
-**Tile** props are reactive (except for [stack](#props_stack) and [type](#props_type)), i.e. if you change these props for an arbitrary tile in tile hierarchy, whole subtree of tiles is rerendered according to updated props.
+**Tile** props are reactive (except for [stack](#props_stack) and [type](#props_type)), i.e. if you change props for an arbitrary tile in tile hierarchy, whole subtree of tiles is rerendered according to updated props.
+
+If you want to know exactly what happens, when you alter these props – without reading through [API Tile Props](#tile-props) – take a look at [https://spren9er.github.io/tilez](https://spren9er.github.io/tilez) and play around with an interactive example layout.
 
 ### Stacking Tiles
 
-The main concept of _**tilez**_ is that you can stack tiles in _horizontal_ or _vertical_ direction, recursively.
+The main concept of _**tilez**_ is stacking tiles in _horizontal_ or _vertical_ direction, recursively.
 Within a stack, a tile starts at the point where the last tile ends. For stacking, you use the property [stack](#props_stack), which defines in which direction children tiles should be stacked.
 
 For convenience, there are following shortcuts available

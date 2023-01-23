@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { assets } from '$app/paths';
+
 	import type {
 		TypeTilePropsHAlign,
 		TypeTilePropsVAlign,
@@ -28,7 +30,7 @@
 	let width = 200;
 	let height = 200;
 	let innerPadding = 4;
-	let outerPadding = 4;
+	let outerPadding = 2;
 	let mode: TypeTilePropsMode = 'spacing';
 
 	let leftWidthActivated = false;
@@ -78,19 +80,23 @@
 		: mode;
 </script>
 
-<h1>tilez</h1>
+<h1><img class="logo" alt="logo" src="{assets}/tilez_logo.svg" />tilez</h1>
 
 <div class="intro">
-	<p>
-		<b>tilez</b> is a generic layout engine for Svelte components.
-	</p>
+	<p>A generic layout engine for Svelte components.</p>
 
 	<p>
 		See
-		<a href="https://github.com/spren9er/tilez#README">GitHub</a> for documentation.
+		<a href="https://github.com/spren9er/tilez">GitHub</a> for documentation.
 	</p>
 
-	<p>Play around with example below.</p>
+	<p class="text">
+		<b>Example</b> In the following, we consider one sample <b>tilez</b> layout with
+		three different document types. There are 20 tiles in total in view hierarchy:
+		1 root tile, 7 stacked tiles and 12 (visible) leaf tiles. In principle, props
+		of all tiles are reactive. Exemplarily, you can control props for the first three
+		most outer tiles (including the whole outer horizontal stack).
+	</p>
 </div>
 
 <div class="forms">
@@ -184,6 +190,7 @@
 			</div>
 			<div>
 				<label for="hAlign">hAlign</label>
+				<input type="checkbox" style:visibility="hidden" />
 				<select
 					name="hAlign"
 					bind:value={leftHAlign}
@@ -196,6 +203,7 @@
 			</div>
 			<div>
 				<label for="vAlign">vAlign</label>
+				<input type="checkbox" style:visibility="hidden" />
 				<select
 					name="vAlign"
 					bind:value={leftVAlign}
@@ -266,6 +274,7 @@
 			</div>
 			<div>
 				<label for="hAlign">hAlign</label>
+				<input type="checkbox" style:visibility="hidden" />
 				<select
 					name="hAlign"
 					bind:value={rightHAlign}
@@ -278,6 +287,7 @@
 			</div>
 			<div>
 				<label for="vAlign">vAlign</label>
+				<input type="checkbox" style:visibility="hidden" />
 				<select
 					name="vAlign"
 					bind:value={rightVAlign}
@@ -447,6 +457,10 @@
 	</div>
 </div>
 
+<div id="twitter-handle">
+	<a href="https://twitter.com/spren9er">@spren9er</a>
+</div>
+
 <style>
 	:global(body) {
 		font-family: 'Courier New', Courier, monospace;
@@ -456,9 +470,20 @@
 		margin: 50px;
 	}
 
+	img.logo {
+		position: relative;
+		top: 1.5px;
+		right: 4px;
+	}
+
 	h1 {
 		text-align: center;
 		margin: 70px 10px 20px 10px;
+	}
+
+	p.text {
+		text-align: left;
+		font-style: italic;
 	}
 
 	a,
@@ -468,7 +493,7 @@
 	}
 
 	.intro {
-		line-height: 120%;
+		line-height: 130%;
 		position: relative;
 		left: 50%;
 		margin-left: -300px;
@@ -480,15 +505,23 @@
 	.forms {
 		display: flex;
 		justify-content: center;
-		margin: 20px 0px;
+		flex-wrap: wrap;
 	}
 
 	.form {
-		margin: 0px 20px;
+		margin: 0px 20px 20px 20px;
 	}
 
 	.form h3 {
 		text-align: center;
+		padding-bottom: 4px;
+		border-bottom: 1px solid #333333;
+	}
+
+	.form div.value {
+		justify-content: end;
+		padding-left: 6px;
+		width: 30px;
 	}
 
 	form div {
@@ -502,12 +535,6 @@
 		padding-right: 8px;
 		display: inline-block;
 		width: 100px;
-	}
-
-	div.value {
-		justify-content: end;
-		padding-left: 6px;
-		width: 30px;
 	}
 
 	.tile-types {
@@ -529,5 +556,20 @@
 
 	.root-tile {
 		border: 1px solid #333333;
+	}
+
+	#twitter-handle {
+		border-top: 1px solid #333333;
+		margin-top: 20px;
+		padding-top: 5px;
+		width: 100%;
+		text-align: right;
+	}
+
+	#twitter-handle a,
+	#twitter-handle a:visited {
+		font-size: 10px;
+		color: #333333;
+		text-decoration: none;
 	}
 </style>
