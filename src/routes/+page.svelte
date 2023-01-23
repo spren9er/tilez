@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { assets } from '$app/paths';
-
 	import type {
 		TypeTilePropsHAlign,
 		TypeTilePropsVAlign,
@@ -80,7 +78,7 @@
 		: mode;
 </script>
 
-<h1><img class="logo" alt="logo" src="{assets}/tilez_logo.svg" />tilez</h1>
+<h1><img class="logo" alt="logo" src="./tilez_logo.svg" />tilez</h1>
 
 <div class="intro">
 	<p>A generic layout engine for Svelte components.</p>
