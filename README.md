@@ -95,7 +95,7 @@ All props are optional, i.e. you can have tiles with no props at all
 
 **Tile** props are reactive (except for [stack](#props_stack) and [type](#props_type)), i.e. if you change props for an arbitrary tile in tile hierarchy, whole subtree of tiles is rerendered according to updated props.
 
-If you want to know exactly what happens, when you alter these props – without reading through [API Tile Props](#tile-props) – take a look at [https://spren9er.github.io/tilez](https://spren9er.github.io/tilez) and play around with an interactive example layout.
+If you want to know exactly what happens, when you alter these props – without reading through [API Tile Props](#tile-props) – take a look at [https://tilez.spren9er.de](https://tilez.spren9er.de) and play around with an interactive example layout.
 
 ### Stacking Tiles
 
