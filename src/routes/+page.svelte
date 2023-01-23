@@ -466,6 +466,8 @@
 		color: #333333;
 		background-color: #ffffff;
 		margin: 50px;
+		-moz-text-size-adjust: none;
+                -webkit-text-size-adjust: none;
 		text-size-adjust: none;
 	}
 
