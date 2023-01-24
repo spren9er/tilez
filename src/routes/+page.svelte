@@ -485,6 +485,9 @@
 	p.text {
 		text-align: left;
 		font-style: italic;
+		margin-left: auto;
+		margin-right: auto;
+		max-width: 600px;
 	}
 
 	a,
@@ -495,10 +498,6 @@
 
 	.intro {
 		line-height: 130%;
-		position: relative;
-		left: 50%;
-		margin-left: -300px;
-		width: 600px;
 		text-align: center;
 		margin-bottom: 50px;
 	}
