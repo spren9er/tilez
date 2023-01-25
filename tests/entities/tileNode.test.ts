@@ -3,7 +3,6 @@ import { expect, describe, it } from 'vitest';
 import { TileNode } from '$lib/entities/tileNode';
 import { TileNodeFactory } from '$lib/factories/tileNodeFactory';
 import { TilePropsFactory } from '$lib/factories/tilePropsFactory';
-import { TileSpecsFactory } from '$lib/factories/tileSpecsFactory';
 
 describe('TileNode', () => {
   it('has children or not', () => {
@@ -47,16 +46,19 @@ describe('TileNode', () => {
 
     expect(root.isSubRoot).toEqual(true);
     expect(root.rootType).toEqual('root');
+    expect(root.subRootNode).toEqual(root);
 
     const subRoot = new TileNodeFactory({ type: 'svg' }, root).build();
 
     expect(subRoot.isSubRoot).toEqual(true);
     expect(subRoot.rootType).toEqual('subroot');
+    expect(subRoot.subRootNode).toEqual(subRoot);
 
     const child = new TileNodeFactory({ type: 'svg' }, subRoot).build();
 
     expect(child.isSubRoot).toEqual(false);
     expect(child.rootType).toBeUndefined();
+    expect(child.subRootNode).toEqual(subRoot);
   });
 
   it('can access specs width and height and updates children specs', () => {
@@ -258,5 +260,31 @@ describe('TileNode', () => {
 
     expect(node.width).toEqual(newWidth);
     expect(node.height).toEqual(newHeight);
+  });
+
+  it('determines coords for subroot node of type "canvas"', () => {
+    const width = 1000;
+    const height = 1000;
+
+    const node = new TileNodeFactory({
+      width,
+      height,
+      stack: 'horizontal',
+    }).build();
+
+    new TileNodeFactory({}, node).build();
+    const innerNode = new TileNodeFactory({ stack: 'vertical' }, node).build();
+
+    new TileNodeFactory({}, innerNode).build();
+    const subRoot = new TileNodeFactory(
+      { type: 'canvas', stack: 'horizontal' },
+      innerNode,
+    ).build();
+
+    new TileNodeFactory({}, subRoot).build();
+    const canvasNode = new TileNodeFactory({}, subRoot).build();
+
+    expect(subRoot.coords).toEqual({ x: 500, y: 500 });
+    expect(canvasNode.coords).toEqual({ x: 250, y: 0 });
   });
 });

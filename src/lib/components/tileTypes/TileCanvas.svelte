@@ -40,7 +40,7 @@
 		$context.scale(dpr, dpr);
 	}
 
-	$: if ($context || $specs) {
+	$: if ($context && $specs) {
 		if (rootType) resizeCanvasToDisplaySize();
 		createSubContext();
 	}
@@ -56,7 +56,8 @@
 {/if}
 
 <style>
-	canvas {
+	canvas,
+	slot {
 		display: block;
 		position: absolute;
 		top: 0;

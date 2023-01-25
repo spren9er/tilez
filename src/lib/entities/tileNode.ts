@@ -36,6 +36,8 @@ export class TileNode {
 
   public updateNodes(rawProps: TypeTileProps) {
     const props = new TilePropsFactory(rawProps).build();
+    if (this.props.isEqualTo(props)) return;
+
     const startNode = this.selectStartNode(props);
     this.props = props;
 
@@ -59,7 +61,7 @@ export class TileNode {
 
   private selectStartNode(props: TileProps) {
     const immutableProps = ['type', 'stack'];
-    if (immutableProps.some((key) => !props.isEqualTo(this.props, key)))
+    if (immutableProps.some((key) => !props.hasSameValue(this.props, key)))
       throw new Error('Can\'t modify immutable props "type" and "stack"');
 
     const startNode = this.specs.type === 'canvas' ? this.subRootNode : this;
@@ -68,7 +70,7 @@ export class TileNode {
 
     if (
       !startNode.isRoot &&
-      parentProps.some((key) => !props.isEqualTo(this.props, key))
+      parentProps.some((key) => !props.hasSameValue(this.props, key))
     )
       return startNode.parent!;
 

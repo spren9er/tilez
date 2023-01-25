@@ -31,6 +31,7 @@
 
 	let containerWidth: number;
 	let containerHeight: number;
+	let init = true;
 
 	const rawProps = {
 		width,
@@ -76,7 +77,9 @@
 		rawProps.width ||= containerWidth;
 		rawProps.height ||= containerHeight;
 
-		node.updateNodes(rawProps);
+		if (!init) node.updateNodes(rawProps);
+
+		init = false;
 	}
 </script>
 

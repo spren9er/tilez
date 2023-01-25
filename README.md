@@ -425,6 +425,8 @@ When layout mode _'sizing'_ is used, all tiles have exactly the size which is sp
 
 It depends on your use case, which mode you choose. You can also mix modes, start with one mode and change to the other mode in an inner tile.
 
+---
+
 <a name="props_element" href="#props_element">#</a> tilez.<b>Tile</b>.<i>element</i>
 
 A reference to an HTML, SVG or Canvas element (depending on the [type](#props_type)). For renderless components (_'plain'_ type), element is `undefined`. See also [this section](#access-html-svg-or-canvas-element).

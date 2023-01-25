@@ -86,20 +86,30 @@ export class TileProps {
     if (key in this) return this[key as keyof TileProps];
   }
 
-  public isEqualTo(props: TileProps, key: string) {
-    if (['width', 'height'].includes(key)) {
-      const dimensionA = this.dimensions.dimensionFor(
-        key as 'width' | 'height',
-      );
-      const dimensionB = props.dimensions.dimensionFor(
-        key as 'width' | 'height',
-      );
+  public isEqualTo(props: TileProps) {
+    return [
+      'width',
+      'height',
+      'stack',
+      'type',
+      'innerPadding',
+      'outerPadding',
+      'hAlign',
+      'vAlign',
+      'mode',
+    ].every((key) => this.hasSameValue(props, key));
+  }
 
-      if (!dimensionA && !dimensionB) return true;
+  public hasSameValue(props: TileProps, key: string): boolean {
+    if (!['width', 'height'].includes(key))
+      return this.call(key) === props.call(key);
 
-      return dimensionA && dimensionB && dimensionA.isEqualTo(dimensionB);
-    }
+    const dimKey = key as 'width' | 'height';
+    const dimensionA = this.dimensions.dimensionFor(dimKey);
+    const dimensionB = props.dimensions.dimensionFor(dimKey);
 
-    return this.call(key) === props.call(key);
+    if (!dimensionA && !dimensionB) return true;
+
+    return !!(dimensionA && dimensionB && dimensionA.isEqualTo(dimensionB));
   }
 }
