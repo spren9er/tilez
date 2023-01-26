@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 64 64">
+  <path
+    fill="#adbac7"
+    stroke="#242930"
+    stroke-width="2"
+    d="M3 3h18.446v18.446H3z"
+  />
+  <path
+    fill="#ffffff"
+    stroke="#242930"
+    stroke-width="2"
+    d="M3 27.446h18.446V61H3zM27.446 3H61v18.446H27.446z"
+  />
+  <path
+    fill="#adbac7"
+    stroke="#242930"
+    stroke-width="2"
+    d="M27.446 27.446H61V61H27.446z"
+  />
+</svg>

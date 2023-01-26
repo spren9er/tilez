@@ -89,11 +89,11 @@
 	</p>
 
 	<p class="text">
-		<b>Example</b> In the following, we consider one sample <b>tilez</b> layout for
-		three different document types. There are 20 tiles in total in view hierarchy:
-		1 root tile, 7 stacked tiles and 12 (visible) leaf tiles. In principle, props
-		of all tiles are reactive. Exemplarily, you can control props for the first three
-		most outer tiles (including the whole outer horizontal stack).
+		In the following, we consider one sample <b>tilez</b> layout for three different
+		document types. There are 20 tiles in total in view hierarchy: 1 root tile, 7
+		stacked tiles and 12 (visible) leaf tiles. In principle, props of all tiles are
+		reactive. Exemplarily, you can control props for the first three most outer tiles
+		(including the whole outer horizontal stack).
 	</p>
 </div>
 
@@ -546,7 +546,6 @@
 	.tile-type {
 		margin: 10px;
 		padding: 10px;
-		background-color: #ffffff;
 	}
 
 	.tile-type h3 {
