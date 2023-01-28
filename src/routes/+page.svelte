@@ -91,9 +91,9 @@
 	<p class="text">
 		In the following, we consider one sample <b>tilez</b> layout for three different
 		document types. There are 20 tiles in total in view hierarchy: 1 root tile, 7
-		stacked tiles and 12 (visible) leaf tiles. In principle, props of all tiles are
-		reactive. Exemplarily, you can control props for the first three most outer tiles
-		(including the whole outer horizontal stack).
+		nested, stacked tiles and 12 (visible) leaf tiles. In principle, props of all
+		tiles are reactive. Exemplarily, you can control props for the first three most
+		outer tiles (including the whole outer horizontal stack).
 	</p>
 </div>
 
@@ -562,7 +562,7 @@
 		margin-top: 20px;
 		padding-top: 5px;
 		width: 100%;
-		text-align: right;
+		text-align: center;
 	}
 
 	#twitter-handle a,
