@@ -59,6 +59,12 @@ describe('TileNode', () => {
     expect(child.isSubRoot).toEqual(false);
     expect(child.rootType).toBeUndefined();
     expect(child.subRootNode).toEqual(subRoot);
+
+    const childChild = new TileNodeFactory({ type: 'svg' }, child).build();
+
+    expect(childChild.isSubRoot).toEqual(false);
+    expect(childChild.rootType).toBeUndefined();
+    expect(childChild.subRootNode).toEqual(subRoot);
   });
 
   it('can access specs width and height and updates children specs', () => {
@@ -230,6 +236,25 @@ describe('TileNode', () => {
     expect(child.specs.mode).toEqual('spacing');
   });
 
+  it('updates node', () => {
+    const width = 1000;
+    const height = 1000;
+    const innerPadding = 10;
+
+    const node = new TileNodeFactory({
+      width,
+      height,
+      stack: 'horizontal',
+      innerPadding,
+    }).build();
+
+    const innerNode = new TileNodeFactory({ innerPadding: 5 }, node).build();
+    expect(innerNode.specs.innerPadding).toEqual(5);
+
+    innerNode.updateNodes({ innerPadding: undefined });
+    expect(innerNode.specs.innerPadding).toEqual(innerPadding);
+  });
+
   it('updates specs when specs dimensions given', () => {
     const width = 861;
     const height = 687;
@@ -286,5 +311,117 @@ describe('TileNode', () => {
 
     expect(subRoot.coords).toEqual({ x: 500, y: 500 });
     expect(canvasNode.coords).toEqual({ x: 250, y: 0 });
+  });
+
+  it('determines correct start node', () => {
+    const width = 1000;
+    const height = 1000;
+
+    const node = new TileNodeFactory({
+      width,
+      height,
+      stack: 'horizontal',
+    }).build();
+
+    new TileNodeFactory({}, node).build();
+    const innerNode = new TileNodeFactory({ stack: 'vertical' }, node).build();
+
+    new TileNodeFactory({}, innerNode).build();
+    const subRoot = new TileNodeFactory(
+      { type: 'canvas', stack: 'horizontal' },
+      innerNode,
+    ).build();
+
+    new TileNodeFactory({}, subRoot).build();
+    const canvasNode = new TileNodeFactory({}, subRoot).build();
+
+    const canvasProps = new TilePropsFactory({}).build();
+    expect(canvasNode.selectStartNode(canvasProps)).toEqual(subRoot);
+
+    const subRootProps = new TilePropsFactory({
+      type: 'canvas',
+      stack: 'horizontal',
+    }).build();
+    expect(subRoot.selectStartNode(subRootProps)).toEqual(subRoot);
+
+    subRootProps.hAlign = 'right';
+    expect(subRoot.selectStartNode(subRootProps)).toEqual(subRoot.parent);
+  });
+
+  it('can\'t update "type" and "stack" props', () => {
+    const width = 1000;
+    const height = 1000;
+
+    const node = new TileNodeFactory({
+      width,
+      height,
+      stack: 'horizontal',
+    }).build();
+
+    const errorMessage = 'Can\'t modify immutable props "type" and "stack"';
+
+    expect(() => node.updateNodes({ type: 'canvas' })).toThrowError(
+      errorMessage,
+    );
+
+    expect(() => node.updateNodes({ stack: 'vertical' })).toThrowError(
+      errorMessage,
+    );
+  });
+
+  it('updates subroot node for "canvas" type', () => {
+    const width = 1000;
+    const height = 1000;
+
+    const node = new TileNodeFactory({
+      width,
+      height,
+      stack: 'horizontal',
+    }).build();
+
+    new TileNodeFactory({}, node).build();
+    const innerNode = new TileNodeFactory({ stack: 'vertical' }, node).build();
+
+    new TileNodeFactory({}, innerNode).build();
+    const subRoot = new TileNodeFactory(
+      { type: 'canvas', stack: 'horizontal' },
+      innerNode,
+    ).build();
+
+    new TileNodeFactory({}, subRoot).build();
+    const canvasNode = new TileNodeFactory({}, subRoot).build();
+
+    subRoot.specs.width = 900;
+    canvasNode.updateNodes({ width: 500, height: 500 });
+
+    expect(subRoot.specs.width).toEqual(500);
+  });
+
+  it('does not update subroot node for non-"canvas" type', () => {
+    const width = 1000;
+    const height = 1000;
+
+    const node = new TileNodeFactory({
+      width,
+      height,
+      stack: 'horizontal',
+    }).build();
+
+    new TileNodeFactory({}, node).build();
+    const innerNode = new TileNodeFactory({ stack: 'vertical' }, node).build();
+
+    new TileNodeFactory({}, innerNode).build();
+    const subRoot = new TileNodeFactory(
+      { type: 'svg', stack: 'horizontal' },
+      innerNode,
+    ).build();
+
+    new TileNodeFactory({}, subRoot).build();
+    const svgNode = new TileNodeFactory({}, subRoot).build();
+
+    subRoot.specs.width = 900;
+    svgNode.updateNodes({ width: 500, height: 500 });
+
+    expect(subRoot.specs.width).toEqual(900);
   });
 });

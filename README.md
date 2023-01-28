@@ -156,7 +156,7 @@ import { getContext } from 'svelte';
 const {specs, xScale, yScale, element } = getContext('tilez');
 ```
 
-For Canvas elements you can retrieve additionally `context` as Svelte store from `getTileContext`.
+For Canvas elements you can retrieve additionally _CanvasRenderingContext2D_ as Svelte store `context` from `getTileContext`.
 
 ### Tile Specs from Tile Context
 

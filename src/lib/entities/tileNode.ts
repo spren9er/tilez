@@ -59,7 +59,7 @@ export class TileNode {
     startNode.updateSubSpecs();
   }
 
-  private selectStartNode(props: TileProps) {
+  public selectStartNode(props: TileProps) {
     const immutableProps = ['type', 'stack'];
     if (immutableProps.some((key) => !props.hasSameValue(this.props, key)))
       throw new Error('Can\'t modify immutable props "type" and "stack"');
@@ -164,8 +164,6 @@ export class TileNode {
   }
 
   private updateChildrenSpecs() {
-    if (!this.hasChildren) return;
-
     const tileSpecsCalculation = new TileSpecsCalculationFactory(
       this.specs,
       this.children.map(({ props }) => props),
