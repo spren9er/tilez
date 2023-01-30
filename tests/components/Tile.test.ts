@@ -2,7 +2,9 @@ import { render } from '@testing-library/svelte';
 import { expect, describe, it } from 'vitest';
 
 import Tile from '$lib/components/Tile.svelte';
+
 import EmptyTwoLevelHierarchy from '$examples/EmptyTwoLevelHierarchy.svelte';
+import SubRootHierarchy from '$examples/SubRootHierarchy.svelte';
 
 function getElementFrom(container: HTMLElement, level = 0) {
   const tileWrapper = container.querySelector('.tile-wrapper');
@@ -116,5 +118,20 @@ describe('Tile', () => {
     const innerElement = component.getInnerElement();
 
     expect(innerElement).toBeInstanceOf(HTMLElement);
+  });
+
+  it('renders sub root correctly', () => {
+    const { container } = render(SubRootHierarchy);
+
+    const svgTile = container.querySelector('svg');
+    const embedTile = svgTile?.parentElement;
+
+    expect(svgTile?.getAttribute('width')).toEqual('95');
+    expect(svgTile?.getAttribute('height')).toEqual('195');
+
+    expect(embedTile?.style.left).toEqual('100px');
+    expect(embedTile?.style.top).toEqual('0px');
+    expect(embedTile?.style.width).toEqual('95px');
+    expect(embedTile?.style.height).toEqual('195px');
   });
 });
