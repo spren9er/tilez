@@ -11,8 +11,9 @@
 	import TileHTMLBox from '$examples/boxes/TileHTMLBox.svelte';
 	import TileSVGBox from '$examples/boxes/TileSVGBox.svelte';
 	import TileCanvasBox from '$examples/boxes/TileCanvasBox.svelte';
+	import TileWebGLBox from '$examples/boxes/TileWebGLBox.svelte';
 
-	const types: TypeTilePropsType[] = ['html', 'svg', 'canvas'];
+	const types: TypeTilePropsType[] = ['html', 'svg', 'canvas', 'webgl'];
 
 	const boxFor = (type: TypeTilePropsType) => {
 		switch (type) {
@@ -22,6 +23,8 @@
 				return TileSVGBox;
 			case 'canvas':
 				return TileCanvasBox;
+			case 'webgl':
+				return TileWebGLBox;
 		}
 	};
 
@@ -89,7 +92,7 @@
 	</p>
 
 	<p class="text">
-		In the following, we consider one sample <b>tilez</b> layout for three different
+		In the following, we consider one sample <b>tilez</b> layout for several different
 		document types. There are 20 tiles in total in view hierarchy: 1 root tile, 7
 		nested, stacked tiles and 12 (visible) leaf tiles. In principle, props of all
 		tiles are reactive. Exemplarily, you can control props for the first three most
@@ -397,8 +400,8 @@
 						<TileCanvasBox />
 					</Tile>
 					<HTile type="html">
-						<Tile width="70px">
-							<TileHTMLBox />
+						<Tile width="70px" type="webgl">
+							<TileWebGLBox />
 						</Tile>
 						<Tile>
 							<TileHTMLBox />
@@ -426,11 +429,11 @@
 					vAlign={rightVAlign}
 				>
 					<HTile height="40%" vAlign="top">
-						<VTile width="75%" type="svg">
-							<Tile>
-								<TileSVGBox />
+						<VTile width="75%">
+							<Tile type="webgl">
+								<TileWebGLBox />
 							</Tile>
-							<Tile height="30%">
+							<Tile type="svg" height="30%">
 								<TileSVGBox />
 							</Tile>
 						</VTile>

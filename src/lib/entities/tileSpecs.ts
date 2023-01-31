@@ -12,7 +12,7 @@ export class TileSpecs {
     public outerPadding: number,
     public hAlign: 'left' | 'center' | 'right',
     public vAlign: 'top' | 'center' | 'bottom',
-    public type: 'plain' | 'html' | 'svg' | 'canvas',
+    public type: 'plain' | 'html' | 'svg' | 'canvas' | 'webgl',
     public mode: 'spacing' | 'sizing',
     public stack?: 'horizontal' | 'vertical',
   ) {}

@@ -45,7 +45,7 @@ describe('TilePropsFactory', () => {
   });
 
   it('validates prop "type"', () => {
-    ['plain', 'html', 'svg', 'canvas'].forEach((type: string) => {
+    ['plain', 'html', 'svg', 'canvas', 'webgl'].forEach((type: string) => {
       const props = new TilePropsFactory({
         type: type as TypeTilePropsType,
       }).build();
@@ -58,9 +58,9 @@ describe('TilePropsFactory', () => {
     expect(props.type).toBeUndefined();
 
     expect(() => {
-      new TilePropsFactory({ type: 'webgl' as TypeTilePropsType }).build();
+      new TilePropsFactory({ type: 'webgpu' as TypeTilePropsType }).build();
     }).toThrowError(
-      'Tile prop "type" must be one of "plain", "html", "svg", "canvas"!',
+      'Tile prop "type" must be one of "plain", "html", "svg", "canvas", "webgl"!',
     );
   });
 

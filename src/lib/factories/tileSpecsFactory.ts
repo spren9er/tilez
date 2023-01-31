@@ -94,19 +94,23 @@ export class TileSpecsFactory {
       html: 'HTML',
       svg: 'SVG',
       canvas: 'Canvas',
+      webgl: 'WebGL',
     };
 
-    if (this.parentSpecs.type === 'svg') {
-      if (['html', 'canvas'].includes(type))
+    const parentType = this.parentSpecs.type;
+
+    if (parentType === 'svg') {
+      if (['html', 'canvas', 'webgl'].includes(type))
         throw Error(
           `${typeMapping[type]} tile can't be embedded into SVG tile!`,
         );
     }
 
-    if (this.parentSpecs.type === 'canvas') {
-      if (['html', 'svg'].includes(type))
+    if (['canvas', 'webgl'].includes(parentType)) {
+      const otherCanvas = parentType === 'canvas' ? 'webgl' : 'canvas';
+      if (['html', 'svg', otherCanvas].includes(type))
         throw Error(
-          `${typeMapping[type]} tile can't be embedded into Canvas tile!`,
+          `${typeMapping[type]} tile can't be embedded into ${typeMapping[parentType]} tile!`,
         );
     }
   }

@@ -17,6 +17,7 @@
 	import TileHTML from '$lib/components/tileTypes/TileHTML.svelte';
 	import TileSVG from '$lib/components/tileTypes/TileSVG.svelte';
 	import TileCanvas from '$lib/components/tileTypes/TileCanvas.svelte';
+	import TileWebGL from '$lib/components/tileTypes/TileWebGL.svelte';
 
 	export let stack: TypeTilePropsStack | undefined = undefined;
 	export let width: TypeTilePropsDimension | undefined = undefined;
@@ -54,6 +55,7 @@
 			html: TileHTML,
 			svg: TileSVG,
 			canvas: TileCanvas,
+			webgl: TileWebGL,
 		};
 
 		return componentMapping[node.specs.type];

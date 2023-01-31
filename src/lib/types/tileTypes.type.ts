@@ -1,1 +1,6 @@
-export type TypeTileType = 'TilePlain' | 'TileHTML' | 'TileSVG' | 'TileCanvas';
+export type TypeTileType =
+  | 'TilePlain'
+  | 'TileHTML'
+  | 'TileSVG'
+  | 'TileCanvas'
+  | 'TileWebGL';

@@ -4,7 +4,7 @@
 	const { specs, context } = getTileContext();
 
 	$: if ($context) {
-		const ctx = $context;
+		const ctx = $context as CanvasRenderingContext2D;
 
 		const dpr = window.devicePixelRatio || 1;
 		const thickness = 1 * dpr;

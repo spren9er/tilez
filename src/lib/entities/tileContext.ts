@@ -4,6 +4,8 @@ import { derived, writable, type Writable } from 'svelte/store';
 import type {
   TypeTileProps,
   TypeTilePropsElement,
+  TypeTilePropsContext,
+  TypeTilePropsType,
 } from '$lib/types/tileProps.type';
 import type { TileNode } from '$lib/entities/tileNode';
 import type { TileSpecs } from '$lib/entities/tileSpecs';
@@ -19,7 +21,7 @@ type TypeTileContext = {
   xScale: Writable<LinearScale>;
   yScale: Writable<LinearScale>;
   element: Writable<TypeTilePropsElement | null>;
-  context: Writable<CanvasRenderingContext2D | null>;
+  context: Writable<TypeTilePropsContext | null>;
 };
 
 export function getTileContext(): TypeTileContext {
@@ -53,13 +55,18 @@ function setTileContext(name: string, node: TileNode) {
   });
 
   const element = setupElement(node);
-  const context = setupCanvas(element);
+  const context = setupCanvas(node.specs.type, element);
 
   setContext(name, { specs, xScale, yScale, element, context });
 }
 
 function setupElement(node: TileNode) {
-  if (node.specs.type === 'canvas' && node.parentType === 'canvas') {
+  const canvasTypes = ['canvas', 'webgl'];
+  if (
+    node.parentType &&
+    canvasTypes.includes(node.specs.type) &&
+    canvasTypes.includes(node.parentType)
+  ) {
     const { element } = getTileContext();
 
     return element;
@@ -69,10 +76,16 @@ function setupElement(node: TileNode) {
 }
 
 /* c8 ignore start */
-function setupCanvas(element: Writable<TypeTilePropsElement | null>) {
+function setupCanvas(
+  type: TypeTilePropsType,
+  element: Writable<TypeTilePropsElement | null>,
+) {
   return derived(element, ($element) => {
-    if ($element && $element instanceof HTMLCanvasElement)
-      return $element.getContext('2d');
+    if ($element && $element instanceof HTMLCanvasElement) {
+      const context = type === 'canvas' ? '2d' : 'webgl';
+
+      return $element.getContext(context);
+    }
 
     return null;
   });

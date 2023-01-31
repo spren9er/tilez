@@ -13,16 +13,6 @@
 
 	const { rootType } = node;
 
-	function createSubContext() {
-		if (!$context || !$specs) return;
-
-		const dpr = window.devicePixelRatio || 1;
-		const ctx = $context as CanvasRenderingContext2D;
-
-		ctx.setTransform(1, 0, 0, 1, 0, 0);
-		ctx.translate($specs.subRootX * dpr, $specs.subRootY * dpr);
-	}
-
 	function resizeCanvasToDisplaySize() {
 		if (!$context || !$specs) return;
 
@@ -37,13 +27,10 @@
 
 		canvas.style.width = `${$specs.width}px`;
 		canvas.style.height = `${$specs.height}px`;
-
-		($context as CanvasRenderingContext2D).scale(dpr, dpr);
 	}
 
-	$: if ($context && $specs) {
-		if (rootType) resizeCanvasToDisplaySize();
-		createSubContext();
+	$: if ($context && $specs && rootType) {
+		resizeCanvasToDisplaySize();
 	}
 </script>
 

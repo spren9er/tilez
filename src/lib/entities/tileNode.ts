@@ -43,7 +43,8 @@ export class TileNode {
 
     if (
       startNode === this ||
-      (startNode.isSubRoot && startNode.specs.type === 'canvas')
+      (startNode.isSubRoot &&
+        ['canvas', 'webgl'].includes(startNode.specs.type))
     ) {
       startNode.update((node: TileNode) => {
         const specs = new TileSpecsFactory(
@@ -64,7 +65,9 @@ export class TileNode {
     if (immutableProps.some((key) => !props.hasSameValue(this.props, key)))
       throw new Error('Can\'t modify immutable props "type" and "stack"');
 
-    const startNode = this.specs.type === 'canvas' ? this.subRootNode : this;
+    const startNode = ['canvas', 'webgl'].includes(this.specs.type)
+      ? this.subRootNode
+      : this;
 
     const parentProps = ['width', 'height', 'hAlign', 'vAlign'];
 

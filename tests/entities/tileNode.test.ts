@@ -105,6 +105,16 @@ describe('TileNode', () => {
     );
   });
 
+  it('of "html" type can\'t  be embedded into "webgl"', () => {
+    const props = new TilePropsFactory({ type: 'webgl' }).build();
+    const node = new TileNode(props);
+
+    const htmlProps = new TilePropsFactory({ type: 'html' }).build();
+    expect(() => new TileNode(htmlProps, node)).toThrowError(
+      "HTML tile can't be embedded into WebGL tile!",
+    );
+  });
+
   it('of "plain" type can be embedded into "svg"', () => {
     const props = new TilePropsFactory({ type: 'svg' }).build();
     const node = new TileNode(props);
@@ -123,6 +133,16 @@ describe('TileNode', () => {
     );
   });
 
+  it('of "webgl" type can\'t be embedded into "svg"', () => {
+    const props = new TilePropsFactory({ type: 'svg' }).build();
+    const node = new TileNode(props);
+
+    const webglProps = new TilePropsFactory({ type: 'webgl' }).build();
+    expect(() => new TileNode(webglProps, node)).toThrowError(
+      "WebGL tile can't be embedded into SVG tile!",
+    );
+  });
+
   it('of "svg" type can\'t be embedded into "canvas"', () => {
     const props = new TilePropsFactory({ type: 'canvas' }).build();
     const node = new TileNode(props);
@@ -130,6 +150,36 @@ describe('TileNode', () => {
     const svgProps = new TilePropsFactory({ type: 'svg' }).build();
     expect(() => new TileNode(svgProps, node)).toThrowError(
       "SVG tile can't be embedded into Canvas tile!",
+    );
+  });
+
+  it('of "svg" type can\'t be embedded into "webgl"', () => {
+    const props = new TilePropsFactory({ type: 'webgl' }).build();
+    const node = new TileNode(props);
+
+    const svgProps = new TilePropsFactory({ type: 'svg' }).build();
+    expect(() => new TileNode(svgProps, node)).toThrowError(
+      "SVG tile can't be embedded into WebGL tile!",
+    );
+  });
+
+  it('of "webgl" type can\'t be embedded into "canvas"', () => {
+    const props = new TilePropsFactory({ type: 'canvas' }).build();
+    const node = new TileNode(props);
+
+    const webglProps = new TilePropsFactory({ type: 'webgl' }).build();
+    expect(() => new TileNode(webglProps, node)).toThrowError(
+      "WebGL tile can't be embedded into Canvas tile!",
+    );
+  });
+
+  it('of "canvas" type can\'t be embedded into "webgl"', () => {
+    const props = new TilePropsFactory({ type: 'webgl' }).build();
+    const node = new TileNode(props);
+
+    const canvasProps = new TilePropsFactory({ type: 'canvas' }).build();
+    expect(() => new TileNode(canvasProps, node)).toThrowError(
+      "Canvas tile can't be embedded into WebGL tile!",
     );
   });
 
