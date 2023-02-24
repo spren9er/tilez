@@ -1,6 +1,6 @@
 {
   "name": "tilez",
-  "version": "0.0.30",
+  "version": "0.0.32",
   "author": "Torsten Sprenger <mail@spren9er.de>",
   "description": "Generic layout engine for Svelte components",
   "keywords": [
@@ -19,6 +19,15 @@
   "bugs": {
     "url": "https://github.com/spren9er/tilez/issues"
   },
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "svelte": "./dist/index.js"
+    }
+  },
   "scripts": {
     "dev": "vite dev",
     "app:build": "vite build",
@@ -30,6 +39,9 @@
     "coverage": "vitest run --coverage",
     "lint": "prettier --plugin-search-dir . --check . && eslint .",
     "format": "prettier --plugin-search-dir . --write ."
+  },
+  "peerDependencies": {
+    "svelte": "^3.55.1"
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^2.0.1",
@@ -54,8 +66,7 @@
     "vite": "^4.1.4",
     "vitest": "^0.28.5"
   },
-  "dependencies": {
-    "svelte": "^3.55.1"
-  },
+  "svelte": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "type": "module"
 }

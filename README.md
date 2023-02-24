@@ -42,6 +42,7 @@ For detailed information about **_tilez_**
 - [How does the layout algorithm work?](#how-does-the-layout-algorithm-work)
 - [API Reference](#api-reference)
 
+
 ## Installation
 
 Install **_tilez_** as npm package via
@@ -57,16 +58,10 @@ A **Tile** component is a building block of a layout.
 
 ### Import Tile Component
 
-There are two ways to import a **Tile** component, either by
+A **Tile** component can be imported by
 
 ```javascript
 import { Tile } from 'tilez';
-```
-
-or
-
-```javascript
-import Tile from 'tilez/components/Tile.svelte';
 ```
 
 ### Tile Component Props
