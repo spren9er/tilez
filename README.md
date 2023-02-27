@@ -34,7 +34,7 @@ The final result is one single SVG chart (w/o HTML).
   <img src="https://github.com/spren9er/tilez/blob/main/docs/images/tilez_upset.svg?raw=true" width="550px">
 </p>
 
-Look at the accompanying packages [tilez-vega-lite](https://github.com/spren9er/tilez-vega-lite) and [tilez-observable-plot](https://github.com/spren9er/tilez-observable-plot) for using chart libraries with **_tilez_**.
+Look at accompanying packages [tilez-vega-lite](https://github.com/spren9er/tilez-vega-lite) and [tilez-observable-plot](https://github.com/spren9er/tilez-observable-plot) for using chart libraries with **_tilez_**.
 
 For detailed information about **_tilez_**
 
