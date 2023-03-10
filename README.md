@@ -38,7 +38,7 @@ The final result is one single SVG chart (w/o HTML).
 
 - [tilez-vega-lite](https://github.com/spren9er/tilez-vega-lite)
 - [tilez-observable-plot](https://github.com/spren9er/tilez-observable-plot)
-- [tilez-echarts](https://github.com/spren9er/tilez-echarts-plot)
+- [tilez-echarts](https://github.com/spren9er/tilez-echarts)
 
 for using chart libraries with **_tilez_**.
 
