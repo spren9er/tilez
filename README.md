@@ -15,7 +15,7 @@ Boxes shown are a mixture of HTML, SVG, Canvas and WebGL elements._
 
 By default, all tiles – the building blocks of a layout – are renderless components. A layout is defined via nested, stackable tiles, where each tile has its own coordinate space, which is accessible through Svelte stores within a tile's context.
 
-_**tilez**_ is
+**_tilez_** is
 
 - easy-to-use – _declare your layout in a simple manner_
 - flexible – _can be used with SVG, HTML, Canvas, WebGL or renderless components_
@@ -25,7 +25,7 @@ _**tilez**_ is
 - robust – _handles edge cases very well_
 - light-weight – _does not add more than a few bytes to your Svelte application_
 
-The main application of **_tilez_** is to use it as abstraction layer for creating compositions and layers of arbitrary HTML, SVG, Canvas or WebGL charts for data visualization.
+The main application of **_tilez_** is to use it as abstraction layer for creating compositions and layers of arbitrary SVG charts for data visualization. As SVG is lacking a layout engine, **_tilez_** tries to fill that gap, even though it can be used with HTML, Canvas and WebGL, too.
 
 Here is an example of a composition of several different [Observable Plot](https://github.com/observablehq/plot) charts, which makes up an [UpSet plot](https://upset.app). Individual charts are embedded in a simple **_tilez_** layout.
 The final result is one single SVG chart (w/o HTML).
@@ -34,7 +34,13 @@ The final result is one single SVG chart (w/o HTML).
   <img src="https://github.com/spren9er/tilez/blob/main/docs/images/tilez_upset.svg?raw=true" width="550px">
 </p>
 
-Look at accompanying packages [tilez-vega-lite](https://github.com/spren9er/tilez-vega-lite) and [tilez-observable-plot](https://github.com/spren9er/tilez-observable-plot) for using chart libraries with **_tilez_**.
+**_tilez_** is also helpful for creating dashboard layouts (e.g. rapid prototyping). It can easily create _open_, _table_, _stratified_ and _grouped_ layouts (see also [Dashboard Design Patterns](https://dashboarddesignpatterns.github.io/patterns.html#page-layout)). Look at accompanying packages
+
+- [tilez-vega-lite](https://github.com/spren9er/tilez-vega-lite)
+- [tilez-observable-plot](https://github.com/spren9er/tilez-observable-plot)
+- [tilez-echarts](https://github.com/spren9er/tilez-echarts-plot)
+
+for using chart libraries with **_tilez_**.
 
 For detailed information about **_tilez_**
 
@@ -100,7 +106,7 @@ If you want to know exactly what happens, when you alter these props in a given 
 
 ### Stacking Tiles
 
-The main concept of _**tilez**_ is stacking tiles in _horizontal_ or _vertical_ direction, recursively.
+The main concept of **_tilez_** is stacking tiles in _horizontal_ or _vertical_ direction, recursively.
 Within a stack, a tile starts at the point where the last tile ends. For stacking, you use the property [stack](#props_stack), which defines in which direction children tiles should be stacked.
 
 For convenience, there are following shortcuts available
@@ -273,7 +279,7 @@ The underlying layout algorithm should behave well in all circumstances, especia
 
 But which tiles should be rendered and which should be ignored?
 
-In the following, we take a closer look at an opinionated rendering algorithm, which is implemented in _**tilez**_. We consider the algorithm for one tile with a non-trivial stack direction (_'horizontal'_ or _'vertical'_) and its direct children tiles. This algorithm then can be applied to each stack of the tiles hierarchy.
+In the following, we take a closer look at an opinionated rendering algorithm, which is implemented in **_tilez_**. We consider the algorithm for one tile with a non-trivial stack direction (_'horizontal'_ or _'vertical'_) and its direct children tiles. This algorithm then can be applied to each stack of the tiles hierarchy.
 
 ### Tiles Prioritization
 
