@@ -25,7 +25,7 @@ By default, all tiles – the building blocks of a layout – are renderless com
 - robust – _handles edge cases very well_
 - light-weight – _does not add more than a few bytes to your Svelte application_
 
-The main application of **_tilez_** is to use it as abstraction layer for creating compositions and layers of arbitrary SVG charts for data visualization. As SVG is lacking a layout engine, **_tilez_** tries to fill that gap, even though it can be used with HTML, Canvas and WebGL, too.
+The main application of **_tilez_** is to use it as abstraction layer for creating compositions and layers of arbitrary SVG charts for data visualization. As SVG is lacking a layout engine, **_tilez_** fills that gap. Nevertheless, it can be used with HTML, Canvas and WebGL, too.
 
 Here is an example of a composition of several different [Observable Plot](https://github.com/observablehq/plot) charts, which makes up an [UpSet plot](https://upset.app). Individual charts are embedded in a simple **_tilez_** layout.
 The final result is one single SVG chart (w/o HTML).
@@ -34,7 +34,9 @@ The final result is one single SVG chart (w/o HTML).
   <img src="https://github.com/spren9er/tilez/blob/main/docs/images/tilez_upset.svg?raw=true" width="550px">
 </p>
 
-**_tilez_** is also helpful for creating dashboard layouts (e.g. rapid prototyping). It can easily create _open_, _table_, _stratified_ and _grouped_ layouts (see also [Dashboard Design Patterns](https://dashboarddesignpatterns.github.io/patterns.html#page-layout)). Look at accompanying packages
+**_tilez_** is also helpful for creating dashboards. It can easily create _open_, _table_, _stratified_ and _grouped_ layouts (see also [Dashboard Design Patterns](https://dashboarddesignpatterns.github.io/patterns.html#page-layout)).
+
+Look at accompanying packages
 
 - [tilez-vega-lite](https://github.com/spren9er/tilez-vega-lite)
 - [tilez-observable-plot](https://github.com/spren9er/tilez-observable-plot)
