@@ -41,7 +41,7 @@ With **_tilez_**, pure SVG dashboards can be implemented effortlessly.
   <img src="https://github.com/spren9er/tilez/blob/main/docs/images/tilez_dashboard.png?raw=true" width="800px">
 </p>
 
-_Above dashboard in open layout contains charts using Apache ECharts library._
+_Above dashboard in open layout contains charts using [Apache ECharts](https://github.com/apache/echarts) library._
 
 Look at accompanying packages
 
