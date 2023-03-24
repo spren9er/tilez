@@ -35,7 +35,7 @@ The final result is one single SVG chart (w/o HTML).
 </p>
 
 **_tilez_** is also helpful for building dashboards. It can easily create _open_, _table_, _stratified_ and _grouped_ layouts (see also [Dashboard Design Patterns](https://dashboarddesignpatterns.github.io/patterns.html#page-layout)).
-Thus, with **_tilez_** it is easy to build pure SVG dashboards.
+With **_tilez_**, pure SVG dashboards can be implemented effortlessly.
 
 <p align="center">
   <img src="https://github.com/spren9er/tilez/blob/main/docs/images/tilez_dashboard.png?raw=true" width="800px">
