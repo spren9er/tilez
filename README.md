@@ -25,7 +25,7 @@ By default, all tiles – the building blocks of a layout – are renderless com
 - robust – _handles edge cases very well_
 - light-weight – _does not add more than a few bytes to your Svelte application_
 
-The main application of **_tilez_** is to use it as abstraction layer for creating compositions and layers of arbitrary SVG charts for data visualization. As SVG is lacking a layout engine, **_tilez_** fills that gap. Nevertheless, it can be used with HTML, Canvas and WebGL, too.
+The main application of **_tilez_** is to use it as abstraction layer for creating compositions and layers of arbitrary SVG charts for data visualization. As SVG is lacking a layout engine, **_tilez_** fills that gap. However, it can be used with HTML, Canvas and WebGL, too.
 
 Here is an example of a composition of several different [Observable Plot](https://github.com/observablehq/plot) charts, which makes up an [UpSet plot](https://upset.app). Individual charts are embedded in a simple **_tilez_** layout.
 The final result is one single SVG chart (w/o HTML).
