@@ -34,7 +34,14 @@ The final result is one single SVG chart (w/o HTML).
   <img src="https://github.com/spren9er/tilez/blob/main/docs/images/tilez_upset.svg?raw=true" width="550px">
 </p>
 
-**_tilez_** is also helpful for creating dashboards. It can easily create _open_, _table_, _stratified_ and _grouped_ layouts (see also [Dashboard Design Patterns](https://dashboarddesignpatterns.github.io/patterns.html#page-layout)).
+**_tilez_** is also helpful for building dashboards. It can easily create _open_, _table_, _stratified_ and _grouped_ layouts (see also [Dashboard Design Patterns](https://dashboarddesignpatterns.github.io/patterns.html#page-layout)).
+Thus, with **_tilez_** it is easy to build pure SVG dashboards.
+
+<p align="center">
+  <img src="https://github.com/spren9er/tilez/blob/main/docs/images/tilez_dashboard.png?raw=true" width="800px">
+</p>
+
+_Above dashboard in open layout contains charts using Apache ECharts library._
 
 Look at accompanying packages
 
@@ -44,7 +51,7 @@ Look at accompanying packages
 
 for using chart libraries with **_tilez_**.
 
-For detailed information about **_tilez_**
+## Table of contents
 
 - [Installation](#installation)
 - [How to specify layouts?](#how-to-specify-layouts)

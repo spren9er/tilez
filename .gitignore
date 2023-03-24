@@ -4,6 +4,7 @@ node_modules
 /coverage
 /.svelte-kit
 /package
+/docs/images/tilez_dashboard.gif
 .env
 .env.*
 !.env.example
