@@ -7,6 +7,7 @@
 		TypeTilePropsType,
 		TypeTilePropsMode,
 		TypeTilePropsElement,
+		TypeTilePropsWrapper,
 	} from '$lib/types/tileProps.type';
 	import type { TileNode } from '$lib/entities/tileNode';
 
@@ -29,6 +30,7 @@
 	export let type: TypeTilePropsType | undefined = undefined;
 	export let mode: TypeTilePropsMode | undefined = undefined;
 	export let element: TypeTilePropsElement | undefined = undefined;
+	export let wrapper: TypeTilePropsWrapper | undefined = undefined;
 
 	let containerWidth: number;
 	let containerHeight: number;
@@ -85,7 +87,7 @@
 	}
 </script>
 
-<TileWrapper node={$node} bind:containerWidth bind:containerHeight>
+<TileWrapper node={$node} bind:wrapper bind:containerWidth bind:containerHeight>
 	<svelte:component this={componentFor($node)} node={$node} bind:element>
 		<slot {element} />
 	</svelte:component>
