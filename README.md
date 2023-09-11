@@ -452,6 +452,27 @@ It depends on your use case, which mode you choose. You can also mix modes, star
 
 A reference to an HTML, SVG or Canvas element (depending on the [type](#props_type)). For renderless components (_'plain'_ type), element is `undefined`. See also [this section](#access-html-svg-or-canvas-element).
 
+---
+
+<a name="props_wrapper" href="#props_wrapper">#</a> tilez.<b>Tile</b>.<i>wrapper</i>
+
+A reference to the wrapper element (`HTMLDivElement`) containing all tiles. This can be used to add styles via
+
+```html
+<script lang="ts">
+import { Tile } from 'tilez';
+
+let wrapper: HTMLDivElement;
+
+$: if (wrapper) wrapper.style.backgroundColor = 'red';
+</script>
+
+<Tile bind:wrapper>
+  ...
+<Tile>
+```
+
+Only applicable for root tile.
 
 ### Tile Context
 

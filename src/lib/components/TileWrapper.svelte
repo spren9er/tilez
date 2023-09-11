@@ -1,11 +1,14 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
+	import type { TypeTilePropsWrapper } from '$lib/types/tileProps.type';
+
 	import type { TileNode } from '$lib/entities/tileNode';
 
 	export let node: TileNode;
 	export let containerWidth: number | undefined = undefined;
 	export let containerHeight: number | undefined = undefined;
+	export let wrapper: TypeTilePropsWrapper | undefined = undefined;
 
 	const { specs, isRoot } = node;
 	const width = specs.width ? `${specs.width}px` : null;
@@ -26,6 +29,7 @@
 		style:height
 		bind:clientWidth={containerWidth}
 		bind:clientHeight={containerHeight}
+		bind:this={wrapper}
 	>
 		{#if !node.specs.hasEmptySize}
 			<slot />
