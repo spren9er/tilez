@@ -20,21 +20,39 @@
 	import TileCanvas from '$lib/components/tileTypes/TileCanvas.svelte';
 	import TileWebGL from '$lib/components/tileTypes/TileWebGL.svelte';
 
-	export let stack: TypeTilePropsStack | undefined = undefined;
-	export let width: TypeTilePropsDimension | undefined = undefined;
-	export let height: TypeTilePropsDimension | undefined = undefined;
-	export let innerPadding: TypeTilePropsDimension | undefined = undefined;
-	export let outerPadding: TypeTilePropsDimension | undefined = undefined;
-	export let hAlign: TypeTilePropsHAlign | undefined = undefined;
-	export let vAlign: TypeTilePropsVAlign | undefined = undefined;
-	export let type: TypeTilePropsType | undefined = undefined;
-	export let mode: TypeTilePropsMode | undefined = undefined;
-	export let element: TypeTilePropsElement | undefined = undefined;
-	export let wrapper: TypeTilePropsWrapper | undefined = undefined;
+	interface Props {
+		stack?: TypeTilePropsStack | undefined;
+		width?: TypeTilePropsDimension | undefined;
+		height?: TypeTilePropsDimension | undefined;
+		innerPadding?: TypeTilePropsDimension | undefined;
+		outerPadding?: TypeTilePropsDimension | undefined;
+		hAlign?: TypeTilePropsHAlign | undefined;
+		vAlign?: TypeTilePropsVAlign | undefined;
+		type?: TypeTilePropsType | undefined;
+		mode?: TypeTilePropsMode | undefined;
+		element?: TypeTilePropsElement | undefined;
+		wrapper?: TypeTilePropsWrapper | undefined;
+		children?: import('svelte').Snippet<[any]>;
+	}
 
-	let containerWidth: number;
-	let containerHeight: number;
-	let init = true;
+	let {
+		stack = undefined,
+		width = undefined,
+		height = undefined,
+		innerPadding = undefined,
+		outerPadding = undefined,
+		hAlign = undefined,
+		vAlign = undefined,
+		type = undefined,
+		mode = undefined,
+		element = $bindable(undefined),
+		wrapper = $bindable(undefined),
+		children,
+	}: Props = $props();
+
+	let containerWidth: number | undefined = $state();
+	let containerHeight: number | undefined = $state();
+	let init = $state(true);
 
 	const rawProps = {
 		width,
@@ -63,9 +81,11 @@
 		return componentMapping[node.specs.type];
 	};
 
-	$: if (element) elementStore.set(element);
+	$effect(() => {
+		if (element) elementStore.set(element);
+	});
 
-	$: {
+	$effect(() => {
 		const rawProps = {
 			width,
 			height,
@@ -84,11 +104,12 @@
 		if (!init) node.updateNodes(rawProps);
 
 		init = false;
-	}
+	});
 </script>
 
 <TileWrapper node={$node} bind:wrapper bind:containerWidth bind:containerHeight>
-	<svelte:component this={componentFor($node)} node={$node} bind:element>
-		<slot {element} />
-	</svelte:component>
+	{@const SvelteComponent = componentFor($node)}
+	<SvelteComponent node={$node} bind:element>
+		{@render children?.({ element })}
+	</SvelteComponent>
 </TileWrapper>

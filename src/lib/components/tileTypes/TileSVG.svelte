@@ -4,10 +4,15 @@
 
 	import TileEmbed from '$lib/components/TileEmbed.svelte';
 
-	export let node: TileNode;
-	export let element: TypeTilePropsElement | undefined = undefined;
+	interface Props {
+		node: TileNode;
+		element?: TypeTilePropsElement | undefined;
+		children?: import('svelte').Snippet<[any]>;
+	}
 
-	$: ({ specs, coords, rootType } = node);
+	let { node, element = $bindable(undefined), children }: Props = $props();
+
+	let { specs, coords, rootType } = $derived(node);
 </script>
 
 {#if rootType}
@@ -19,12 +24,12 @@
 			viewBox="0 0 {specs.width} {specs.height}"
 			bind:this={element}
 		>
-			<slot {element} />
+			{@render children?.({ element, })}
 		</svg>
 	</TileEmbed>
 {:else}
 	<g transform="translate({coords.x}, {coords.y})" bind:this={element}>
-		<slot {element} />
+		{@render children?.({ element, })}
 	</g>
 {/if}
 

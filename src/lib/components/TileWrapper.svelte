@@ -5,16 +5,27 @@
 
 	import type { TileNode } from '$lib/entities/tileNode';
 
-	export let node: TileNode;
-	export let containerWidth: number | undefined = undefined;
-	export let containerHeight: number | undefined = undefined;
-	export let wrapper: TypeTilePropsWrapper | undefined = undefined;
+	interface Props {
+		node: TileNode;
+		containerWidth?: number | undefined;
+		containerHeight?: number | undefined;
+		wrapper?: TypeTilePropsWrapper | undefined;
+		children?: import('svelte').Snippet;
+	}
+
+	let {
+		node,
+		containerWidth = $bindable(undefined),
+		containerHeight = $bindable(undefined),
+		wrapper = $bindable(undefined),
+		children,
+	}: Props = $props();
 
 	const { specs, isRoot } = node;
 	const width = specs.width ? `${specs.width}px` : null;
 	const height = specs.height ? `${specs.height}px` : null;
 
-	let visible = false;
+	let visible = $state(false);
 
 	onMount(() => {
 		visible = true;
@@ -32,11 +43,11 @@
 		bind:this={wrapper}
 	>
 		{#if !node.specs.hasEmptySize}
-			<slot />
+			{@render children?.()}
 		{/if}
 	</div>
 {:else}
-	<slot />
+	{@render children?.()}
 {/if}
 
 <style>
@@ -49,12 +60,6 @@
 		left: 0;
 		width: 100%;
 		height: 100%;
-	}
-
-	slot {
-		position: absolute;
-		top: 0;
-		left: 0;
 	}
 
 	.tile-wrapper.visible {

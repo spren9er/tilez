@@ -10,7 +10,7 @@
 
 	let width = 600;
 	let height = 400;
-	let svgElement: TypeTilePropsElement;
+	let svgElement: TypeTilePropsElement | undefined = $state();
 
 	export function element() {
 		return svgElement;

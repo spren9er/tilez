@@ -2,10 +2,15 @@
 	import type { TypeTilePropsElement } from '$lib/types/tileProps.type';
 	import type { TileNode } from '$lib/entities/tileNode';
 
-	export let node: TileNode;
-	export let element: TypeTilePropsElement | undefined = undefined;
+	interface Props {
+		node: TileNode;
+		element?: TypeTilePropsElement | undefined;
+		children?: import('svelte').Snippet<[any]>;
+	}
 
-	$: ({ specs, coords } = node);
+	let { node, element = $bindable(undefined), children }: Props = $props();
+
+	let { specs, coords } = $derived(node);
 </script>
 
 <div
@@ -16,12 +21,11 @@
 	style:height="{specs.height}px"
 	bind:this={element}
 >
-	<slot {element} />
+	{@render children?.({ element })}
 </div>
 
 <style>
-	.tile,
-	slot {
+	.tile {
 		position: absolute;
 		top: 0;
 		left: 0;

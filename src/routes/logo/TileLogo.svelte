@@ -1,7 +1,11 @@
 <script lang="ts">
 	import { getTileContext } from '$lib';
 
-	export let fill = true;
+	interface Props {
+		fill?: boolean;
+	}
+
+	let { fill = true }: Props = $props();
 
 	const { xScale, yScale } = getTileContext();
 </script>

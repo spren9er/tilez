@@ -1,8 +1,9 @@
 import { sveltekit } from '@sveltejs/kit/vite';
+import { svelteTesting } from '@testing-library/svelte/vite';
 
 /** @type {import('vite').UserConfig} */
 const config = {
-  plugins: [sveltekit()],
+  plugins: [sveltekit(), svelteTesting()],
   test: {
     globals: true,
     include: ['tests/**/*.test.ts'],

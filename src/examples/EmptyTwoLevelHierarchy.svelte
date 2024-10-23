@@ -6,10 +6,14 @@
 
 	import Tile from '$lib/components/Tile.svelte';
 
-	export let type: TypeTilePropsType;
+	interface Props {
+		type: TypeTilePropsType;
+	}
 
-	let outerElement: TypeTilePropsElement;
-	let innerElement: TypeTilePropsElement;
+	let { type }: Props = $props();
+
+	let outerElement: TypeTilePropsElement | undefined = $state();
+	let innerElement: TypeTilePropsElement | undefined = $state();
 
 	export function getOuterElement() {
 		return outerElement;

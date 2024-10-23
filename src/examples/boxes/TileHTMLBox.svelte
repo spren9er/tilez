@@ -3,7 +3,7 @@
 
 	const { specs } = getTileContext();
 
-	$: borderWidth = $specs?.hasEmptySize ? '0px' : '1px';
+	let borderWidth = $derived($specs?.hasEmptySize ? '0px' : '1px');
 </script>
 
 <div
@@ -11,7 +11,7 @@
 	style:width="{$specs.width}px"
 	style:height="{$specs.height}px"
 	style:border-width={borderWidth}
-/>
+></div>
 
 <style>
 	.tile {

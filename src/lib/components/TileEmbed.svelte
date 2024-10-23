@@ -1,9 +1,14 @@
 <script lang="ts">
 	import type { TileNode } from '$lib/entities/tileNode';
 
-	export let node: TileNode;
+	interface Props {
+		node: TileNode;
+		children?: import('svelte').Snippet;
+	}
 
-	$: ({ specs, coords, rootType } = node);
+	let { node, children }: Props = $props();
+
+	let { specs, coords, rootType } = $derived(node);
 </script>
 
 {#if rootType === 'subroot'}
@@ -14,15 +19,14 @@
 		style:width="{specs.width}px"
 		style:height="{specs.height}px"
 	>
-		<slot />
+		{@render children?.()}
 	</div>
 {:else}
-	<slot />
+	{@render children?.()}
 {/if}
 
 <style>
-	.tile,
-	slot {
+	.tile {
 		position: absolute;
 		top: 0;
 		left: 0;

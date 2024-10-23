@@ -11,16 +11,33 @@
 
 	import Tile from './Tile.svelte';
 
-	export let width: TypeTilePropsDimension | undefined = undefined;
-	export let height: TypeTilePropsDimension | undefined = undefined;
-	export let innerPadding: TypeTilePropsDimension | undefined = undefined;
-	export let outerPadding: TypeTilePropsDimension | undefined = undefined;
-	export let hAlign: TypeTilePropsHAlign | undefined = undefined;
-	export let vAlign: TypeTilePropsVAlign | undefined = undefined;
-	export let type: TypeTilePropsType | undefined = undefined;
-	export let mode: TypeTilePropsMode | undefined = undefined;
-	export let element: TypeTilePropsElement | undefined = undefined;
-	export let wrapper: TypeTilePropsWrapper | undefined = undefined;
+	interface Props {
+		width?: TypeTilePropsDimension | undefined;
+		height?: TypeTilePropsDimension | undefined;
+		innerPadding?: TypeTilePropsDimension | undefined;
+		outerPadding?: TypeTilePropsDimension | undefined;
+		hAlign?: TypeTilePropsHAlign | undefined;
+		vAlign?: TypeTilePropsVAlign | undefined;
+		type?: TypeTilePropsType | undefined;
+		mode?: TypeTilePropsMode | undefined;
+		element?: TypeTilePropsElement | undefined;
+		wrapper?: TypeTilePropsWrapper | undefined;
+		children?: import('svelte').Snippet<[any]>;
+	}
+
+	let {
+		width = undefined,
+		height = undefined,
+		innerPadding = undefined,
+		outerPadding = undefined,
+		hAlign = undefined,
+		vAlign = undefined,
+		type = undefined,
+		mode = undefined,
+		element = $bindable(undefined),
+		wrapper = $bindable(undefined),
+		children
+	}: Props = $props();
 </script>
 
 <Tile
@@ -36,5 +53,5 @@
 	bind:wrapper
 	bind:element
 >
-	<slot {element} />
+	{@render children?.({ element, })}
 </Tile>

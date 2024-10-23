@@ -217,24 +217,6 @@ const { element } = getTileContext();
 $: if ($element) doSomethingWith($element);
 ```
 
-#### Use Element from Slot Props
-
-You can pass the available tile slot prop `element` to your component via
-
-```html
-<Tile type="svg" let:element>
-  <MyComponent {element}>
-<Tile>
-```
-
-In your component you write
-
-```javascript
-export let element: SVGElement;
-
-$: if (element) doSomethingWith(element);
-```
-
 #### Bind Element from Tile
 
 Elements are also accessible from outside of tile scope with following binding

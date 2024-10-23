@@ -6,8 +6,13 @@
 
 	import TileEmbed from '$lib/components/TileEmbed.svelte';
 
-	export let node: TileNode;
-	export let element: TypeTilePropsElement | undefined = undefined;
+	interface Props {
+		node: TileNode;
+		element?: TypeTilePropsElement | undefined;
+		children?: import('svelte').Snippet<[any]>;
+	}
+
+	let { node, element = $bindable(undefined), children }: Props = $props();
 
 	const { specs, context } = getTileContext();
 
@@ -29,23 +34,25 @@
 		canvas.style.height = `${$specs.height}px`;
 	}
 
-	$: if ($context && $specs && rootType) {
-		resizeCanvasToDisplaySize();
-	}
+	$effect(() => {
+		if ($context && $specs && rootType) {
+			resizeCanvasToDisplaySize();
+		}
+	});
 </script>
 
 {#if rootType}
 	<TileEmbed {node}>
-		<canvas bind:this={element} />
-		<slot {element} />
+		<canvas bind:this={element}></canvas>
+
+		{@render children?.({ element })}
 	</TileEmbed>
 {:else}
-	<slot {element} />
+	{@render children?.({ element })}
 {/if}
 
 <style>
-	canvas,
-	slot {
+	canvas {
 		display: block;
 		position: absolute;
 		top: 0;

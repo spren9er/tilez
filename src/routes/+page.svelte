@@ -28,57 +28,73 @@
 		}
 	};
 
-	let width = 200;
-	let height = 200;
-	let innerPadding = 4;
-	let outerPadding = 2;
-	let mode: TypeTilePropsMode = 'spacing';
+	let width = $state(200);
+	let height = $state(200);
+	let innerPadding = $state(4);
+	let outerPadding = $state(2);
+	let mode: TypeTilePropsMode = $state('spacing');
 
-	let leftWidthActivated = false;
-	let leftHeightActivated = false;
-	let leftInnerPaddingActivated = false;
-	let leftModeActivated = false;
+	let leftWidthActivated = $state(false);
+	let leftHeightActivated = $state(false);
+	let leftInnerPaddingActivated = $state(false);
+	let leftModeActivated = $state(false);
 
-	let leftWidth = 50;
-	let leftHeight = 100;
-	let leftInnerPadding = 4;
-	let leftOuterPadding = 0;
-	let leftHAlign: TypeTilePropsHAlign = 'left';
-	let leftVAlign: TypeTilePropsVAlign = 'top';
+	let leftWidth = $state(50);
+	let leftHeight = $state(100);
+	let leftInnerPadding = $state(4);
+	let leftOuterPadding = $state(0);
+	let leftHAlign: TypeTilePropsHAlign = $state('left');
+	let leftVAlign: TypeTilePropsVAlign = $state('top');
 
-	let rightWidthActivated = false;
-	let rightHeightActivated = false;
-	let rightInnerPaddingActivated = false;
-	let rightModeActivated = false;
+	let rightWidthActivated = $state(false);
+	let rightHeightActivated = $state(false);
+	let rightInnerPaddingActivated = $state(false);
+	let rightModeActivated = $state(false);
 
-	let rightWidth = 50;
-	let rightHeight = 100;
-	let rightInnerPadding = 4;
-	let rightOuterPadding = 0;
-	let rightHAlign: TypeTilePropsHAlign = 'left';
-	let rightVAlign: TypeTilePropsVAlign = 'top';
+	let rightWidth = $state(50);
+	let rightHeight = $state(100);
+	let rightInnerPadding = $state(4);
+	let rightOuterPadding = $state(0);
+	let rightHAlign: TypeTilePropsHAlign = $state('left');
+	let rightVAlign: TypeTilePropsVAlign = $state('top');
 
-	$: leftWidthResult = leftWidthActivated ? `${leftWidth}%` : undefined;
-	$: leftHeightResult = leftHeightActivated ? `${leftHeight}%` : undefined;
-	$: leftInnerPaddingResult = leftInnerPaddingActivated
-		? leftInnerPadding
-		: undefined;
-	$: leftModeResult = leftModeActivated
-		? mode === 'sizing'
-			? 'spacing'
-			: 'sizing'
-		: mode;
+	let leftWidthResult = $derived(
+		leftWidthActivated ? `${leftWidth}%` : undefined,
+	);
+	let leftHeightResult = $derived(
+		leftHeightActivated ? `${leftHeight}%` : undefined,
+	);
+	let leftInnerPaddingResult = $derived(
+		leftInnerPaddingActivated ? leftInnerPadding : undefined,
+	);
+	let leftModeResult: 'spacing' | 'sizing' | undefined = $state(undefined);
 
-	$: rightWidthResult = rightWidthActivated ? `${rightWidth}%` : undefined;
-	$: rightHeightResult = rightHeightActivated ? `${rightHeight}%` : undefined;
-	$: rightInnerPaddingResult = rightInnerPaddingActivated
-		? rightInnerPadding
-		: undefined;
-	$: rightModeResult = rightModeActivated
-		? mode === 'sizing'
-			? 'spacing'
-			: 'sizing'
-		: mode;
+	$effect(() => {
+		leftModeResult = leftModeActivated
+			? mode === 'sizing'
+				? 'spacing'
+				: 'sizing'
+			: mode;
+	});
+
+	let rightWidthResult = $derived(
+		rightWidthActivated ? `${rightWidth}%` : undefined,
+	);
+	let rightHeightResult = $derived(
+		rightHeightActivated ? `${rightHeight}%` : undefined,
+	);
+	let rightInnerPaddingResult = $derived(
+		rightInnerPaddingActivated ? rightInnerPadding : undefined,
+	);
+	let rightModeResult: 'spacing' | 'sizing' | undefined = $state(undefined);
+
+	$effect(() => {
+		rightModeResult = rightModeActivated
+			? mode === 'sizing'
+				? 'spacing'
+				: 'sizing'
+			: mode;
+	});
 </script>
 
 <h1><img class="logo" alt="logo" src="./tilez_logo.svg" />tilez</h1>
@@ -321,26 +337,32 @@
 						vAlign={leftVAlign}
 					>
 						<Tile height="15%">
-							<svelte:component this={boxFor(type)} />
+							{@const SvelteComponent = boxFor(type)}
+							<SvelteComponent />
 						</Tile>
 						<HTile>
 							<Tile width="70px">
-								<svelte:component this={boxFor(type)} />
+								{@const SvelteComponent_1 = boxFor(type)}
+								<SvelteComponent_1 />
 							</Tile>
 							<Tile>
-								<svelte:component this={boxFor(type)} />
+								{@const SvelteComponent_2 = boxFor(type)}
+								<SvelteComponent_2 />
 							</Tile>
 						</HTile>
 						<HTile height="70px">
 							<Tile width="30%">
-								<svelte:component this={boxFor(type)} />
+								{@const SvelteComponent_3 = boxFor(type)}
+								<SvelteComponent_3 />
 							</Tile>
 							<Tile width="60%" hAlign="right">
-								<svelte:component this={boxFor(type)} />
+								{@const SvelteComponent_4 = boxFor(type)}
+								<SvelteComponent_4 />
 							</Tile>
 						</HTile>
 						<Tile height="20%">
-							<svelte:component this={boxFor(type)} />
+							{@const SvelteComponent_5 = boxFor(type)}
+							<SvelteComponent_5 />
 						</Tile>
 					</VTile>
 					<VTile
@@ -355,25 +377,31 @@
 						<HTile height="40%" vAlign="top">
 							<VTile width="75%">
 								<Tile>
-									<svelte:component this={boxFor(type)} />
+									{@const SvelteComponent_6 = boxFor(type)}
+									<SvelteComponent_6 />
 								</Tile>
 								<Tile height="30%">
-									<svelte:component this={boxFor(type)} />
+									{@const SvelteComponent_7 = boxFor(type)}
+									<SvelteComponent_7 />
 								</Tile>
 							</VTile>
 							<Tile>
-								<svelte:component this={boxFor(type)} />
+								{@const SvelteComponent_8 = boxFor(type)}
+								<SvelteComponent_8 />
 							</Tile>
 						</HTile>
 						<Tile width="80%" hAlign="right">
-							<svelte:component this={boxFor(type)} />
+							{@const SvelteComponent_9 = boxFor(type)}
+							<SvelteComponent_9 />
 						</Tile>
 						<HTile height="30%" vAlign="bottom">
 							<Tile>
-								<svelte:component this={boxFor(type)} />
+								{@const SvelteComponent_10 = boxFor(type)}
+								<SvelteComponent_10 />
 							</Tile>
 							<Tile width="50px">
-								<svelte:component this={boxFor(type)} />
+								{@const SvelteComponent_11 = boxFor(type)}
+								<SvelteComponent_11 />
 							</Tile>
 						</HTile>
 					</VTile>
