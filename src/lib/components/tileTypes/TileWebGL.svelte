@@ -34,7 +34,7 @@
 		canvas.style.height = `${$specs.height}px`;
 	}
 
-	$effect(() => {
+	$effect.pre(() => {
 		if ($context && $specs && rootType) {
 			resizeCanvasToDisplaySize();
 		}

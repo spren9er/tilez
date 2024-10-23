@@ -46,7 +46,7 @@
 		($context as CanvasRenderingContext2D).scale(dpr, dpr);
 	}
 
-	$effect(() => {
+	$effect.pre(() => {
 		if ($context && $specs) {
 			if (rootType) resizeCanvasToDisplaySize();
 			createSubContext();

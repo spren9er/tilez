@@ -3,7 +3,7 @@
 
 	const { specs, context } = getTileContext();
 
-	$effect(() => {
+	$effect.pre(() => {
 		if ($context) {
 			const ctx = $context as CanvasRenderingContext2D;
 

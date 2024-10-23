@@ -243,22 +243,24 @@ Here is an example of using Canvas in your component
 ```javascript
 const { specs, context } = getTileContext();
 
-$: if ($context) {
-  const ctx = $context as CanvasRenderingContext2D;
-  const dpr = window.devicePixelRatio || 1;
-  const thickness = 1 * dpr;
+$effect.pre(() => {
+  if ($context) {
+    const ctx = $context as CanvasRenderingContext2D;
+    const dpr = window.devicePixelRatio || 1;
+    const thickness = 1 * dpr;
 
-  const offset = thickness / 2;
-  const width = $specs.width * dpr - thickness;
-  const height = $specs.height * dpr - thickness;
+    const offset = thickness / 2;
+    const width = $specs.width * dpr - thickness;
+    const height = $specs.height * dpr - thickness;
 
-  ctx.beginPath();
-  ctx.strokeStyle = '#cccccc';
-  ctx.lineWidth = thickness;
-  ctx.rect(offset, offset, width, height);
-  ctx.stroke();
-  ctx.closePath();
-}
+    ctx.beginPath();
+    ctx.strokeStyle = '#cccccc';
+    ctx.lineWidth = thickness;
+    ctx.rect(offset, offset, width, height);
+    ctx.stroke();
+    ctx.closePath();
+  }
+});
 ```
 
 _**Note:** When using Canvas tiles, make sure that you multiply specs coordinates with `window.devicePixelRatio`._
