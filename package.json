@@ -43,7 +43,7 @@
     "app:preview": "vite preview"
   },
   "peerDependencies": {
-    "svelte": "^5.0.0"
+    "svelte": "^5.1.0"
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^3.0.5",
@@ -62,7 +62,7 @@
     "jsdom": "^25.0.1",
     "prettier": "^3.3.3",
     "prettier-plugin-svelte": "^3.2.7",
-    "publint": "^0.2.11",
+    "publint": "^0.2.12",
     "regl": "^2.1.0",
     "svelte-check": "^4.0.5",
     "testing-library": "^0.0.2",
