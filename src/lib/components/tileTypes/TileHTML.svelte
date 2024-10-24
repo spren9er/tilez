@@ -1,37 +1,37 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
+  import type { Snippet } from 'svelte';
 
-	import type { TypeTilePropsElement } from '$lib/types/tileProps.type';
-	import type { TileNode } from '$lib/entities/tileNode';
+  import type { TypeTilePropsElement } from '$lib/types/tileProps.type';
+  import type { TileNode } from '$lib/entities/tileNode';
 
-	interface Props {
-		node: TileNode;
-		element?: TypeTilePropsElement | undefined;
-		children?: Snippet<[unknown]>;
-	}
+  interface Props {
+    node: TileNode;
+    element?: TypeTilePropsElement | undefined;
+    children?: Snippet<[unknown]>;
+  }
 
-	let { node, element = $bindable(undefined), children }: Props = $props();
+  let { node, element = $bindable(undefined), children }: Props = $props();
 
-	let { specs, coords } = $derived(node);
+  let { specs, coords } = $derived(node);
 </script>
 
 <div
-	class="tile"
-	style:left="{coords.x}px"
-	style:top="{coords.y}px"
-	style:width="{specs.width}px"
-	style:height="{specs.height}px"
-	bind:this={element}
+  class="tile"
+  style:left="{coords.x}px"
+  style:top="{coords.y}px"
+  style:width="{specs.width}px"
+  style:height="{specs.height}px"
+  bind:this={element}
 >
-	{@render children?.({ element })}
+  {@render children?.({ element })}
 </div>
 
 <style>
-	.tile {
-		position: absolute;
-		top: 0;
-		left: 0;
-		margin: 0;
-		padding: 0;
-	}
+  .tile {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+  }
 </style>

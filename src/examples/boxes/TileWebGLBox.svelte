@@ -1,30 +1,30 @@
 <script lang="ts">
-	// @ts-nocheck
-	import reglFactory from 'regl';
+  // @ts-nocheck
+  import reglFactory from 'regl';
 
-	import { getTileContext } from '$lib/entities/tileContext';
+  import { getTileContext } from '$lib/entities/tileContext';
 
-	const { specs, element, context } = getTileContext();
+  const { specs, element, context } = getTileContext();
 
-	let regl: reglFactory.Regl = $state();
-	let draw: reglFactory.DrawCommand = $state();
+  let regl: reglFactory.Regl = $state();
+  let draw: reglFactory.DrawCommand = $state();
 
-	type ReglProps = {
-		x: number;
-		y: number;
-		width: number;
-		height: number;
-		fullWidth: number;
-		fullHeight: number;
-		dpr: number;
-	};
+  type ReglProps = {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    fullWidth: number;
+    fullHeight: number;
+    dpr: number;
+  };
 
-	$effect(() => {
-		if ($element && $context && !regl) {
-			regl = reglFactory({ gl: $context as WebGLRenderingContext });
+  $effect(() => {
+    if ($element && $context && !regl) {
+      regl = reglFactory({ gl: $context as WebGLRenderingContext });
 
-			draw = regl({
-				frag: `
+      draw = regl({
+        frag: `
 	        precision mediump float;
 
 	        uniform float x;
@@ -55,7 +55,7 @@
 	          }
 	        }
 	      `,
-				vert: `
+        vert: `
 	        precision mediump float;
 	        attribute vec2 position;
 
@@ -63,47 +63,47 @@
 	          gl_Position = vec4(position, 0.0, 1.0);
 	        }
 	      `,
-				attributes: {
-					position: [
-						[-3, 0],
-						[0, -3],
-						[3, 3],
-					],
-				},
-				uniforms: {
-					x: (_, props: ReglProps) => props.x,
-					y: (_, props: ReglProps) => props.y,
-					width: (_, props: ReglProps) => props.width,
-					height: (_, props: ReglProps) => props.height,
-					fullHeight: (_, props: ReglProps) => props.fullHeight,
-					dpr: (_, props: ReglProps) => props.dpr,
-				},
-				count: 3,
-				viewport: {
-					x: 0,
-					y: 0,
-					width: (_, props: ReglProps) => props.fullWidth * props.dpr,
-					height: (_, props: ReglProps) => props.fullHeight * props.dpr,
-				},
-			});
-		}
-	});
+        attributes: {
+          position: [
+            [-3, 0],
+            [0, -3],
+            [3, 3],
+          ],
+        },
+        uniforms: {
+          x: (_, props: ReglProps) => props.x,
+          y: (_, props: ReglProps) => props.y,
+          width: (_, props: ReglProps) => props.width,
+          height: (_, props: ReglProps) => props.height,
+          fullHeight: (_, props: ReglProps) => props.fullHeight,
+          dpr: (_, props: ReglProps) => props.dpr,
+        },
+        count: 3,
+        viewport: {
+          x: 0,
+          y: 0,
+          width: (_, props: ReglProps) => props.fullWidth * props.dpr,
+          height: (_, props: ReglProps) => props.fullHeight * props.dpr,
+        },
+      });
+    }
+  });
 
-	$effect(() => {
-		if ($element && $context && !!regl) {
-			const dpr = window.devicePixelRatio || 1;
-			const fullWidth = parseFloat($element.style.width);
-			const fullHeight = parseFloat($element.style.height);
+  $effect(() => {
+    if ($element && $context && !!regl) {
+      const dpr = window.devicePixelRatio || 1;
+      const fullWidth = parseFloat($element.style.width);
+      const fullHeight = parseFloat($element.style.height);
 
-			draw({
-				x: $specs.subRootX,
-				y: $specs.subRootY,
-				width: Math.round($specs.width),
-				height: Math.round($specs.height),
-				fullWidth: Math.round(fullWidth),
-				fullHeight: Math.round(fullHeight),
-				dpr,
-			});
-		}
-	});
+      draw({
+        x: $specs.subRootX,
+        y: $specs.subRootY,
+        width: Math.round($specs.width),
+        height: Math.round($specs.height),
+        fullWidth: Math.round(fullWidth),
+        fullHeight: Math.round(fullHeight),
+        dpr,
+      });
+    }
+  });
 </script>
