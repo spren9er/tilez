@@ -454,7 +454,7 @@ import { Tile } from 'tilez';
 let wrapper: HTMLDivElement;
 
 onMount(() => {
-  wrapper.style.backgroundColor = 'red';
+  if (wrapper) wrapper.style.border = '2px solid red';
 });
 </script>
 

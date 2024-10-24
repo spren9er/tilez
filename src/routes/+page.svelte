@@ -69,14 +69,6 @@
 	);
 	let leftModeResult: 'spacing' | 'sizing' | undefined = $state(undefined);
 
-	$effect(() => {
-		leftModeResult = leftModeActivated
-			? mode === 'sizing'
-				? 'spacing'
-				: 'sizing'
-			: mode;
-	});
-
 	let rightWidthResult = $derived(
 		rightWidthActivated ? `${rightWidth}%` : undefined,
 	);
@@ -89,6 +81,12 @@
 	let rightModeResult: 'spacing' | 'sizing' | undefined = $state(undefined);
 
 	$effect(() => {
+		leftModeResult = leftModeActivated
+			? mode === 'sizing'
+				? 'spacing'
+				: 'sizing'
+			: mode;
+
 		rightModeResult = rightModeActivated
 			? mode === 'sizing'
 				? 'spacing'
