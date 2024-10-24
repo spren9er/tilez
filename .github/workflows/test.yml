@@ -12,10 +12,12 @@ jobs:
       - name: Setup node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '22'
       - name: Install Dependencies
         run: npm install
       - name: Run svelte check
         run: npm run check
+      - name: Run lint
+        run: npm run lint
       - name: Run tests
         run: npm run test

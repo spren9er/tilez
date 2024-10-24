@@ -1,9 +1,11 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
+
 	import type { TileNode } from '$lib/entities/tileNode';
 
 	interface Props {
 		node: TileNode;
-		children?: import('svelte').Snippet;
+		children?: Snippet;
 	}
 
 	let { node, children }: Props = $props();

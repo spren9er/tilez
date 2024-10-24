@@ -1,4 +1,6 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
+
 	import { onMount } from 'svelte';
 
 	import type { TypeTilePropsWrapper } from '$lib/types/tileProps.type';
@@ -10,7 +12,7 @@
 		containerWidth?: number | undefined;
 		containerHeight?: number | undefined;
 		wrapper?: TypeTilePropsWrapper | undefined;
-		children?: import('svelte').Snippet;
+		children?: Snippet;
 	}
 
 	let {

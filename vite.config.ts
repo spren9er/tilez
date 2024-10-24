@@ -1,8 +1,8 @@
+import { defineConfig } from 'vitest/config';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { svelteTesting } from '@testing-library/svelte/vite';
 
-/** @type {import('vite').UserConfig} */
-const config = {
+export default defineConfig({
   plugins: [sveltekit(), svelteTesting()],
   test: {
     globals: true,
@@ -18,6 +18,4 @@ const config = {
       $examples: './src/examples',
     },
   },
-};
-
-export default config;
+});

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
+
 	import type {
 		TypeTilePropsStack,
 		TypeTilePropsDimension,
@@ -32,7 +34,7 @@
 		mode?: TypeTilePropsMode | undefined;
 		element?: TypeTilePropsElement | undefined;
 		wrapper?: TypeTilePropsWrapper | undefined;
-		children?: import('svelte').Snippet<[any]>;
+		children?: Snippet<[unknown]>;
 	}
 
 	let {

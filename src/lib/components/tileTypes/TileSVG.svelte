@@ -1,4 +1,6 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
+
 	import type { TypeTilePropsElement } from '$lib/types/tileProps.type';
 	import type { TileNode } from '$lib/entities/tileNode';
 
@@ -7,7 +9,7 @@
 	interface Props {
 		node: TileNode;
 		element?: TypeTilePropsElement | undefined;
-		children?: import('svelte').Snippet<[any]>;
+		children?: Snippet<[unknown]>;
 	}
 
 	let { node, element = $bindable(undefined), children }: Props = $props();
@@ -24,12 +26,12 @@
 			viewBox="0 0 {specs.width} {specs.height}"
 			bind:this={element}
 		>
-			{@render children?.({ element, })}
+			{@render children?.({ element })}
 		</svg>
 	</TileEmbed>
 {:else}
 	<g transform="translate({coords.x}, {coords.y})" bind:this={element}>
-		{@render children?.({ element, })}
+		{@render children?.({ element })}
 	</g>
 {/if}
 

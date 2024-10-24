@@ -1,4 +1,6 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
+
 	import type {
 		TypeTilePropsDimension,
 		TypeTilePropsHAlign,
@@ -22,7 +24,7 @@
 		mode?: TypeTilePropsMode | undefined;
 		element?: TypeTilePropsElement | undefined;
 		wrapper?: TypeTilePropsWrapper | undefined;
-		children?: import('svelte').Snippet<[any]>;
+		children?: Snippet<[unknown]>;
 	}
 
 	let {
@@ -36,7 +38,7 @@
 		mode = undefined,
 		element = $bindable(undefined),
 		wrapper = $bindable(undefined),
-		children
+		children,
 	}: Props = $props();
 </script>
 
@@ -53,5 +55,5 @@
 	bind:wrapper
 	bind:element
 >
-	{@render children?.({ element, })}
+	{@render children?.({ element })}
 </Tile>

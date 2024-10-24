@@ -276,7 +276,7 @@ The underlying layout algorithm should behave well in all circumstances, especia
 
 But which tiles should be rendered and which should be ignored?
 
-In the following, we take a closer look at an opinionated rendering algorithm, which is implemented in **_tilez_**. We consider the algorithm for one tile with a non-trivial stack direction (_'horizontal'_ or _'vertical'_) and its direct children tiles. This algorithm then can be applied to each stack of the tiles hierarchy.
+In the following, we take a closer look at an opinionated rendering algorithm, which is implemented in **_tilez_**. We consider the algorithm for a single tile with a non-trivial stack direction (_'horizontal'_ or _'vertical'_) and its direct children tiles. This algorithm then can be applied to each stack of the tiles hierarchy.
 
 ### Tiles Prioritization
 
