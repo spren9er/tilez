@@ -1,17 +1,21 @@
 <script lang="ts">
-	import { getTileContext } from '$lib';
+  import { getTileContext } from '$lib';
 
-	export let fill = true;
+  interface Props {
+    fill?: boolean;
+  }
 
-	const { xScale, yScale } = getTileContext();
+  let { fill = true }: Props = $props();
+
+  const { xScale, yScale } = getTileContext();
 </script>
 
 <rect
-	x={0}
-	y={0}
-	width={$xScale(1)}
-	height={$yScale(1)}
-	fill={fill ? '#adbac7' : 'none'}
-	stroke="#242931"
-	stroke-width="2"
+  x={0}
+  y={0}
+  width={$xScale(1)}
+  height={$yScale(1)}
+  fill={fill ? '#adbac7' : 'none'}
+  stroke="#242931"
+  stroke-width="2"
 />

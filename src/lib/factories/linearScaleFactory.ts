@@ -21,13 +21,3 @@ export class LinearScaleFactory {
     return new LinearScale(this._domain, this._range);
   }
 }
-export function linearScale(domain: [number, number], range: [number, number]) {
-  const [x1, x2] = domain;
-  const [y1, y2] = range;
-
-  if (x1 === x2) throw new Error('Empty domain is not allowed!');
-
-  if (x1 > x2) return new LinearScale([x2, x1], [y1, y2]);
-
-  new LinearScale([x1, x2], [y1, y2]);
-}

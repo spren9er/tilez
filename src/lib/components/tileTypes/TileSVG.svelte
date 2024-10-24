@@ -1,40 +1,47 @@
 <script lang="ts">
-	import type { TypeTilePropsElement } from '$lib/types/tileProps.type';
-	import type { TileNode } from '$lib/entities/tileNode';
+  import type { Snippet } from 'svelte';
 
-	import TileEmbed from '$lib/components/TileEmbed.svelte';
+  import type { TypeTilePropsElement } from '$lib/types/tileProps.type';
+  import type { TileNode } from '$lib/entities/tileNode';
 
-	export let node: TileNode;
-	export let element: TypeTilePropsElement | undefined = undefined;
+  import TileEmbed from '$lib/components/TileEmbed.svelte';
 
-	$: ({ specs, coords, rootType } = node);
+  interface Props {
+    node: TileNode;
+    element?: TypeTilePropsElement | undefined;
+    children?: Snippet<[unknown]>;
+  }
+
+  let { node, element = $bindable(undefined), children }: Props = $props();
+
+  let { specs, coords, rootType } = $derived(node);
 </script>
 
 {#if rootType}
-	<TileEmbed {node}>
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			width={specs.width}
-			height={specs.height}
-			viewBox="0 0 {specs.width} {specs.height}"
-			bind:this={element}
-		>
-			<slot {element} />
-		</svg>
-	</TileEmbed>
+  <TileEmbed {node}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={specs.width}
+      height={specs.height}
+      viewBox="0 0 {specs.width} {specs.height}"
+      bind:this={element}
+    >
+      {@render children?.({ element })}
+    </svg>
+  </TileEmbed>
 {:else}
-	<g transform="translate({coords.x}, {coords.y})" bind:this={element}>
-		<slot {element} />
-	</g>
+  <g transform="translate({coords.x}, {coords.y})" bind:this={element}>
+    {@render children?.({ element })}
+  </g>
 {/if}
 
 <style>
-	svg {
-		display: block;
-		position: absolute;
-		top: 0;
-		left: 0;
-		margin: 0;
-		padding: 0;
-	}
+  svg {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+  }
 </style>

@@ -1,40 +1,59 @@
 <script lang="ts">
-	import type {
-		TypeTilePropsDimension,
-		TypeTilePropsHAlign,
-		TypeTilePropsVAlign,
-		TypeTilePropsType,
-		TypeTilePropsMode,
-		TypeTilePropsElement,
-		TypeTilePropsWrapper,
-	} from '$lib/types/tileProps.type';
+  import type { Snippet } from 'svelte';
 
-	import Tile from './Tile.svelte';
+  import type {
+    TypeTilePropsDimension,
+    TypeTilePropsHAlign,
+    TypeTilePropsVAlign,
+    TypeTilePropsType,
+    TypeTilePropsMode,
+    TypeTilePropsElement,
+    TypeTilePropsWrapper,
+  } from '$lib/types/tileProps.type';
 
-	export let width: TypeTilePropsDimension | undefined = undefined;
-	export let height: TypeTilePropsDimension | undefined = undefined;
-	export let innerPadding: TypeTilePropsDimension | undefined = undefined;
-	export let outerPadding: TypeTilePropsDimension | undefined = undefined;
-	export let hAlign: TypeTilePropsHAlign | undefined = undefined;
-	export let vAlign: TypeTilePropsVAlign | undefined = undefined;
-	export let type: TypeTilePropsType | undefined = undefined;
-	export let mode: TypeTilePropsMode | undefined = undefined;
-	export let element: TypeTilePropsElement | undefined = undefined;
-	export let wrapper: TypeTilePropsWrapper | undefined = undefined;
+  import Tile from './Tile.svelte';
+
+  interface Props {
+    width?: TypeTilePropsDimension | undefined;
+    height?: TypeTilePropsDimension | undefined;
+    innerPadding?: TypeTilePropsDimension | undefined;
+    outerPadding?: TypeTilePropsDimension | undefined;
+    hAlign?: TypeTilePropsHAlign | undefined;
+    vAlign?: TypeTilePropsVAlign | undefined;
+    type?: TypeTilePropsType | undefined;
+    mode?: TypeTilePropsMode | undefined;
+    element?: TypeTilePropsElement | undefined;
+    wrapper?: TypeTilePropsWrapper | undefined;
+    children?: Snippet<[unknown]>;
+  }
+
+  let {
+    width = undefined,
+    height = undefined,
+    innerPadding = undefined,
+    outerPadding = undefined,
+    hAlign = undefined,
+    vAlign = undefined,
+    type = undefined,
+    mode = undefined,
+    element = $bindable(undefined),
+    wrapper = $bindable(undefined),
+    children,
+  }: Props = $props();
 </script>
 
 <Tile
-	stack="horizontal"
-	{width}
-	{height}
-	{innerPadding}
-	{outerPadding}
-	{hAlign}
-	{vAlign}
-	{type}
-	{mode}
-	bind:wrapper
-	bind:element
+  stack="horizontal"
+  {width}
+  {height}
+  {innerPadding}
+  {outerPadding}
+  {hAlign}
+  {vAlign}
+  {type}
+  {mode}
+  bind:wrapper
+  bind:element
 >
-	<slot {element} />
+  {@render children?.({ element })}
 </Tile>

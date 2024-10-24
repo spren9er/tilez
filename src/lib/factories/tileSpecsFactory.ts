@@ -27,7 +27,10 @@ export class TileSpecsFactory {
     stack: undefined,
   };
 
-  constructor(private props: TileProps, private parentSpecs?: TileSpecs) {}
+  constructor(
+    private props: TileProps,
+    private parentSpecs?: TileSpecs,
+  ) {}
 
   public build() {
     let { width, height } = this.DEFAULT_SPECS;

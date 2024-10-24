@@ -1,94 +1,117 @@
 <script lang="ts">
-	import type {
-		TypeTilePropsStack,
-		TypeTilePropsDimension,
-		TypeTilePropsHAlign,
-		TypeTilePropsVAlign,
-		TypeTilePropsType,
-		TypeTilePropsMode,
-		TypeTilePropsElement,
-		TypeTilePropsWrapper,
-	} from '$lib/types/tileProps.type';
-	import type { TileNode } from '$lib/entities/tileNode';
+  import type { Snippet } from 'svelte';
 
-	import { setNodeContext, getTileContext } from '$lib/entities/tileContext';
+  import type {
+    TypeTilePropsStack,
+    TypeTilePropsDimension,
+    TypeTilePropsHAlign,
+    TypeTilePropsVAlign,
+    TypeTilePropsType,
+    TypeTilePropsMode,
+    TypeTilePropsElement,
+    TypeTilePropsWrapper,
+  } from '$lib/types/tileProps.type';
+  import type { TileNode } from '$lib/entities/tileNode';
 
-	import TileWrapper from '$lib/components/TileWrapper.svelte';
-	import TilePlain from '$lib/components/tileTypes/TilePlain.svelte';
-	import TileHTML from '$lib/components/tileTypes/TileHTML.svelte';
-	import TileSVG from '$lib/components/tileTypes/TileSVG.svelte';
-	import TileCanvas from '$lib/components/tileTypes/TileCanvas.svelte';
-	import TileWebGL from '$lib/components/tileTypes/TileWebGL.svelte';
+  import { setNodeContext, getTileContext } from '$lib/entities/tileContext';
 
-	export let stack: TypeTilePropsStack | undefined = undefined;
-	export let width: TypeTilePropsDimension | undefined = undefined;
-	export let height: TypeTilePropsDimension | undefined = undefined;
-	export let innerPadding: TypeTilePropsDimension | undefined = undefined;
-	export let outerPadding: TypeTilePropsDimension | undefined = undefined;
-	export let hAlign: TypeTilePropsHAlign | undefined = undefined;
-	export let vAlign: TypeTilePropsVAlign | undefined = undefined;
-	export let type: TypeTilePropsType | undefined = undefined;
-	export let mode: TypeTilePropsMode | undefined = undefined;
-	export let element: TypeTilePropsElement | undefined = undefined;
-	export let wrapper: TypeTilePropsWrapper | undefined = undefined;
+  import TileWrapper from '$lib/components/TileWrapper.svelte';
+  import TilePlain from '$lib/components/tileTypes/TilePlain.svelte';
+  import TileHTML from '$lib/components/tileTypes/TileHTML.svelte';
+  import TileSVG from '$lib/components/tileTypes/TileSVG.svelte';
+  import TileCanvas from '$lib/components/tileTypes/TileCanvas.svelte';
+  import TileWebGL from '$lib/components/tileTypes/TileWebGL.svelte';
 
-	let containerWidth: number;
-	let containerHeight: number;
-	let init = true;
+  interface Props {
+    stack?: TypeTilePropsStack | undefined;
+    width?: TypeTilePropsDimension | undefined;
+    height?: TypeTilePropsDimension | undefined;
+    innerPadding?: TypeTilePropsDimension | undefined;
+    outerPadding?: TypeTilePropsDimension | undefined;
+    hAlign?: TypeTilePropsHAlign | undefined;
+    vAlign?: TypeTilePropsVAlign | undefined;
+    type?: TypeTilePropsType | undefined;
+    mode?: TypeTilePropsMode | undefined;
+    element?: TypeTilePropsElement | undefined;
+    wrapper?: TypeTilePropsWrapper | undefined;
+    children?: Snippet<[unknown]>;
+  }
 
-	const rawProps = {
-		width,
-		height,
-		innerPadding,
-		outerPadding,
-		hAlign,
-		vAlign,
-		type,
-		mode,
-		stack,
-	};
-	const node = setNodeContext(rawProps);
+  let {
+    stack = undefined,
+    width = undefined,
+    height = undefined,
+    innerPadding = undefined,
+    outerPadding = undefined,
+    hAlign = undefined,
+    vAlign = undefined,
+    type = undefined,
+    mode = undefined,
+    element = $bindable(undefined),
+    wrapper = $bindable(undefined),
+    children,
+  }: Props = $props();
 
-	const { element: elementStore } = getTileContext();
+  let containerWidth: number | undefined = $state();
+  let containerHeight: number | undefined = $state();
+  let init = $state(true);
 
-	const componentFor = (node: TileNode) => {
-		const componentMapping = {
-			plain: TilePlain,
-			html: TileHTML,
-			svg: TileSVG,
-			canvas: TileCanvas,
-			webgl: TileWebGL,
-		};
+  const rawProps = {
+    width,
+    height,
+    innerPadding,
+    outerPadding,
+    hAlign,
+    vAlign,
+    type,
+    mode,
+    stack,
+  };
+  const node = setNodeContext(rawProps);
 
-		return componentMapping[node.specs.type];
-	};
+  const { element: elementStore } = getTileContext();
 
-	$: if (element) elementStore.set(element);
+  const componentFor = (node: TileNode) => {
+    const componentMapping = {
+      plain: TilePlain,
+      html: TileHTML,
+      svg: TileSVG,
+      canvas: TileCanvas,
+      webgl: TileWebGL,
+    };
 
-	$: {
-		const rawProps = {
-			width,
-			height,
-			innerPadding,
-			outerPadding,
-			hAlign,
-			vAlign,
-			type,
-			mode,
-			stack,
-		};
+    return componentMapping[node.specs.type];
+  };
 
-		rawProps.width ||= containerWidth;
-		rawProps.height ||= containerHeight;
+  $effect(() => {
+    if (element) elementStore.set(element);
+  });
 
-		if (!init) node.updateNodes(rawProps);
+  $effect(() => {
+    const rawProps = {
+      width,
+      height,
+      innerPadding,
+      outerPadding,
+      hAlign,
+      vAlign,
+      type,
+      mode,
+      stack,
+    };
 
-		init = false;
-	}
+    rawProps.width ||= containerWidth;
+    rawProps.height ||= containerHeight;
+
+    if (!init) node.updateNodes(rawProps);
+
+    init = false;
+  });
 </script>
 
 <TileWrapper node={$node} bind:wrapper bind:containerWidth bind:containerHeight>
-	<svelte:component this={componentFor($node)} node={$node} bind:element>
-		<slot {element} />
-	</svelte:component>
+  {@const SvelteComponent = componentFor($node)}
+  <SvelteComponent node={$node} bind:element>
+    {@render children?.({ element })}
+  </SvelteComponent>
 </TileWrapper>

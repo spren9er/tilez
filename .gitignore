@@ -1,7 +1,8 @@
 .DS_Store
 node_modules
-/dist
+/build
 /coverage
+/dist
 /.svelte-kit
 /package
 /docs/images/tilez_dashboard.gif

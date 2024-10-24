@@ -1,11 +1,16 @@
 <script lang="ts">
-	import type { TypeTilePropsElement } from '$lib/types/tileProps.type';
-	import type { TileNode } from '$lib/entities/tileNode';
+  import type { Snippet } from 'svelte';
 
-	export let node: TileNode;
-	export const element: TypeTilePropsElement | undefined = undefined;
+  import type { TypeTilePropsElement } from '$lib/types/tileProps.type';
+  import type { TileNode } from '$lib/entities/tileNode';
 
-	node; // not used
+  interface Props {
+    node: TileNode;
+    children?: Snippet<[unknown]>;
+    element?: TypeTilePropsElement;
+  }
+
+  let { children, element = $bindable(undefined) }: Props = $props();
 </script>
 
-<slot {element} />
+{@render children?.({ element })}

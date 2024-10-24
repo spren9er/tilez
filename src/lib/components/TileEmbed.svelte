@@ -1,33 +1,39 @@
 <script lang="ts">
-	import type { TileNode } from '$lib/entities/tileNode';
+  import type { Snippet } from 'svelte';
 
-	export let node: TileNode;
+  import type { TileNode } from '$lib/entities/tileNode';
 
-	$: ({ specs, coords, rootType } = node);
+  interface Props {
+    node: TileNode;
+    children?: Snippet;
+  }
+
+  let { node, children }: Props = $props();
+
+  let { specs, coords, rootType } = $derived(node);
 </script>
 
 {#if rootType === 'subroot'}
-	<div
-		class="tile"
-		style:left="{coords.x}px"
-		style:top="{coords.y}px"
-		style:width="{specs.width}px"
-		style:height="{specs.height}px"
-	>
-		<slot />
-	</div>
+  <div
+    class="tile"
+    style:left="{coords.x}px"
+    style:top="{coords.y}px"
+    style:width="{specs.width}px"
+    style:height="{specs.height}px"
+  >
+    {@render children?.()}
+  </div>
 {:else}
-	<slot />
+  {@render children?.()}
 {/if}
 
 <style>
-	.tile,
-	slot {
-		position: absolute;
-		top: 0;
-		left: 0;
-		margin: 0;
-		padding: 0;
-		overflow: visible;
-	}
+  .tile {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+  }
 </style>

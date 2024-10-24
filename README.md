@@ -203,7 +203,7 @@ See also [API Linear Scale](#linear-scale).
 
 ### Access HTML, SVG or Canvas element
 
-There are three ways to get a reference to the underlying HTML, SVG, Canvas or WebGL element of a tile.
+There are following ways to get a reference to the underlying HTML, SVG, Canvas or WebGL element of a tile.
 
 #### Get Element from Tile Context
 
@@ -214,25 +214,9 @@ import { getTileContext } from 'tilez';
 
 const { element } = getTileContext();
 
-$: if ($element) doSomethingWith($element);
-```
-
-#### Use Element from Slot Props
-
-You can pass the available tile slot prop `element` to your component via
-
-```html
-<Tile type="svg" let:element>
-  <MyComponent {element}>
-<Tile>
-```
-
-In your component you write
-
-```javascript
-export let element: SVGElement;
-
-$: if (element) doSomethingWith(element);
+$effect(() => {
+  doSomethingWith($element);
+});
 ```
 
 #### Bind Element from Tile
@@ -245,7 +229,9 @@ import { Tile } from 'tilez';
 
 let element: SVGElement;
 
-$: if (element) doSomethingWith(element);
+$effect(() => {
+  doSomethingWith($element);
+});
 </script>
 
 <Tile type="svg" bind:element>
@@ -261,22 +247,24 @@ Here is an example of using Canvas in your component
 ```javascript
 const { specs, context } = getTileContext();
 
-$: if ($context) {
-  const ctx = $context as CanvasRenderingContext2D;
-  const dpr = window.devicePixelRatio || 1;
-  const thickness = 1 * dpr;
+$effect.pre(() => {
+  if ($context) {
+    const ctx = $context as CanvasRenderingContext2D;
+    const dpr = window.devicePixelRatio || 1;
+    const thickness = 1 * dpr;
 
-  const offset = thickness / 2;
-  const width = $specs.width * dpr - thickness;
-  const height = $specs.height * dpr - thickness;
+    const offset = thickness / 2;
+    const width = $specs.width * dpr - thickness;
+    const height = $specs.height * dpr - thickness;
 
-  ctx.beginPath();
-  ctx.strokeStyle = '#cccccc';
-  ctx.lineWidth = thickness;
-  ctx.rect(offset, offset, width, height);
-  ctx.stroke();
-  ctx.closePath();
-}
+    ctx.beginPath();
+    ctx.strokeStyle = '#cccccc';
+    ctx.lineWidth = thickness;
+    ctx.rect(offset, offset, width, height);
+    ctx.stroke();
+    ctx.closePath();
+  }
+});
 ```
 
 _**Note:** When using Canvas tiles, make sure that you multiply specs coordinates with `window.devicePixelRatio`._
@@ -288,7 +276,7 @@ The underlying layout algorithm should behave well in all circumstances, especia
 
 But which tiles should be rendered and which should be ignored?
 
-In the following, we take a closer look at an opinionated rendering algorithm, which is implemented in **_tilez_**. We consider the algorithm for one tile with a non-trivial stack direction (_'horizontal'_ or _'vertical'_) and its direct children tiles. This algorithm then can be applied to each stack of the tiles hierarchy.
+In the following, we take a closer look at an opinionated rendering algorithm, which is implemented in **_tilez_**. We consider the algorithm for a single tile with a non-trivial stack direction (_'horizontal'_ or _'vertical'_) and its direct children tiles. This algorithm then can be applied to each stack of the tiles hierarchy.
 
 ### Tiles Prioritization
 
@@ -460,11 +448,14 @@ A reference to the wrapper element (`HTMLDivElement`) containing all tiles. This
 
 ```html
 <script lang="ts">
+import { onMount } from 'svelte';
 import { Tile } from 'tilez';
 
 let wrapper: HTMLDivElement;
 
-$: if (wrapper) wrapper.style.backgroundColor = 'red';
+onMount(() => {
+  if (wrapper) wrapper.style.border = '2px solid red';
+});
 </script>
 
 <Tile bind:wrapper>

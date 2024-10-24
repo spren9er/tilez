@@ -1,25 +1,29 @@
 <script lang="ts">
-	import type {
-		TypeTilePropsElement,
-		TypeTilePropsType,
-	} from '$lib/types/tileProps.type';
+  import type {
+    TypeTilePropsElement,
+    TypeTilePropsType,
+  } from '$lib/types/tileProps.type';
 
-	import Tile from '$lib/components/Tile.svelte';
+  import Tile from '$lib/components/Tile.svelte';
 
-	export let type: TypeTilePropsType;
+  interface Props {
+    type: TypeTilePropsType;
+  }
 
-	let outerElement: TypeTilePropsElement;
-	let innerElement: TypeTilePropsElement;
+  let { type }: Props = $props();
 
-	export function getOuterElement() {
-		return outerElement;
-	}
+  let outerElement: TypeTilePropsElement | undefined = $state();
+  let innerElement: TypeTilePropsElement | undefined = $state();
 
-	export function getInnerElement() {
-		return innerElement;
-	}
+  export function getOuterElement() {
+    return outerElement;
+  }
+
+  export function getInnerElement() {
+    return innerElement;
+  }
 </script>
 
 <Tile width="100px" height="100px" {type} bind:element={outerElement}>
-	<Tile width="80px" height="60px" {type} bind:element={innerElement} />
+  <Tile width="80px" height="60px" {type} bind:element={innerElement} />
 </Tile>

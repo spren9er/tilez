@@ -27,20 +27,16 @@ describe('Tile', () => {
     const tileWrapper = getElementFrom(container);
 
     expect(tileWrapper).toBeInTheDocument();
-    expect(
-      Array.from(tileWrapper!.children).filter(
-        (child) => child.tagName !== 'IFRAME', // bind:client... is using iframe
-      ),
-    ).toHaveLength(0);
+    expect(Array.from(tileWrapper!.children)).toHaveLength(0);
   });
 
   it('renders nothing but a wrapper if no width and height is given', () => {
     const { container } = render(Tile, { props: { type: 'html' } });
 
-    const element = getElementFrom(container, 1);
+    const tileWrapper = getElementFrom(container);
 
-    expect(element).toBeInstanceOf(HTMLElement);
-    expect(element?.tagName).toEqual('IFRAME');
+    expect(tileWrapper).toBeInTheDocument();
+    expect(Array.from(tileWrapper!.children)).toHaveLength(0);
   });
 
   it('of "svg" type renders a <svg> if root', () => {

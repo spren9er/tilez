@@ -8,18 +8,18 @@ export type TypeTilePropsMode = 'spacing' | 'sizing';
 export type TypeTilePropsElement = HTMLElement | SVGElement | HTMLCanvasElement;
 export type TypeTilePropsWrapper = HTMLDivElement;
 export type TypeTilePropsContext =
-	| CanvasRenderingContext2D
-	| WebGLRenderingContext
-	| null;
+  | CanvasRenderingContext2D
+  | WebGLRenderingContext
+  | null;
 
 export type TypeTileProps = {
-	width?: TypeTilePropsDimension;
-	height?: TypeTilePropsDimension;
-	stack?: TypeTilePropsStack;
-	type?: TypeTilePropsType;
-	innerPadding?: TypeTilePropsDimension;
-	outerPadding?: TypeTilePropsDimension;
-	hAlign?: TypeTilePropsHAlign;
-	vAlign?: TypeTilePropsVAlign;
-	mode?: TypeTilePropsMode;
+  width?: TypeTilePropsDimension;
+  height?: TypeTilePropsDimension;
+  stack?: TypeTilePropsStack;
+  type?: TypeTilePropsType;
+  innerPadding?: TypeTilePropsDimension;
+  outerPadding?: TypeTilePropsDimension;
+  hAlign?: TypeTilePropsHAlign;
+  vAlign?: TypeTilePropsVAlign;
+  mode?: TypeTilePropsMode;
 };
