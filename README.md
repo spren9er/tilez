@@ -203,7 +203,7 @@ See also [API Linear Scale](#linear-scale).
 
 ### Access HTML, SVG or Canvas element
 
-There are three ways to get a reference to the underlying HTML, SVG, Canvas or WebGL element of a tile.
+There are following ways to get a reference to the underlying HTML, SVG, Canvas or WebGL element of a tile.
 
 #### Get Element from Tile Context
 
@@ -214,7 +214,9 @@ import { getTileContext } from 'tilez';
 
 const { element } = getTileContext();
 
-$: if ($element) doSomethingWith($element);
+$effect(() => {
+  doSomethingWith($element);
+});
 ```
 
 #### Bind Element from Tile
@@ -227,7 +229,9 @@ import { Tile } from 'tilez';
 
 let element: SVGElement;
 
-$: if (element) doSomethingWith(element);
+$effect(() => {
+  doSomethingWith($element);
+});
 </script>
 
 <Tile type="svg" bind:element>
@@ -444,11 +448,14 @@ A reference to the wrapper element (`HTMLDivElement`) containing all tiles. This
 
 ```html
 <script lang="ts">
+import { onMount } from 'svelte';
 import { Tile } from 'tilez';
 
 let wrapper: HTMLDivElement;
 
-$: if (wrapper) wrapper.style.backgroundColor = 'red';
+onMount(() => {
+  wrapper.style.backgroundColor = 'red';
+});
 </script>
 
 <Tile bind:wrapper>
