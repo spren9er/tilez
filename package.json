@@ -13,7 +13,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/spren9er/tilez.git"
+    "url": "git+https://github.com/spren9er/tilez.git"
   },
   "license": "MIT",
   "bugs": {
@@ -31,7 +31,6 @@
   },
   "scripts": {
     "dev": "vite dev",
-    "app:build": "vite build",
     "build": "svelte-kit sync && svelte-package && publint",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -39,7 +38,9 @@
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
     "lint": "eslint . && prettier --check .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "app:build": "vite build",
+    "app:preview": "vite preview"
   },
   "peerDependencies": {
     "svelte": "^5.0.0"
