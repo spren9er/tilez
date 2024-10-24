@@ -149,7 +149,7 @@ Layouts can be described in a declarative way, by defining props of nested tiles
 
 <img src="https://github.com/spren9er/tilez/blob/main/docs/images/tilez_layout_example.png?raw=true" width="225px" height="170px" />
 
-Check out a similar example in [Svelte REPL](https://svelte.dev/repl/1a8e45baea624a079255275a1473374b?version=3.55.0)!
+Check out a similar example in [Svelte REPL](https://svelte.dev/playground/1a8e45baea624a079255275a1473374b?version=5.1.1)!
 
 
 ## How to access tile information?
