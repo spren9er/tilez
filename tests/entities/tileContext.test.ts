@@ -18,7 +18,7 @@ vi.mock('svelte', () => ({
   },
 }));
 
-describe.skip('TileContext', () => {
+describe('TileContext', () => {
   it('creates node/specs contexts and retrieve specs and scales of context', () => {
     const width = 200;
     const height = 100;

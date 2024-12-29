@@ -27,6 +27,15 @@ export default ts.config(
           caughtErrors: 'none',
         },
       ],
+      '@typescript-eslint/ban-ts-comment': [
+        'error',
+        {
+          'ts-expect-error': false,
+          'ts-ignore': true,
+          'ts-nocheck': true,
+          'ts-check': false,
+        },
+      ],
     },
   },
   {
