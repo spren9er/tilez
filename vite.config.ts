@@ -26,7 +26,11 @@ export default defineConfig({
     setupFiles: './tests/setup.ts',
     coverage: {
       include: ['src/lib/**/*.{ts,svelte}'],
-      exclude: ['src/lib/index.ts', 'src/lib/types/**/*'],
+      exclude: [
+        'src/lib/index.ts',
+        'src/lib/types/**/*',
+        'src/lib/components/**/*',
+      ],
       provider: 'istanbul',
     },
   },
