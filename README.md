@@ -19,7 +19,7 @@ By default, all tiles – the building blocks of a layout – are renderless com
 
 - easy-to-use – _declare your layout in a simple manner_
 - flexible – _can be used with SVG, HTML, Canvas, WebGL or renderless components_
-- reactive – _changing props of a tile will update all sub tiles_
+- reactive – _changing props of a tile will update all subtiles_
 - free of dependencies – _except for Svelte_
 - opinionated – _the way the layout algorithm works (see [here](#how-does-the-layout-algorithm-work))_
 - robust – _handles edge cases very well_
@@ -174,11 +174,13 @@ const {specs, xScale, yScale, element } = getContext('tilez');
 
 For Canvas or WebGL elements you can retrieve additionally _CanvasRenderingContext2D_ or _WebGLRenderingContext_, respectively as Svelte store `context` from `getTileContext`.
 
+
 ### Tile Specs from Tile Context
 
 Tile specs give you information about [_width_](#specs_width) and [_height_](#specs_height) of tile, as well as relative positions w.r.t. root, subroot and parent tile.
 
 For further specs information see [API Tile Specs](#tile-specs).
+
 
 ### Linear Scales from Tile Context
 
@@ -237,6 +239,23 @@ $effect(() => {
 <Tile type="svg" bind:element>
   ...
 <Tile>
+```
+
+### Tile Specs from Tile Component
+
+Tile specs can be accessed also directly via snippets.
+
+```html
+<HTile width="400px" height="300px" innerPadding="10px" outerPadding="5px">
+  <Tile width="180px">
+    {#snippet children({ specs: { width, height }})}
+      <MyComponent1 {width} {height} />
+    {/snippet}
+  </Tile>
+  <Tile>
+    ...
+  </Tile>
+</HTile>
 ```
 
 #### Get Canvas or WebGL Context from Tile
