@@ -4,18 +4,13 @@ import { sveltekit } from '@sveltejs/kit/vite';
 export default defineConfig({
   plugins: [
     // @ts-expect-error
-    sveltekit({
-      compilerOptions: {
-        runes: true,
-        css: 'injected',
-      },
-    }),
+    sveltekit({ compilerOptions: { runes: true, css: 'injected' } }),
   ],
   test: {
     browser: {
-      provider: 'webdriverio',
       enabled: true,
-      name: 'chrome',
+      instances: [{ browser: 'chrome' }],
+      provider: 'webdriverio',
       headless: true,
       isolate: true,
       fileParallelism: true,
@@ -34,9 +29,5 @@ export default defineConfig({
       provider: 'istanbul',
     },
   },
-  resolve: {
-    alias: {
-      $examples: './src/examples',
-    },
-  },
+  resolve: { alias: { $examples: './src/examples' } },
 });
