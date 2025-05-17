@@ -1,8 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
 
-  import type { TypeTileSpecs } from '$lib/types/tileSpecs.type';
-
   import type {
     TypeTilePropsStack,
     TypeTilePropsDimension,
@@ -35,10 +33,10 @@
     vAlign?: TypeTilePropsVAlign | undefined;
     type?: TypeTilePropsType | undefined;
     mode?: TypeTilePropsMode | undefined;
+    specs?: TileSpecs | undefined;
     element?: TypeTilePropsElement | undefined;
     wrapper?: TypeTilePropsWrapper | undefined;
-    children?: Snippet<[{ element?: TypeTilePropsElement; specs: TileSpecs }]>;
-    specs?: TypeTileSpecs;
+    children?: Snippet<[{ specs: TileSpecs; element?: TypeTilePropsElement }]>;
   }
 
   let {
@@ -51,10 +49,10 @@
     vAlign = undefined,
     type = undefined,
     mode = undefined,
+    specs = $bindable(undefined),
     element = $bindable(undefined),
     wrapper = $bindable(undefined),
     children,
-    specs = $bindable(undefined),
   }: Props = $props();
 
   let containerWidth: number | undefined = $state();
@@ -122,8 +120,8 @@
   {@const SvelteComponent = componentFor($node)}
   <SvelteComponent node={$node} bind:element>
     {@render children?.({
-      element,
       specs: $node.specs,
+      element,
     })}
   </SvelteComponent>
 </TileWrapper>

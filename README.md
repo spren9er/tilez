@@ -85,7 +85,7 @@ import { Tile } from 'tilez';
 
 A **Tile** component has following available props (see [API Tile Props](#tile-props) for details)
 
-```html
+```svelte
 <Tile
   stack="horizontal"
   width="800px"
@@ -103,7 +103,7 @@ A **Tile** component has following available props (see [API Tile Props](#tile-p
 
 All props are optional, i.e. you can have tiles with no props at all
 
-```html
+```svelte
 <Tile>
   ...
 </Tile>
@@ -133,14 +133,16 @@ Assuming no stack is given for a tile, then all children tiles will be layered. 
 
 Layouts can be described in a declarative way, by defining props of nested tiles. Here is an example of a simple layout
 
-```html
+```svelte
 <HTile width="400px" height="300px" innerPadding="10px" outerPadding="5px">
   <Tile width="180px">
     <MyComponent1 />
   </Tile>
+
   <Tile height="60%" vAlign="center">
     <MyComponent2 />
   </Tile>
+
   <Tile width="30%">
     <MyComponent3 />
   </Tile>
@@ -225,7 +227,7 @@ $effect(() => {
 
 Elements are also accessible from outside of tile scope with following binding
 
-```html
+```svelte
 <script lang="ts">
 import { Tile } from 'tilez';
 
@@ -245,13 +247,14 @@ $effect(() => {
 
 Tile specs can be accessed also directly via snippets.
 
-```html
+```svelte
 <HTile width="400px" height="300px" innerPadding="10px" outerPadding="5px">
   <Tile width="180px">
     {#snippet children({ specs: { width, height }})}
       <MyComponent1 {width} {height} />
     {/snippet}
   </Tile>
+
   <Tile>
     ...
   </Tile>
@@ -465,7 +468,7 @@ A reference to an HTML, SVG or Canvas element (depending on the [type](#props_ty
 
 A reference to the wrapper element (`HTMLDivElement`) containing all tiles. This can be used to add styles via
 
-```html
+```svelte
 <script lang="ts">
 import { onMount } from 'svelte';
 import { Tile } from 'tilez';
