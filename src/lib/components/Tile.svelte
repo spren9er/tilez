@@ -12,6 +12,7 @@
     TypeTilePropsWrapper,
   } from '$lib/types/tileProps.type';
   import type { TileNode } from '$lib/entities/tileNode';
+  import type { TileSpecs } from '$lib/entities/tileSpecs';
 
   import { setNodeContext, getTileContext } from '$lib/entities/tileContext';
 
@@ -32,9 +33,10 @@
     vAlign?: TypeTilePropsVAlign | undefined;
     type?: TypeTilePropsType | undefined;
     mode?: TypeTilePropsMode | undefined;
+    specs?: TileSpecs | undefined;
     element?: TypeTilePropsElement | undefined;
     wrapper?: TypeTilePropsWrapper | undefined;
-    children?: Snippet<[unknown]>;
+    children?: Snippet<[{ specs: TileSpecs; element?: TypeTilePropsElement }]>;
   }
 
   let {
@@ -47,6 +49,7 @@
     vAlign = undefined,
     type = undefined,
     mode = undefined,
+    specs = $bindable(undefined),
     element = $bindable(undefined),
     wrapper = $bindable(undefined),
     children,
@@ -84,6 +87,10 @@
   };
 
   $effect(() => {
+    specs = $node.specs;
+  });
+
+  $effect(() => {
     if (element) elementStore.set(element);
   });
 
@@ -112,6 +119,9 @@
 <TileWrapper node={$node} bind:wrapper bind:containerWidth bind:containerHeight>
   {@const SvelteComponent = componentFor($node)}
   <SvelteComponent node={$node} bind:element>
-    {@render children?.({ element })}
+    {@render children?.({
+      specs: $node.specs,
+      element,
+    })}
   </SvelteComponent>
 </TileWrapper>

@@ -19,7 +19,7 @@ By default, all tiles – the building blocks of a layout – are renderless com
 
 - easy-to-use – _declare your layout in a simple manner_
 - flexible – _can be used with SVG, HTML, Canvas, WebGL or renderless components_
-- reactive – _changing props of a tile will update all sub tiles_
+- reactive – _changing props of a tile will update all subtiles_
 - free of dependencies – _except for Svelte_
 - opinionated – _the way the layout algorithm works (see [here](#how-does-the-layout-algorithm-work))_
 - robust – _handles edge cases very well_
@@ -85,7 +85,7 @@ import { Tile } from 'tilez';
 
 A **Tile** component has following available props (see [API Tile Props](#tile-props) for details)
 
-```html
+```svelte
 <Tile
   stack="horizontal"
   width="800px"
@@ -103,7 +103,7 @@ A **Tile** component has following available props (see [API Tile Props](#tile-p
 
 All props are optional, i.e. you can have tiles with no props at all
 
-```html
+```svelte
 <Tile>
   ...
 </Tile>
@@ -133,14 +133,16 @@ Assuming no stack is given for a tile, then all children tiles will be layered. 
 
 Layouts can be described in a declarative way, by defining props of nested tiles. Here is an example of a simple layout
 
-```html
+```svelte
 <HTile width="400px" height="300px" innerPadding="10px" outerPadding="5px">
   <Tile width="180px">
     <MyComponent1 />
   </Tile>
+
   <Tile height="60%" vAlign="center">
     <MyComponent2 />
   </Tile>
+
   <Tile width="30%">
     <MyComponent3 />
   </Tile>
@@ -174,11 +176,13 @@ const {specs, xScale, yScale, element } = getContext('tilez');
 
 For Canvas or WebGL elements you can retrieve additionally _CanvasRenderingContext2D_ or _WebGLRenderingContext_, respectively as Svelte store `context` from `getTileContext`.
 
+
 ### Tile Specs from Tile Context
 
 Tile specs give you information about [_width_](#specs_width) and [_height_](#specs_height) of tile, as well as relative positions w.r.t. root, subroot and parent tile.
 
 For further specs information see [API Tile Specs](#tile-specs).
+
 
 ### Linear Scales from Tile Context
 
@@ -221,16 +225,16 @@ $effect(() => {
 
 #### Bind Element from Tile
 
-Elements are also accessible from outside of tile scope with following binding
+Elements can also be accessed from outside of tile scope using `bind`
 
-```html
+```svelte
 <script lang="ts">
 import { Tile } from 'tilez';
 
 let element: SVGElement;
 
 $effect(() => {
-  doSomethingWith($element);
+  doSomethingWith(element);
 });
 </script>
 
@@ -269,6 +273,42 @@ $effect.pre(() => {
 
 _**Note:** When using Canvas tiles, make sure that you multiply specs coordinates with `window.devicePixelRatio`._
 
+
+### Tile Specs from Tile Component
+
+Tile specs can also be accessed directly via `children` snippet
+
+```svelte
+<HTile width="400px" height="300px" innerPadding="10px" outerPadding="5px">
+  <Tile width="180px">
+    {#snippet children({ specs: { width, height }})}
+      <MyComponent1 {width} {height} />
+    {/snippet}
+  </Tile>
+
+  <Tile>
+    ...
+  </Tile>
+</HTile>
+```
+
+or from outside of tile scope using `bind`
+
+```svelte
+<script lang="ts">
+import { Tile, type TileSpecs } from 'tilez';
+
+let specs: TileSpecs;
+
+$effect(() => {
+  doSomethingWith(specs);
+});
+</script>
+
+<Tile type="svg" bind:specs>
+  ...
+<Tile>
+```
 
 ## How does the layout algorithm work?
 
@@ -436,6 +476,12 @@ It depends on your use case, which mode you choose. You can also mix modes, star
 
 ---
 
+<a name="props_specs" href="#props_specs">#</a> tilez.<b>Tile</b>.<i>specs</i>
+
+A reference to tile specs.
+
+---
+
 <a name="props_element" href="#props_element">#</a> tilez.<b>Tile</b>.<i>element</i>
 
 A reference to an HTML, SVG or Canvas element (depending on the [type](#props_type)). For renderless components (_'plain'_ type), element is `undefined`. See also [this section](#access-html-svg-or-canvas-element).
@@ -446,7 +492,7 @@ A reference to an HTML, SVG or Canvas element (depending on the [type](#props_ty
 
 A reference to the wrapper element (`HTMLDivElement`) containing all tiles. This can be used to add styles via
 
-```html
+```svelte
 <script lang="ts">
 import { onMount } from 'svelte';
 import { Tile } from 'tilez';
