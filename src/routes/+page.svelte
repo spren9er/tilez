@@ -319,7 +319,7 @@
 </div>
 
 <div class="tile-types">
-  {#each types as type}
+  {#each types as type (type)}
     <div class="tile-type">
       <h3>{type}</h3>
 
