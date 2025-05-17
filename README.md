@@ -225,7 +225,7 @@ $effect(() => {
 
 #### Bind Element from Tile
 
-Elements are also accessible from outside of tile scope with following binding
+Elements can also be accessed from outside of tile scope using `bind`
 
 ```svelte
 <script lang="ts">
@@ -234,31 +234,13 @@ import { Tile } from 'tilez';
 let element: SVGElement;
 
 $effect(() => {
-  doSomethingWith($element);
+  doSomethingWith(element);
 });
 </script>
 
 <Tile type="svg" bind:element>
   ...
 <Tile>
-```
-
-### Tile Specs from Tile Component
-
-Tile specs can be accessed also directly via snippets.
-
-```svelte
-<HTile width="400px" height="300px" innerPadding="10px" outerPadding="5px">
-  <Tile width="180px">
-    {#snippet children({ specs: { width, height }})}
-      <MyComponent1 {width} {height} />
-    {/snippet}
-  </Tile>
-
-  <Tile>
-    ...
-  </Tile>
-</HTile>
 ```
 
 #### Get Canvas or WebGL Context from Tile
@@ -291,6 +273,42 @@ $effect.pre(() => {
 
 _**Note:** When using Canvas tiles, make sure that you multiply specs coordinates with `window.devicePixelRatio`._
 
+
+### Tile Specs from Tile Component
+
+Tile specs can also be accessed directly via `children` snippet
+
+```svelte
+<HTile width="400px" height="300px" innerPadding="10px" outerPadding="5px">
+  <Tile width="180px">
+    {#snippet children({ specs: { width, height }})}
+      <MyComponent1 {width} {height} />
+    {/snippet}
+  </Tile>
+
+  <Tile>
+    ...
+  </Tile>
+</HTile>
+```
+
+or from outside of tile scope using `bind`
+
+```svelte
+<script lang="ts">
+import { Tile, type TileSpecs } from 'tilez';
+
+let specs: TileSpecs;
+
+$effect(() => {
+  doSomethingWith(specs);
+});
+</script>
+
+<Tile type="svg" bind:specs>
+  ...
+<Tile>
+```
 
 ## How does the layout algorithm work?
 
@@ -455,6 +473,12 @@ When layout mode _'sizing'_ is used, all tiles have exactly the size which is sp
 <img src="https://github.com/spren9er/tilez/blob/main/docs/images/tilez_layout_sizing.png?raw=true" width="225px" height="170px" />
 
 It depends on your use case, which mode you choose. You can also mix modes, start with one mode and change to the other mode in an inner tile.
+
+---
+
+<a name="props_specs" href="#props_specs">#</a> tilez.<b>Tile</b>.<i>specs</i>
+
+A reference to tile specs.
 
 ---
 
