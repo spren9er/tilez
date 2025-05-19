@@ -298,7 +298,7 @@ or from outside of tile scope using `bind`
 <script lang="ts">
 import { Tile, type TileSpecs } from 'tilez';
 
-let specs: TileSpecs;
+let specs: TileSpecs | undefined;
 
 $effect(() => {
   doSomethingWith(specs);
