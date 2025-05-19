@@ -1,6 +1,6 @@
 {
   "name": "tilez",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": "Torsten Sprenger <mail@spren9er.de>",
   "description": "Generic layout engine for Svelte components",
   "keywords": [
