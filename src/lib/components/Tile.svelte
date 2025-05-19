@@ -36,7 +36,7 @@
     specs?: TileSpecs | undefined;
     element?: TypeTilePropsElement | undefined;
     wrapper?: TypeTilePropsWrapper | undefined;
-    children?: Snippet<[{ specs: TileSpecs; element?: TypeTilePropsElement }]>;
+    children?: Snippet<[{ specs?: TileSpecs; element?: TypeTilePropsElement }]>;
   }
 
   let {
@@ -119,9 +119,6 @@
 <TileWrapper node={$node} bind:wrapper bind:containerWidth bind:containerHeight>
   {@const SvelteComponent = componentFor($node)}
   <SvelteComponent node={$node} bind:element>
-    {@render children?.({
-      specs: $node.specs,
-      element,
-    })}
+    {@render children?.({ specs, element })}
   </SvelteComponent>
 </TileWrapper>

@@ -10,6 +10,7 @@
     TypeTilePropsElement,
     TypeTilePropsWrapper,
   } from '$lib/types/tileProps.type';
+  import type { TileSpecs } from '$lib/entities/tileSpecs';
 
   import Tile from './Tile.svelte';
 
@@ -22,9 +23,10 @@
     vAlign?: TypeTilePropsVAlign | undefined;
     type?: TypeTilePropsType | undefined;
     mode?: TypeTilePropsMode | undefined;
+    specs?: TileSpecs | undefined;
     element?: TypeTilePropsElement | undefined;
     wrapper?: TypeTilePropsWrapper | undefined;
-    children?: Snippet<[unknown]>;
+    children?: Snippet<[{ specs?: TileSpecs; element?: TypeTilePropsElement }]>;
   }
 
   let {
@@ -36,6 +38,7 @@
     vAlign = undefined,
     type = undefined,
     mode = undefined,
+    specs = $bindable(undefined),
     element = $bindable(undefined),
     wrapper = $bindable(undefined),
     children,
@@ -52,8 +55,9 @@
   {vAlign}
   {type}
   {mode}
-  bind:wrapper
+  bind:specs
   bind:element
+  bind:wrapper
 >
-  {@render children?.({ element })}
+  {@render children?.({ specs, element })}
 </Tile>
