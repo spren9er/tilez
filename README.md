@@ -281,8 +281,8 @@ Tile specs can also be accessed directly via `children` snippet
 ```svelte
 <HTile width="400px" height="300px" innerPadding="10px" outerPadding="5px">
   <Tile width="180px">
-    {#snippet children({ specs })}
-      <MyComponent1 width={specs?.width} height={specs?.height} />
+    {#snippet children({ specs: { width, height } = {} })}
+      <MyComponent1 {width} {height} />
     {/snippet}
   </Tile>
 
