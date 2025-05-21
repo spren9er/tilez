@@ -484,8 +484,8 @@
   </div>
 </div>
 
-<div id="twitter-handle">
-  <a href="https://twitter.com/spren9er">@spren9er</a>
+<div id="website-url">
+  <a href="https://spren9er.de">@spren9er</a>
 </div>
 
 <style>
@@ -586,7 +586,7 @@
     border: 1px solid #333333;
   }
 
-  #twitter-handle {
+  #website-url {
     border-top: 1px solid #333333;
     margin-top: 20px;
     padding-top: 5px;
@@ -594,8 +594,8 @@
     text-align: center;
   }
 
-  #twitter-handle a,
-  #twitter-handle a:visited {
+  #website-url a,
+  #website-url a:visited {
     font-size: 10px;
     color: #333333;
     text-decoration: none;
